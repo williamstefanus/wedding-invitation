@@ -1,0 +1,215 @@
+/* ─── Google Fonts ─────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap");
+
+@import "tailwindcss";
+
+/* ─── Tailwind v4 Theme Tokens ──────────────────────────────────────────────── */
+@theme {
+  /* Typography */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-script:  "Cormorant Garamond", Georgia, serif;
+
+  /* Gold palette (invitation) */
+  --color-gold-50:  #fdfbf0;
+  --color-gold-100: #faf3d0;
+  --color-gold-200: #f5e49a;
+  --color-gold-300: #edcc5c;
+  --color-gold-400: #e3b528;
+  --color-gold-500: #c9951a;
+  --color-gold-600: #a87514;
+  --color-gold-700: #855812;
+  --color-gold-800: #6a4515;
+  --color-gold-900: #573916;
+
+  /* Navy palette (invitation) */
+  --color-navy-50:  #f0f3ff;
+  --color-navy-100: #dde4fb;
+  --color-navy-200: #c3cef7;
+  --color-navy-300: #9aaef0;
+  --color-navy-400: #6b87e6;
+  --color-navy-500: #4a64d8;
+  --color-navy-600: #3547c4;
+  --color-navy-700: #2a38a0;
+  --color-navy-800: #1e2a70;
+  --color-navy-900: #111940;
+  --color-navy-950: #090d24;
+
+  /* Ivory palette */
+  --color-ivory-50:  #fdfdf8;
+  --color-ivory-100: #faf9f0;
+  --color-ivory-200: #f4f2e0;
+  --color-ivory-300: #eae6c8;
+  --color-ivory-400: #dad5aa;
+  --color-ivory-500: #c5bd88;
+
+  /* Rose accent */
+  --color-rose-blush: #f7e7e7;
+  --color-rose-deep:  #c0707a;
+
+  /* Custom animations */
+  --animate-fade-in:      fade-in 0.6s ease-out forwards;
+  --animate-fade-up:      fade-up 0.7s ease-out forwards;
+  --animate-fade-down:    fade-down 0.5s ease-out forwards;
+  --animate-shimmer:      shimmer 2s linear infinite;
+  --animate-float:        float 4s ease-in-out infinite;
+  --animate-pulse-gold:   pulse-gold 2s ease-in-out infinite;
+  --animate-slide-in-left:  slide-in-left 0.5s ease-out forwards;
+  --animate-slide-in-right: slide-in-right 0.5s ease-out forwards;
+}
+
+/* ─── Keyframes ─────────────────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(201, 149, 26, 0.4); }
+  50%       { opacity: 0.85; box-shadow: 0 0 0 8px rgba(201, 149, 26, 0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Base Resets ──────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* ─── CSS Design Tokens (Runtime vars) ─────────────────────────────────────── */
+:root {
+  /* Invitation surface */
+  --surface-invite:    #111940;  /* navy-950 */
+  --surface-invite-2:  #1e2a70;  /* navy-800 */
+  --surface-card:      rgba(255,255,255,0.05);
+
+  /* Gold accents */
+  --gold-primary:    #c9951a;
+  --gold-light:      #e3b528;
+  --gold-subtle:     rgba(201,149,26,0.15);
+
+  /* Ivory text */
+  --text-ivory:      #faf9f0;
+  --text-ivory-muted:#c5bd88;
+
+  /* Admin surface */
+  --admin-bg:        #f8fafc;
+  --admin-sidebar:   #0f172a;
+  --admin-card:      #ffffff;
+  --admin-border:    #e2e8f0;
+  --admin-text:      #0f172a;
+  --admin-muted:     #64748b;
+
+  /* Status colours */
+  --status-attending:     #16a34a;
+  --status-not-attending: #dc2626;
+  --status-pending:       #d97706;
+}
+
+/* ─── Utility Layer ────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Gold shimmer text */
+  .text-gold-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--gold-primary) 0%,
+      #f5e49a 40%,
+      var(--gold-primary) 60%,
+      var(--gold-light) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: var(--animate-shimmer);
+  }
+
+  /* Glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(201, 149, 26, 0.2);
+  }
+
+  /* Gold divider line */
+  .divider-gold {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+  }
+
+  /* Elegant border */
+  .border-gold {
+    border-color: var(--gold-primary);
+  }
+
+  .border-gold-subtle {
+    border-color: rgba(201, 149, 26, 0.3);
+  }
+
+  /* Scroll bar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-primary) transparent;
+  }
+
+  /* Animation helpers */
+  .animate-fade-in      { animation: var(--animate-fade-in); }
+  .animate-fade-up      { animation: var(--animate-fade-up); }
+  .animate-fade-down    { animation: var(--animate-fade-down); }
+  .animate-float        { animation: var(--animate-float); }
+  .animate-pulse-gold   { animation: var(--animate-pulse-gold); }
+  .animate-shimmer      { animation: var(--animate-shimmer); }
+  .animate-slide-left   { animation: var(--animate-slide-in-left); }
+  .animate-slide-right  { animation: var(--animate-slide-in-right); }
+
+  /* Delay utilities */
+  .animation-delay-100  { animation-delay: 100ms; }
+  .animation-delay-200  { animation-delay: 200ms; }
+  .animation-delay-300  { animation-delay: 300ms; }
+  .animation-delay-500  { animation-delay: 500ms; }
+  .animation-delay-700  { animation-delay: 700ms; }
+  .animation-delay-1000 { animation-delay: 1000ms; }
+
+  /* Fill mode */
+  .fill-both { animation-fill-mode: both; }
+}
