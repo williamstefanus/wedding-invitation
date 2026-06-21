@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Cormorant_Garamond } from "next/font/google";
+import localFont from "next/font/local";
+import { Inter, Playfair_Display, Cormorant_Garamond, Alegreya_Sans } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -24,6 +25,20 @@ const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"],
 });
 
+const alegreya = Alegreya_Sans({
+  subsets: ["latin"],
+  variable: "--font-alegreya",
+  display: "swap",
+  weight: ["300", "400", "500", "700"],
+  style: ["normal", "italic"],
+});
+
+const justWrite = localFont({
+  src: "../../design-assets/JustWrite.otf",
+  variable: "--font-justwrite",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Wedding Invitation — William & Aziel",
@@ -42,7 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${cormorant.variable} h-full`}
+      className={`${inter.variable} ${playfair.variable} ${cormorant.variable} ${alegreya.variable} ${justWrite.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-white text-slate-900 antialiased">

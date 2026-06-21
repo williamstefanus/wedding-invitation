@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Gem } from "lucide-react";
+import { getInvitationDetails } from "@/lib/actions/invitation";
+import { InviteNotFound } from "@/components/invitation/InviteNotFound";
 
 export const metadata: Metadata = {
   title: "Sangjit Invitation",
@@ -15,20 +17,15 @@ export default async function SangjitInvitePage({
 }: SangjitInvitePageProps) {
   const { code } = await params;
 
-  // Phase 3: fetch sangjit invitation from Supabase here
-  // const supabase = await createClient();
-  // const { data: invitation } = await supabase
-  //   .from("invitations")
-  //   .select("*, guest(*), events(*), rsvp(*)")
-  //   .eq("code", code)
-  //   .eq("event_type", "sangjit")
-  //   .single();
+  // Fetch invitation strictly bound to the 'sangjit' event type slug
+  const { invitation, error } = await getInvitationDetails(code, "sangjit");
 
-  const isValid = !!code && code.length > 0;
-
-  if (!isValid) {
+  if (error || !invitation) {
     return <InviteNotFound />;
   }
+
+  // We have a valid invitation now
+  const guest = invitation.guest;
 
   return (
     <main
@@ -97,30 +94,6 @@ export default async function SangjitInvitePage({
             Code: {code}
           </p>
         </div>
-      </div>
-    </main>
-  );
-}
-
-function InviteNotFound() {
-  return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-center px-4"
-      style={{
-        background:
-          "linear-gradient(135deg, #1a0f1f 0%, #2d1b2e 50%, #1a0f1f 100%)",
-      }}
-    >
-      <div className="text-center space-y-4 animate-fade-in">
-        <Gem className="mx-auto h-12 w-12 text-slate-500" />
-        <h1 className="text-2xl font-semibold" style={{ color: "#faf9f0" }}>
-          Invitation Not Found
-        </h1>
-        <p className="text-sm" style={{ color: "#c5bd88" }}>
-          This invitation link may be invalid or expired.
-          <br />
-          Please contact the couple for assistance.
-        </p>
       </div>
     </main>
   );

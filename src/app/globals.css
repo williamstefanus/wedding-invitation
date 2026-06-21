@@ -6,9 +6,9 @@
 /* ─── Tailwind v4 Theme Tokens ──────────────────────────────────────────────── */
 @theme {
   /* Typography */
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-body:    "Inter", system-ui, sans-serif;
-  --font-script:  "Cormorant Garamond", Georgia, serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body:    var(--font-alegreya), "Alegreya Sans", system-ui, sans-serif;
+  --font-script:  var(--font-justwrite), "Cormorant Garamond", Georgia, serif;
 
   /* Gold palette (invitation) */
   --color-gold-50:  #fdfbf0;
