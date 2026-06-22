@@ -13,7 +13,7 @@ interface OpeningScreenProps {
 export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps) {
   return (
     <section 
-      className="relative w-full h-[100vh] flex flex-col items-center justify-center overflow-hidden"
+      className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
       style={{
         background: "linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 40%, #556B2F 100%)",
       }}
@@ -69,7 +69,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
         <div className="absolute inset-0 bg-black/10 z-30 pointer-events-none" />
       </div>
 
-      <div className="relative z-40 flex flex-col items-center justify-between text-center px-4 w-full h-full pb-16 pt-24">
+      <div className="relative z-40 flex flex-col items-center justify-between text-center px-4 w-full h-full pb-8 pt-24 sm:pb-16 pointer-events-none">
         
         {/* Title Section - Remains visible */}
         <div className="flex flex-col items-center rotate-[-2deg] drop-shadow-md">
@@ -101,7 +101,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.8, delay: 1.2, ease: "easeInOut" }}
-              className="mt-auto flex flex-col items-center gap-4 w-full justify-end"
+              className="mt-auto flex flex-col items-center gap-4 w-full justify-end pb-[env(safe-area-inset-bottom)] pointer-events-auto"
             >
               <p className="text-white text-xl font-medium drop-shadow-md tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
                 Dear {guestName || "Guest"},
@@ -113,7 +113,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onOpen}
-                className="rounded-full bg-[#FFF9ED] text-[#4B4B4B] px-8 py-3 shadow-lg font-medium tracking-wider mt-2 transition-colors hover:shadow-xl hover:bg-white"
+                className="rounded-full bg-[#FFF9ED] text-[#4B4B4B] px-8 py-3 shadow-lg font-medium tracking-wider mt-2 mb-4 transition-colors hover:shadow-xl hover:bg-white"
                 style={{ fontFamily: "var(--font-alegreya)" }}
               >
                 Open Invitation

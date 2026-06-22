@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 
 interface CountdownSectionProps {
@@ -16,12 +15,22 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
     seconds: 0,
   });
 
+  const [formattedDate, setFormattedDate] = useState("Event");
+
   useEffect(() => {
-    const target = new Date(targetDateStr).getTime();
+    const target = new Date(targetDateStr);
+    
+    // Format the date using Intl.DateTimeFormat to prevent hydration mismatch
+    const formatted = new Intl.DateTimeFormat('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).format(target);
+    setFormattedDate(formatted);
 
     const updateTime = () => {
       const now = new Date().getTime();
-      const difference = target - now;
+      const difference = target.getTime() - now;
 
       if (difference > 0) {
         setTimeLeft({
@@ -39,8 +48,9 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
   }, [targetDateStr]);
 
   const formatDigits = (num: number) => {
-    const str = String(num).padStart(2, '0');
-    return [str[0], str[1]];
+    // Dynamically splits numbers into individual character boxes.
+    // Falls back to 2 digits with a leading zero if < 10.
+    return String(num).padStart(2, '0').split('');
   };
 
   const days = formatDigits(timeLeft.days);
@@ -55,7 +65,7 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
         
         {/* Header */}
         <div className="flex items-center justify-between mb-4 px-1">
-          <h2 className="text-black text-lg font-medium">Event</h2>
+          <h2 className="text-[#4B4B4B] text-lg font-medium">{formattedDate}</h2>
           <button className="p-1 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-50 transition">
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -67,42 +77,39 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
           {/* Days */}
           <div className="flex flex-col items-center">
             <div className="flex gap-1">
-              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
-                {days[0]}
-              </div>
-              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
-                {days[1]}
-              </div>
+              {days.map((digit, idx) => (
+                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                  {digit}
+                </div>
+              ))}
             </div>
             <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">days</span>
           </div>
 
-          <span className="text-xl font-medium text-black mt-1 mx-1">:</span>
+          <span className="text-xl font-medium text-[#4B4B4B] mt-1 mx-1">:</span>
 
           {/* Hours */}
           <div className="flex flex-col items-center">
             <div className="flex gap-1">
-              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
-                {hours[0]}
-              </div>
-              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
-                {hours[1]}
-              </div>
+              {hours.map((digit, idx) => (
+                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                  {digit}
+                </div>
+              ))}
             </div>
             <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">hours</span>
           </div>
 
-          <span className="text-xl font-medium text-black mt-1 mx-1">:</span>
+          <span className="text-xl font-medium text-[#4B4B4B] mt-1 mx-1">:</span>
 
           {/* Minutes */}
           <div className="flex flex-col items-center">
             <div className="flex gap-1">
-              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
-                {minutes[0]}
-              </div>
-              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
-                {minutes[1]}
-              </div>
+              {minutes.map((digit, idx) => (
+                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                  {digit}
+                </div>
+              ))}
             </div>
             <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">minutes</span>
           </div>

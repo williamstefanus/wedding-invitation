@@ -277,7 +277,7 @@ export function RsvpClient({
                         {isPend ? "-" : new Date(rsvp.submitted_at).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 text-slate-600">
-                        {inv.seating_assignment?.[0]?.seating_table?.table_name || "-"}
+                        {inv.seating_assignment?.seating_table?.table_name || "-"}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-1">
@@ -456,7 +456,7 @@ export function RsvpClient({
               )}
 
               {/* Warning if changing to not attending when seating exists */}
-              {editStatus === 'not_attending' && selectedInv.seating_assignment?.length > 0 && (
+              {editStatus === 'not_attending' && selectedInv.seating_assignment && (
                 <div className="bg-red-50 border border-red-200 p-3 rounded-lg text-sm text-red-700">
                   <strong>Warning:</strong> Saving this will remove the guest's seating assignment.
                 </div>
@@ -481,7 +481,7 @@ export function RsvpClient({
             <h2 className="text-xl font-bold text-slate-800 mb-2">Reset RSVP?</h2>
             <p className="text-slate-500 mb-4 text-sm">This will completely wipe the RSVP record for {selectedInv.guest.name}, returning the invitation to <strong>Pending</strong>.</p>
             
-            {selectedInv?.seating_assignment?.length > 0 && (
+            {selectedInv?.seating_assignment && (
               <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-3 rounded-lg mb-6 text-left">
                 <strong>Warning:</strong> This will also wipe their seating assignment.
               </div>
