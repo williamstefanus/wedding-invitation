@@ -1,132 +1,134 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { WEDDING_INVITATION_ASSETS } from "@/lib/constants/weddingInvitationAssets";
+import { WEDDING_INVITATION_ASSETS as ASSET } from "@/lib/constants/weddingInvitationAssets";
 
 export function CoupleSection() {
   return (
-    <section className="relative w-full flex flex-col items-center pt-8 pb-32 z-10 overflow-hidden bg-[#faf9f0]">
+    <section className="relative w-full flex flex-col items-center bg-[#faf9f0] overflow-hidden pb-[120px]">
       
-      {/* Background Hill Transition / Sky */}
-      <div className="absolute top-0 w-full aspect-[390/359] z-0 pointer-events-none opacity-80">
-        <Image src={WEDDING_INVITATION_ASSETS.envelopeGreenHillTransition} alt="Sky Transition" fill className="object-cover object-top" />
-      </div>
-
-      <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 1.0 }}
-        className="relative w-full max-w-[390px] mx-auto flex flex-col items-center z-10"
-      >
+      {/* Container matching Figma's 390px canvas width */}
+      <div className="relative w-full max-w-[390px] flex flex-col items-center">
         
-        {/* Envelope Container */}
-        <div className="relative w-full aspect-[390/417] pointer-events-none mt-[15%]">
-          
-          {/* 1. Envelope Back Panel (White Base with open flap) */}
+        {/* 1. Background Sky/Grass - placed at the top center */}
+        <div className="absolute top-0 w-[150%] max-w-[600px] h-[358px] pointer-events-none opacity-90 z-0">
+          <Image src={ASSET.tallGrassDivider} alt="Sky Decor" fill className="object-cover object-top" />
+        </div>
+
+        {/* 2. Envelope Composition Container */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{ duration: 1.0 }}
+          className="relative w-[90%] aspect-[410/417] mt-[80px] flex justify-center z-10"
+        >
+          {/* Back Panel */}
           <div className="absolute inset-0 z-10">
-            <Image src={WEDDING_INVITATION_ASSETS.envelopeBackPanel} alt="Envelope Back" fill className="object-contain object-top" />
+            <Image src={ASSET.envelopeBackPanel} alt="Envelope Back" fill className="object-contain" />
           </div>
 
-          {/* 2. Meadow Flap (Green Liner) */}
-          <div className="absolute top-[2%] left-1/2 -translate-x-1/2 w-[82%] aspect-[318/320] z-20">
-            <Image src={WEDDING_INVITATION_ASSETS.envelopeMeadowFlap} alt="Green Liner" fill className="object-contain object-top" />
+          {/* Meadow Flap - Centered inside top half */}
+          {/* We remove the wild rotation from Figma to allow it to sit perfectly as a flap liner */}
+          <div className="absolute top-[8%] left-1/2 -translate-x-1/2 w-[80%] aspect-square z-20">
+            <Image src={ASSET.envelopeMeadowFlap} alt="Envelope Flap" fill className="object-contain object-top" />
           </div>
 
-          {/* 3. Bouquets (Inside the envelope, on top of liner) */}
+          {/* Floral Bouquet - Placed blooming over the left side */}
           <motion.div 
             animate={{ y: [0, -3, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-[-10%] top-[0%] w-[85%] aspect-[295/307] z-30"
+            className="absolute -top-[15%] left-[-15%] w-[85%] aspect-square z-30 drop-shadow-md"
           >
-            <Image src="/assets/wedding-invitation/floral-bouquet-left.png" alt="Bouquet Left" fill className="object-contain" />
+            <Image src={ASSET.floralBouquetLeft} alt="Bouquet" fill className="object-contain" />
+          </motion.div>
+        </motion.div>
+
+        {/* 3. Paper Card & Wax Seal Layer */}
+        {/* Placed overlapping the envelope's bottom half */}
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{ duration: 1.0, delay: 0.2 }}
+          className="relative w-[88%] aspect-[354/490] -mt-[40%] z-50 flex flex-col items-center"
+        >
+          {/* Paper Card Background */}
+          <div className="absolute inset-0 drop-shadow-2xl z-0">
+            <Image src={ASSET.envelopePaperCard} alt="Paper Card" fill className="object-contain" />
+          </div>
+
+          {/* Wax Seal - Centered directly on top edge */}
+          <motion.div 
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: false }}
+            transition={{ type: "spring", stiffness: 120, damping: 10, delay: 0.6 }}
+            className="absolute -top-[8%] left-1/2 -translate-x-1/2 w-[22%] aspect-square z-50 drop-shadow-lg"
+          >
+            <Image src={ASSET.waxSealGold} alt="Wax Seal" fill className="object-contain" />
           </motion.div>
 
-        </div>
-
-        {/* 4. Paper Card (Placed IN FRONT of the envelope, overlapping the bottom half) */}
-        <div className="relative w-[85%] aspect-[710/982] -mt-[35%] z-40">
-          <Image src={WEDDING_INVITATION_ASSETS.envelopePaperCard} alt="Paper Card" fill className="object-contain drop-shadow-xl" />
-          
-          {/* Card Content Overlay */}
-          <div className="absolute inset-0 z-50 flex flex-col justify-start pt-[15%] px-[8%] pb-[10%]">
+          {/* 4. Text and Stamps Content Container */}
+          <div className="relative z-10 w-full h-full flex flex-col justify-between px-[6%] py-[15%]">
             
-            {/* Groom */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: false }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="flex w-full items-start justify-between gap-1"
-            >
-              <div className="w-[85px] aspect-[120/140] relative rotate-[-4deg] ml-1 mt-2 shrink-0 drop-shadow-md">
-                <div className="absolute inset-[8%] z-10 overflow-hidden bg-slate-200">
-                  <Image src={WEDDING_INVITATION_ASSETS.groomPhotoWilliam} fill className="object-cover" alt="William" />
+            {/* Groom Row */}
+            <div className="flex items-center justify-between w-full h-[35%]">
+              {/* Stamp Container */}
+              <div className="relative w-[45%] aspect-[152/172] rotate-[2deg] shrink-0 drop-shadow-sm">
+                {/* We use standard inset so the photo fits nicely inside the stamp frame */}
+                <div className="absolute inset-[6%] -rotate-1 overflow-hidden bg-slate-200 z-10">
+                  <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill className="object-cover" />
                 </div>
-                <Image src={WEDDING_INVITATION_ASSETS.stampFrame} fill className="object-contain z-20 drop-shadow-sm" alt="Stamp" />
+                <div className="absolute inset-0 z-20 pointer-events-none">
+                  <Image src={ASSET.stampFrame} alt="Stamp" fill className="object-fill" />
+                </div>
               </div>
 
-              <div className="flex flex-col text-right mt-1 w-full pl-2">
-                <div className="flex flex-col items-end text-[#4B4B4B] text-[2.2rem] leading-[0.8]" style={{ fontFamily: "var(--font-justwrite)" }}>
-                  <span>William</span>
-                  <span className="-mr-2">Stefanus,</span>
-                  <span>S.Kom</span>
+              {/* Text */}
+              <div className="flex flex-col items-center justify-center w-[50%] gap-1">
+                <div className="text-center text-[#4B4B4B] text-[2.2rem] leading-[0.9]" style={{ fontFamily: "var(--font-justwrite)" }}>
+                  William<br/>Stefanus,
+                  <div className="text-[1.8rem] mt-1">S.Kom</div>
                 </div>
-                <p className="text-[10px] text-[#4B4B4B] mt-3 leading-snug" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  First son of Mr. Hadi Stefanus<br/>& Mrs. Lanny Mariana
-                </p>
+                <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2" style={{ fontFamily: "var(--font-alegreya)" }}>
+                  First son of Mr. Hadi Stefanus <br/>& Mrs. Lanny Mariana
+                </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Middle */}
-            <div className="text-center my-6 text-[#4B4B4B] text-lg" style={{ fontFamily: "var(--font-alegreya)" }}>
+            <div className="w-full text-center text-[#4B4B4B] text-[1.2rem] my-2" style={{ fontFamily: "var(--font-alegreya)" }}>
               – and –
             </div>
 
-            {/* Bride */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: false }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="flex w-full items-start justify-between gap-1 flex-row-reverse"
-            >
-              <div className="w-[85px] aspect-[120/140] relative rotate-[4deg] mr-1 mt-2 shrink-0 drop-shadow-md">
-                <div className="absolute inset-[8%] z-10 overflow-hidden bg-slate-200">
-                  <Image src={WEDDING_INVITATION_ASSETS.bridePhotoAziel} fill className="object-cover object-top" alt="Aziel" />
+            {/* Bride Row */}
+            <div className="flex items-center justify-between w-full h-[35%] flex-row-reverse">
+              {/* Stamp Container */}
+              <div className="relative w-[45%] aspect-[152/172] -rotate-[3deg] shrink-0 drop-shadow-sm">
+                <div className="absolute inset-[6%] -rotate-1 overflow-hidden bg-slate-200 z-10">
+                  <Image src={ASSET.bridePhotoAziel} alt="Bride" fill className="object-cover object-top" />
                 </div>
-                <Image src={WEDDING_INVITATION_ASSETS.stampFrame} fill className="object-contain z-20 drop-shadow-sm" alt="Stamp" />
+                <div className="absolute inset-0 z-20 pointer-events-none">
+                  <Image src={ASSET.stampFrame} alt="Stamp" fill className="object-fill" />
+                </div>
               </div>
 
-              <div className="flex flex-col text-left mt-1 w-full pr-2">
-                <div className="flex flex-col items-start text-[#4B4B4B] text-[2.2rem] leading-[0.8]" style={{ fontFamily: "var(--font-justwrite)" }}>
-                  <span>Aziel</span>
-                  <span className="-ml-1">Yorieza,</span>
-                  <span>B.A</span>
+              {/* Text */}
+              <div className="flex flex-col items-center justify-center w-[50%] gap-1">
+                <div className="text-center text-[#4B4B4B] text-[2.2rem] leading-[0.9]" style={{ fontFamily: "var(--font-justwrite)" }}>
+                  Aziel<br/>Yorieza,
+                  <div className="text-[1.8rem] mt-1">B.A</div>
                 </div>
-                <p className="text-[10px] text-[#4B4B4B] mt-3 leading-snug" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  Second daughter of<br/>Mr. Yopie Kusnandar &<br/>Mrs. Ina Rostiana Rahardja
-                </p>
+                <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2" style={{ fontFamily: "var(--font-alegreya)" }}>
+                  Second daughter of<br/>Mr. Yopie Kusnandar & <br/>Mrs. Ina Rostiana Rahardja
+                </div>
               </div>
-            </motion.div>
+            </div>
 
           </div>
-        </div>
-
-        {/* 5. Envelope Front Panel (Overlaps the paper card's very bottom edge, but behind the card? Wait, no. If paper card is pulled out, front panel is usually behind it or overlapping it. Let's place it behind the card, but below the envelope back panel.) */}
-        {/* Actually, in Screenshot 1, there is no visible front panel, the paper card covers it. We can omit it or place it behind. */}
-
-        {/* 6. Wax Seal (Overlaps the top edge of the paper card AND the tip of the envelope liner) */}
-        <motion.div 
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: false }}
-          transition={{ type: "spring", stiffness: 120, damping: 10, delay: 1.2 }}
-          className="absolute top-[41%] left-1/2 -translate-x-1/2 w-[70px] aspect-square z-50 pointer-events-none drop-shadow-md"
-        >
-          <Image src={WEDDING_INVITATION_ASSETS.waxSealGold} alt="Wax Seal" fill className="object-contain" />
         </motion.div>
 
-      </motion.div>
+      </div>
     </section>
   );
 }
