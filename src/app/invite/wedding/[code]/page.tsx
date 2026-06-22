@@ -19,7 +19,7 @@ export async function generateMetadata(
   const { invitation, error } = await getInvitationDetails(code, "wedding");
 
   // 2. Graceful Fallbacks
-  const guestName = (invitation && !error) ? invitation.guest.name : "Our Special Guest";
+  const guestName = (invitation && !error && invitation.guest?.name) ? invitation.guest.name : "Our Special Guest";
 
   // 3. Dynamic Text Generation
   const title = "Wedding Invitation - William & Aziel";
