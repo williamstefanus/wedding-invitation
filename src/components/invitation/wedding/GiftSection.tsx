@@ -30,7 +30,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
       {/* Top Meadow Transition (overlaps upwards if needed) */}
       <div className="absolute top-[-20px] left-0 w-full z-20 pointer-events-none opacity-80">
         <Image 
-          src="/assets/wedding-invitation/meadow-flower-divider.png" 
+          src="/images/meadow-flower-divider.png" 
           alt="Meadow Divider" 
           width={480} 
           height={295} 
@@ -120,10 +120,10 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
 
       {/* Bottom Floral Bouquets Transition */}
       <div className="absolute bottom-[-20px] left-[-20px] z-20 pointer-events-none w-[180px] h-[180px]">
-        <Image src="/assets/wedding-invitation/floral-bouquet-left.png" fill className="object-contain object-bottom-left" alt="Floral Left" />
+        <Image src="/images/floral-bouquet-left.png" fill className="object-contain object-bottom-left" alt="Floral Left" />
       </div>
       <div className="absolute bottom-[-20px] right-[-20px] z-20 pointer-events-none w-[180px] h-[180px]">
-        <Image src="/assets/wedding-invitation/floral-bouquet-right.png" fill className="object-contain object-bottom-right" alt="Floral Right" />
+        <Image src="/images/floral-bouquet-right.png" fill className="object-contain object-bottom-right" alt="Floral Right" />
       </div>
 
     </section>

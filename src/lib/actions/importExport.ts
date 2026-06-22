@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { generateInvitationCode } from "@/lib/utils/generateCode";
+import { generateInvitationCode } from "@/lib/utils";
 
 export async function fetchExistingIdentifiers() {
   try {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { WEDDING_INVITATION_ASSETS as ASSET } from "@/lib/constants/weddingInvitationAssets";
+import { WEDDING_INVITATION_ASSETS as ASSET } from "@/lib/constants";
 
 export function CoupleSection() {
   return (

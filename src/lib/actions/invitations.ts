@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { generateInvitationCode } from "@/lib/utils/generateCode";
+import { generateInvitationCode } from "@/lib/utils";
 
 export async function getInvitations({ 
   search, 

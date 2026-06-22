@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { WEDDING_INVITATION_ASSETS } from "@/lib/constants/weddingInvitationAssets";
+import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
 
 interface EventDetailsSectionProps {
   sessions: any[];

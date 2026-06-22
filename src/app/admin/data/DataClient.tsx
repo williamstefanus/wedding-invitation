@@ -4,7 +4,7 @@ import { useState, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { UploadCloud, FileDown, AlertCircle, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import * as XLSX from "xlsx";
-import { exportToExcel } from "@/lib/utils/exportExcel";
+import { exportToExcel } from "@/lib/utils";
 import { generateExportData, bulkImportGuestsAndInvitations } from "@/lib/actions/importExport";
 
 interface DataClientProps {

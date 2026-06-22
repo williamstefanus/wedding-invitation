@@ -21,7 +21,7 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
       {/* Meadow Hills - Normal Document Flow to dictate height naturally */}
       <div className="relative w-full z-10 pointer-events-none mt-10">
         <Image 
-          src="/assets/wedding-invitation/footer-meadow-hills.png"
+          src="/images/footer-meadow-hills.png"
           alt="Meadow Hills"
           width={390}
           height={300}
@@ -31,7 +31,7 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
         {/* Floral Bouquets absolutely positioned relative to the hills */}
         <div className="absolute top-[0px] left-[-30px] z-20 w-[180px] h-[240px]">
           <Image 
-            src="/assets/wedding-invitation/floral-bouquet-left.png" 
+            src="/images/floral-bouquet-left.png" 
             fill 
             className="object-contain object-left-top" 
             alt="Floral Left" 
@@ -41,7 +41,7 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
         {/* Right Floral Bouquet anchored to the hills */}
         <div className="absolute bottom-[-30px] right-[-30px] z-20 w-[160px] h-[200px]">
           <Image 
-            src="/assets/wedding-invitation/floral-bouquet-right.png" 
+            src="/images/floral-bouquet-right.png" 
             fill 
             className="object-contain object-right-bottom" 
             alt="Floral Right" 

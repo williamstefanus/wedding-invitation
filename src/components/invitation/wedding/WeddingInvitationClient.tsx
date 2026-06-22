@@ -116,7 +116,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
         {/* Meadow Flower Divider at the top of the content */}
         <div className="w-full -mt-10 relative z-30 pointer-events-none">
           <Image 
-            src="/assets/wedding-invitation/meadow-flower-divider.png" 
+            src="/images/meadow-flower-divider.png" 
             alt="Meadow Flower Divider" 
             width={480} 
             height={295} 

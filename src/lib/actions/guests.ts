@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import type { Guest, GuestCategory, GuestOwner } from "@/types";
-import { generateInvitationCode } from "@/lib/utils/generateCode";
+import { generateInvitationCode } from "@/lib/utils";
 
 interface GetGuestsParams {
   search?: string;

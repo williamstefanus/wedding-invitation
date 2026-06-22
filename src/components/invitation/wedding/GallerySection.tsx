@@ -90,7 +90,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 className="w-full aspect-[4/3] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
                 onClick={() => setSelectedImage({ label: "Placeholder" })}
               >
-                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
               </motion.div>
               
               <div className="flex gap-3 w-full">
@@ -102,7 +102,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                   className="flex-1 aspect-square relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
                   onClick={() => setSelectedImage({ label: "Placeholder" })}
                 >
-                  <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                  <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
@@ -112,7 +112,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                   className="flex-1 aspect-square relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
                   onClick={() => setSelectedImage({ label: "Placeholder" })}
                 >
-                  <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                  <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
                 </motion.div>
               </div>
 
@@ -124,7 +124,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 className="w-full aspect-[4/3] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
                 onClick={() => setSelectedImage({ label: "Placeholder" })}
               >
-                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
               </motion.div>
             </div>
 
@@ -137,7 +137,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
                 onClick={() => setSelectedImage({ label: "Placeholder" })}
               >
-                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
               </motion.div>
               
               <motion.div 
@@ -148,7 +148,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
                 onClick={() => setSelectedImage({ label: "Placeholder" })}
               >
-                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
               </motion.div>
             </div>
           </div>
@@ -170,7 +170,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                <img src={selectedImage.url} alt="Gallery item full" className="object-contain w-full h-full" />
              ) : (
                <Image 
-                 src="/assets/wedding-invitation/gallery-placeholder.png"
+                 src="/images/gallery-placeholder.png"
                  alt="Gallery Placeholder Full" 
                  fill 
                  className="object-contain" 

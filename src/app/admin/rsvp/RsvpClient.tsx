@@ -4,7 +4,7 @@ import { useState, useTransition, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Eye, Edit2, Trash2, Search, Download, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { adminUpdateRsvp, resetRsvp, getAllRsvpsForExport } from "@/lib/actions/adminRsvp";
-import { exportToExcel } from "@/lib/utils/exportExcel";
+import { exportToExcel } from "@/lib/utils";
 
 export function RsvpClient({
   initialInvitations,
