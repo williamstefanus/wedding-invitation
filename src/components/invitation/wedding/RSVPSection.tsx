@@ -80,7 +80,48 @@ export function RSVPSection({ invitation, deadline: settingsDeadline }: RSVPSect
   };
 
   const handleAddToCalendar = () => {
-    window.open("https://calendar.google.com/calendar/r/eventedit", "_blank");
+    try {
+      const sessions = invitation?.event_type?.sessions || [];
+      const title = encodeURIComponent("William & Aziel Wedding");
+      const details = encodeURIComponent("We joyfully invite you to celebrate our wedding! Please check the digital invitation for full details.");
+      
+      let location = "";
+      let startStr = "";
+      let endStr = "";
+      
+      if (sessions.length > 0) {
+        // Sort sessions chronologically
+        const sorted = [...sessions].sort((a: any, b: any) => {
+          return `${a.date}T${a.start_time}`.localeCompare(`${b.date}T${b.start_time}`);
+        });
+        
+        const first = sorted[0];
+        const last = sorted[sorted.length - 1];
+        
+        location = encodeURIComponent(`${first.venue_name}${first.address ? `, ${first.address}` : ''}`);
+        
+        // Format Google Date YYYYMMDDTHHMMSS
+        const formatGoogleDate = (d: string, t: string) => {
+          if (!d || !t) return "";
+          return `${d.replace(/-/g, '')}T${t.replace(/:/g, '').padEnd(6, '0')}`;
+        };
+        
+        startStr = formatGoogleDate(first.date, first.start_time);
+        endStr = formatGoogleDate(last.date, last.end_time);
+      }
+      
+      let url = `https://calendar.google.com/calendar/r/eventedit?text=${title}&details=${details}&ctz=Asia/Jakarta`;
+      if (startStr && endStr) {
+        url += `&dates=${startStr}/${endStr}`;
+      }
+      if (location) {
+        url += `&location=${location}`;
+      }
+      
+      window.open(url, "_blank");
+    } catch (err) {
+      window.open("https://calendar.google.com/calendar/r/eventedit?text=William+%26+Aziel+Wedding", "_blank");
+    }
   };
 
   const resetForm = () => {
