@@ -1,6 +1,7 @@
 import { getGuests } from "@/lib/actions/guests";
 import { GuestClient } from "./GuestClient";
 import type { GuestOwner, GuestCategory } from "@/types";
+import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 0;
 
@@ -15,15 +16,20 @@ export default async function GuestsPage({
   const search = typeof resolvedParams.search === "string" ? resolvedParams.search : "";
   const owner = typeof resolvedParams.owner === "string" ? (resolvedParams.owner as GuestOwner | "All") : "All";
   const category = typeof resolvedParams.category === "string" ? (resolvedParams.category as GuestCategory | "All") : "All";
+  const tab = typeof resolvedParams.tab === "string" ? resolvedParams.tab : "all";
   const limit = 10;
 
   const { data: guests, total, totalPages } = await getGuests({
     search,
     owner,
     category,
+    tab,
     page,
     limit
   });
+
+  const supabase = await createClient();
+  const { data: eventTypes } = await supabase.from("event_types").select("*");
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
@@ -35,6 +41,8 @@ export default async function GuestsPage({
         currentSearch={search}
         currentOwner={owner}
         currentCategory={category}
+        currentTab={tab}
+        eventTypes={eventTypes || []}
       />
     </div>
   );

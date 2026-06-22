@@ -22,7 +22,6 @@ import { GlobalSearch } from "./GlobalSearch";
 const NAV_ITEMS = [
   { label: "Overview",    href: "/admin",             icon: LayoutDashboard },
   { label: "Guests",      href: "/admin/guests",      icon: Users },
-  { label: "Invitations", href: "/admin/invitations", icon: Mail },
   { label: "RSVP",        href: "/admin/rsvp",        icon: CheckSquare },
   { label: "Seating",     href: "/admin/seating",     icon: Grid3X3 },
   { label: "Data Management", href: "/admin/data",    icon: Database },
