@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Heart } from "lucide-react";
 import { getInvitationDetails } from "@/lib/actions/invitation";
+import { getSettings } from "@/lib/actions/settings";
 import { InviteNotFound } from "@/components/invitation/InviteNotFound";
 import { WeddingInvitationClient } from "@/components/invitation/wedding/WeddingInvitationClient";
 
@@ -20,6 +21,7 @@ export default async function WeddingInvitePage({
 
   // Fetch invitation strictly bound to the 'wedding' event type slug
   const { invitation, error } = await getInvitationDetails(code, "wedding");
+  const settingsRes = await getSettings();
 
   if (error || !invitation) {
     return <InviteNotFound />;
@@ -29,6 +31,10 @@ export default async function WeddingInvitePage({
   const guest = invitation.guest;
 
   return (
-    <WeddingInvitationClient invitation={invitation} code={code} />
+    <WeddingInvitationClient 
+      invitation={invitation} 
+      code={code} 
+      settings={settingsRes.data} 
+    />
   );
 }

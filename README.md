@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wedding Invitation & Admin Dashboard
+
+This is a comprehensive wedding invitation platform featuring dynamic public invitation pages, a multi-event RSVP system, and a full-featured admin dashboard.
+
+## Features
+
+- **Dynamic Public Invitations**: Custom links for guests (`/invite/wedding/[code]`).
+- **Multi-Event RSVP System**: Guests can RSVP for the Wedding Celebration and Sangjit Ceremony. Deadlines restrict edits automatically.
+- **Admin Dashboard**: Manage guests, invitations, RSVPs, seating, and global settings from one interface.
+- **Seating Assignments**: Visual mapping and tabular assignments with over-capacity warnings.
+- **Import/Export Data**: Bulk import guests via CSV/Excel and export invitation data.
+- **Global Settings Management**: Update couple names, venues, maps URLs, RSVP deadlines, and gallery images without code changes.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Node.js](https://nodejs.org/en/) (v18 or higher)
+- [Supabase CLI](https://supabase.com/docs/guides/cli) (if running Supabase locally)
+- A Supabase Project (Local or Remote)
+
+### 2. Environment Variables
+
+Create a `.env.local` file in the root directory and add the following keys:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key # For admin actions bypassing RLS
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Supabase Setup & Database Initialization
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the following commands to set up your database schema and seed it with initial data.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**If using Local Supabase:**
+```bash
+supabase start
+supabase db reset
+```
 
-## Learn More
+**If using a Remote Supabase Project:**
+Link your project and push migrations:
+```bash
+supabase link --project-ref your-project-ref
+supabase db push
+# Then run the SQL from supabase/seed.sql manually in the Supabase SQL Editor to populate initial data.
+```
 
-To learn more about Next.js, take a look at the following resources:
+**Storage Bucket Setup:**
+You must manually create a storage bucket in your Supabase Dashboard:
+1. Name the bucket `gallery`.
+2. Ensure it is set to **Public**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Asset Placement
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Before running the project, place your custom design assets into the `/public` folder:
+- `/public/images/`: `hero_background.png`, `floral_envelope.png`, `wax_seal.png`, `grass_texture.png`, etc.
+- `/public/audio/`: `bgm.mp3` (Background music for the public invitation).
+- Ensure any file names referenced in `AssetPlaceholder` components are placed accurately.
 
-## Deploy on Vercel
+### 5. Local Development Commands
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To lint, build, and run the project locally, use the following exact commands:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Install dependencies
+npm install
+
+# Run ESLint to verify code quality
+npm run lint
+
+# Run TypeScript type check
+npx tsc --noEmit
+
+# Run production build
+npm run build
+
+# Start local development server
+npm run dev
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000).
+- Admin Dashboard: `http://localhost:3000/admin`
+
+---
+
+## Deployment to Vercel
+
+1. Push your code to a GitHub repository.
+2. Go to [Vercel](https://vercel.com/) and import the repository.
+3. Add the following Environment Variables in the Vercel project settings:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+4. Click **Deploy**. Vercel will automatically run `npm run build` and launch the application.
+
+---
+
+## Known Limitations and MVP Scope
+
+- **No Authentication Mechanism**: The admin dashboard is currently unprotected. It requires a hardcoded authentication guard or integration with Supabase Auth before production deployment.
+- **Local Media Storage constraints**: The gallery image uploader requires a pre-existing `gallery` public bucket. 
+- **Seating Map Constraints**: The seating UI visually groups guests but does not yet feature a drag-and-drop 2D visual floor plan mapping tool.
+
+## Future Scope
+
+The following features are slated for future development:
+- **Add authentication**: Secure the admin dashboard with Supabase Auth.
+- **Add admin roles**: Differentiate permissions between the Bride/Groom and Wedding Organizers (WO).
+- **Add full RSVP history/audit log**: Track exactly when and how guests modified their RSVPs.
+- **Add final Sangjit visual design**: Update the Sangjit public invitation page once final assets and design files are provided.

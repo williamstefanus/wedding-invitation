@@ -1,4 +1,5 @@
-import { AssetPlaceholder } from "@/components/ui/AssetPlaceholder";
+import Image from "next/image";
+import { WEDDING_INVITATION_ASSETS } from "@/lib/constants/weddingInvitationAssets";
 
 interface EventDetailsSectionProps {
   sessions: any[];
@@ -17,7 +18,7 @@ export function EventDetailsSection({ sessions = [] }: EventDetailsSectionProps)
           : "flex-row-reverse justify-between items-center mb-16 gap-4";
           
         const textAlignmentClass = isEven ? "items-start text-left" : "items-end text-right";
-        const placeholderImg = isEven ? "[church_line_art.png]" : "[dinner_table_art.png]";
+        const placeholderImg = isEven ? WEDDING_INVITATION_ASSETS.holyMatrimonyIllustration : WEDDING_INVITATION_ASSETS.receptionDinnerIllustration;
         const placeholderClass = isEven ? "w-[120px] h-[140px]" : "w-[140px] h-[140px] -ml-4";
 
         // Format time string from "HH:MM:SS" to "HH:MM"
@@ -59,15 +60,15 @@ export function EventDetailsSection({ sessions = [] }: EventDetailsSectionProps)
             </div>
             
             <div className={`shrink-0 relative opacity-90 ${placeholderClass}`}>
-              <AssetPlaceholder label={placeholderImg} width="100%" height="100%" className="bg-transparent border-none text-white/50" />
+              <Image src={placeholderImg} alt={session.name || "Event"} fill className="object-contain drop-shadow-md" />
             </div>
           </div>
         );
       })}
 
       {/* Floral Divider to RSVP Section */}
-      <div className="w-full mt-8 -mb-24 relative z-30">
-        <AssetPlaceholder label="[floral_divider_yellow.png]" width="100%" height="200px" className="bg-transparent border-none" />
+      <div className="w-full mt-8 -mb-24 relative z-30 h-[200px]">
+        <Image src={WEDDING_INVITATION_ASSETS.daisyGardenDivider} alt="Divider" fill className="object-contain" />
       </div>
 
     </section>

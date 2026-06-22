@@ -1,38 +1,158 @@
 "use client";
 
 import { useState } from "react";
-import { AssetPlaceholder } from "@/components/ui/AssetPlaceholder";
 import { X } from "lucide-react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-const placeholderImages = [
-  { id: 1, label: "[gallery_1.png]", height: "200px" },
-  { id: 2, label: "[gallery_2.png]", height: "150px" },
-  { id: 3, label: "[gallery_3.png]", height: "220px" },
-  { id: 4, label: "[gallery_4.png]", height: "160px" },
-  { id: 5, label: "[gallery_5.png]", height: "230px" },
-  { id: 6, label: "[gallery_6.png]", height: "160px" },
-];
+interface GallerySectionProps {
+  images?: string[];
+}
 
-export function GallerySection() {
-  const [selectedImage, setSelectedImage] = useState<{ id: number, label: string } | null>(null);
+export function GallerySection({ images }: GallerySectionProps) {
+  const [selectedImage, setSelectedImage] = useState<{ url?: string, label?: string } | null>(null);
+
+  const hasImages = images && images.length > 0;
+
+  // Split images into left and right columns for the playful masonry look
+  const leftColImages: string[] = [];
+  const rightColImages: string[] = [];
+  
+  if (hasImages) {
+    images.forEach((img, idx) => {
+      if (idx % 2 === 0) leftColImages.push(img);
+      else rightColImages.push(img);
+    });
+  }
 
   return (
-    <section className="w-full flex flex-col items-center bg-white py-16 z-20 relative">
-      <h2 className="text-6xl text-slate-800 mb-12" style={{ fontFamily: "var(--font-justwrite)" }}>
+    <section 
+      className="w-full flex flex-col items-center pt-16 pb-48 z-20 relative"
+      style={{
+        background: "linear-gradient(to bottom, #faf9f0 0%, #faf9f0 40%, #E3F2FD 80%, #90CAF9 100%)"
+      }}
+    >
+      <motion.h2 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, margin: "-50px" }}
+        transition={{ duration: 0.8 }}
+        className="text-[5.5rem] text-[#4B4B4B] mb-10 leading-none" 
+        style={{ fontFamily: "var(--font-justwrite)" }}
+      >
         Our Moments
-      </h2>
+      </motion.h2>
 
-      {/* Masonry Layout */}
-      <div className="w-full max-w-4xl mx-auto px-4 columns-2 md:columns-3 gap-4 space-y-4">
-        {placeholderImages.map((img) => (
-          <div 
-            key={img.id} 
-            className="break-inside-avoid cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-105 active:scale-95 shadow-md"
-            onClick={() => setSelectedImage(img)}
-          >
-            <AssetPlaceholder label={img.label} height={img.height} className="w-full border-none bg-sky-100" />
+      <div className="w-full max-w-[390px] mx-auto px-6 relative z-30">
+        {hasImages ? (
+          <div className="grid grid-cols-2 gap-3">
+            {/* Real Images Layout */}
+            <div className="flex flex-col gap-3">
+              {leftColImages.map((url, idx) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  key={`left-${idx}`} 
+                  className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white"
+                  onClick={() => setSelectedImage({ url })}
+                >
+                  <img src={url} alt={`Gallery image left ${idx + 1}`} loading="lazy" className="w-full h-auto object-cover rounded-xl" />
+                </motion.div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3 pt-6">
+              {rightColImages.map((url, idx) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.6, delay: 0.2 + (idx * 0.1) }}
+                  key={`right-${idx}`} 
+                  className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white"
+                  onClick={() => setSelectedImage({ url })}
+                >
+                  <img src={url} alt={`Gallery image right ${idx + 1}`} loading="lazy" className="w-full h-auto object-cover rounded-xl" />
+                </motion.div>
+              ))}
+            </div>
           </div>
-        ))}
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {/* Placeholder Layout exactly matching Figma */}
+            <div className="flex flex-col gap-3">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.6 }}
+                className="w-full aspect-[4/3] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
+                onClick={() => setSelectedImage({ label: "Placeholder" })}
+              >
+                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+              </motion.div>
+              
+              <div className="flex gap-3 w-full">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="flex-1 aspect-square relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
+                  onClick={() => setSelectedImage({ label: "Placeholder" })}
+                >
+                  <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="flex-1 aspect-square relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
+                  onClick={() => setSelectedImage({ label: "Placeholder" })}
+                >
+                  <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                </motion.div>
+              </div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="w-full aspect-[4/3] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
+                onClick={() => setSelectedImage({ label: "Placeholder" })}
+              >
+                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+              </motion.div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
+                onClick={() => setSelectedImage({ label: "Placeholder" })}
+              >
+                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+              </motion.div>
+              
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
+                onClick={() => setSelectedImage({ label: "Placeholder" })}
+              >
+                <Image src="/assets/wedding-invitation/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+              </motion.div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Lightbox Modal */}
@@ -45,8 +165,17 @@ export function GallerySection() {
             <X className="w-8 h-8" />
           </button>
           
-          <div className="relative w-full max-w-3xl aspect-[3/4] md:aspect-video bg-white/10 rounded-xl overflow-hidden shadow-2xl flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-             <AssetPlaceholder label={selectedImage.label} width="100%" height="100%" className="border-none bg-transparent text-white" />
+          <div className="relative w-full max-w-[390px] aspect-[3/4] bg-white/5 rounded-xl overflow-hidden shadow-2xl flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+             {selectedImage.url ? (
+               <img src={selectedImage.url} alt="Gallery item full" className="object-contain w-full h-full" />
+             ) : (
+               <Image 
+                 src="/assets/wedding-invitation/gallery-placeholder.png"
+                 alt="Gallery Placeholder Full" 
+                 fill 
+                 className="object-contain" 
+               />
+             )}
           </div>
         </div>
       )}

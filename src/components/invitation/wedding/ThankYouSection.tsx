@@ -1,43 +1,76 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { AssetPlaceholder } from "@/components/ui/AssetPlaceholder";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
-export function ThankYouSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+interface ThankYouSectionProps {
+  names?: string;
+}
+
+export function ThankYouSection({ names }: ThankYouSectionProps) {
+  const displayNames = names || "William & Aziel";
 
   return (
-    <section ref={ref} className="relative w-full flex flex-col items-center justify-end pb-12 min-h-[500px] z-20 overflow-hidden text-center">
+    <section 
+      className="relative w-full flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center"
+      style={{
+        background: "linear-gradient(to bottom, #E8E8E8 0%, #E8E8E8 35%, #F7E392 35%, #F7E392 100%)"
+      }}
+    >
       
-      {/* Golden Sandy Background & Flowers */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#416130] via-[#c9951a] to-[#e3b528] opacity-80" />
-      <div className="absolute bottom-0 left-0 right-0 z-10 opacity-70 pointer-events-none">
-        <AssetPlaceholder label="[bottom_flowers.png]" height="300px" className="border-none bg-transparent" />
+      {/* Meadow Hills - Normal Document Flow to dictate height naturally */}
+      <div className="relative w-full z-10 pointer-events-none mt-10">
+        <Image 
+          src="/assets/wedding-invitation/footer-meadow-hills.png"
+          alt="Meadow Hills"
+          width={390}
+          height={300}
+          className="w-full h-auto object-cover object-top"
+        />
+
+        {/* Floral Bouquets absolutely positioned relative to the hills */}
+        <div className="absolute top-[0px] left-[-30px] z-20 w-[180px] h-[240px]">
+          <Image 
+            src="/assets/wedding-invitation/floral-bouquet-left.png" 
+            fill 
+            className="object-contain object-left-top" 
+            alt="Floral Left" 
+          />
+        </div>
+
+        {/* Right Floral Bouquet anchored to the hills */}
+        <div className="absolute bottom-[-30px] right-[-30px] z-20 w-[160px] h-[200px]">
+          <Image 
+            src="/assets/wedding-invitation/floral-bouquet-right.png" 
+            fill 
+            className="object-contain object-right-bottom" 
+            alt="Floral Right" 
+          />
+        </div>
       </div>
 
       <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="relative z-20 w-full max-w-md mx-auto px-4 flex flex-col items-center pt-24 text-slate-800"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: false, margin: "-50px" }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="relative z-30 w-full max-w-[390px] mx-auto px-6 flex flex-col items-center mt-12 text-[#4B4B4B]"
       >
-        <p className="text-sm font-medium mb-8 max-w-[280px] mx-auto leading-relaxed" style={{ fontFamily: "var(--font-alegreya)" }}>
-          It would be our greatest joy to have your presence
+        <p className="text-[14px] mb-6 leading-relaxed px-4" style={{ fontFamily: "var(--font-alegreya)" }}>
+          It would be our greatest joy to have your presence<br />
           as we celebrate this special moment together.
         </p>
 
-        <h2 className="text-7xl mb-4" style={{ fontFamily: "var(--font-justwrite)" }}>
+        <h2 className="text-[4rem] mb-4 leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-justwrite)" }}>
           Thank You
         </h2>
         
-        <p className="italic text-slate-700 text-sm mb-12" style={{ fontFamily: "var(--font-alegreya)" }}>
+        <p className="text-[16px] mb-12" style={{ fontFamily: "var(--font-alegreya)" }}>
           for your love and blessings
         </p>
 
-        <p className="text-xs font-medium tracking-widest uppercase text-slate-800" style={{ fontFamily: "var(--font-alegreya)" }}>
-          William &amp; Aziel - 2026
+        <p className="text-[13px] tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
+          {displayNames} - 2026
         </p>
       </motion.div>
     </section>

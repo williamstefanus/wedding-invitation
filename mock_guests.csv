@@ -1,0 +1,6 @@
+Name,Phone,Owner,Category,Wedding Pax,Sangjit Pax,Notes
+James Gosling,123456789,William,Friends,2,0,
+Guido van Rossum,987654321,Aziel,Relatives,4,4,VVIP
+Bjarne Stroustrup,55555555,William,Church,0,2,
+Invalid Owner,111,Invalid,Friends,2,0,Should error out
+Duplicate Guest,222,William,Friends,2,0,Will test duplicate on second run

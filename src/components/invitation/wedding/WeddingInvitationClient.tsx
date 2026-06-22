@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { OpeningScreen } from "./OpeningScreen";
 import { CountdownSection } from "./CountdownSection";
 import { CoupleSection } from "./CoupleSection";
-import { SaveTheDateSection } from "./SaveTheDateSection";
-import { EventDetailsSection } from "./EventDetailsSection";
+import { ScheduleSection } from "./ScheduleSection";
 import { RSVPSection } from "./RSVPSection";
 import { GallerySection } from "./GallerySection";
 import { GiftSection } from "./GiftSection";
@@ -15,9 +15,10 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from "@heroicons/react/24/solid";
 interface WeddingInvitationClientProps {
   invitation: any;
   code: string;
+  settings?: any;
 }
 
-export function WeddingInvitationClient({ invitation, code }: WeddingInvitationClientProps) {
+export function WeddingInvitationClient({ invitation, code, settings }: WeddingInvitationClientProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -63,10 +64,14 @@ export function WeddingInvitationClient({ invitation, code }: WeddingInvitationC
     };
   }, [isOpen]);
 
+  const config = settings?.config || {};
+  const musicUrl = config.music_url || "/audio/bgm.mp3";
+
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-white">
-      {/* Background Audio */}
-      <audio ref={audioRef} src="/audio/bgm.mp3" loop />
+    <div className="min-h-[100dvh] w-full bg-neutral-100 flex justify-center">
+      <main className="relative min-h-[100dvh] w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl">
+        {/* Background Audio */}
+        <audio ref={audioRef} src={musicUrl} loop />
 
       <OpeningScreen 
         guestName={invitation?.guest?.name || null}
@@ -85,15 +90,11 @@ export function WeddingInvitationClient({ invitation, code }: WeddingInvitationC
         >
           {/* Full Black Disc SVG */}
           <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Main black vinyl disc */}
             <circle cx="20" cy="20" r="20" fill="#1A1A1A" />
-            {/* Inner grooves */}
             <circle cx="20" cy="20" r="14" stroke="#333333" strokeWidth="1" />
             <circle cx="20" cy="20" r="10" stroke="#333333" strokeWidth="1" />
             <circle cx="20" cy="20" r="6" stroke="#333333" strokeWidth="1" />
-            {/* Center label (gold) */}
             <circle cx="20" cy="20" r="4" fill="#e2c882" />
-            {/* Center hole */}
             <circle cx="20" cy="20" r="1" fill="#FFFFFF" />
           </svg>
         </button>
@@ -102,17 +103,28 @@ export function WeddingInvitationClient({ invitation, code }: WeddingInvitationC
       {/* The main content that shows underneath */}
       <div 
         ref={contentRef}
-        className="w-full flex flex-col relative z-20"
+        className="w-full flex flex-col relative z-20 bg-[#faf9f0]"
       >
-        <CountdownSection targetDateStr="2026-10-23T11:00:00" />
+        {/* Meadow Flower Divider at the top of the content */}
+        <div className="w-full -mt-10 relative z-30 pointer-events-none">
+          <Image 
+            src="/assets/wedding-invitation/meadow-flower-divider.png" 
+            alt="Meadow Flower Divider" 
+            width={480} 
+            height={295} 
+            className="w-full h-auto object-cover object-top" 
+          />
+        </div>
+
+        <CountdownSection targetDateStr={config.countdown_date || "2026-10-23T11:00:00"} />
         <CoupleSection />
-        <SaveTheDateSection />
-        <EventDetailsSection sessions={invitation?.event_type?.sessions || []} />
-        <RSVPSection invitation={invitation} />
-        <GallerySection />
-        <GiftSection />
-        <ThankYouSection />
+        <ScheduleSection sessions={settings?.sessions ? [settings.sessions.holyMatrimony, settings.sessions.reception].filter(Boolean) : (invitation?.event_type?.sessions || [])} />
+        <RSVPSection invitation={invitation} deadline={settings?.deadlines?.wedding} />
+        <GallerySection images={config.gallery_images} />
+        <GiftSection bank={config.gift_bank} account={config.gift_account} name={config.gift_name} />
+        <ThankYouSection names={config.couple_names} />
       </div>
     </main>
+    </div>
   );
 }

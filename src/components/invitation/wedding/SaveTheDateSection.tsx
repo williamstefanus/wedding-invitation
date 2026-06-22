@@ -1,14 +1,15 @@
-import { AssetPlaceholder } from "@/components/ui/AssetPlaceholder";
+import Image from "next/image";
+import { WEDDING_INVITATION_ASSETS } from "@/lib/constants/weddingInvitationAssets";
 
 export function SaveTheDateSection() {
   return (
     <section className="w-full flex flex-col items-center py-16 bg-[#416130] z-20 relative">
-      <div className="relative mb-8">
-        <AssetPlaceholder label="[gold-badge.png]" width="140px" height="140px" className="rounded-full bg-yellow-600/20 border-yellow-500 text-yellow-200" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span className="text-yellow-100 uppercase tracking-widest text-sm" style={{ fontFamily: "var(--font-alegreya)" }}>Save</span>
-          <span className="text-yellow-100 uppercase tracking-widest text-xs" style={{ fontFamily: "var(--font-alegreya)" }}>— The —</span>
-          <span className="text-yellow-100 uppercase tracking-widest text-2xl" style={{ fontFamily: "var(--font-alegreya)" }}>Date</span>
+      <div className="relative mb-8 flex justify-center items-center w-[140px] h-[140px]">
+        <Image src={WEDDING_INVITATION_ASSETS.saveDateGoldBadge} alt="Save The Date Badge" fill className="object-contain drop-shadow-lg" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
+          <span className="text-yellow-900 uppercase tracking-widest text-[10px]" style={{ fontFamily: "var(--font-alegreya)" }}>Save</span>
+          <span className="text-yellow-900 uppercase tracking-widest text-[8px] my-1" style={{ fontFamily: "var(--font-alegreya)" }}>— The —</span>
+          <span className="text-yellow-900 uppercase tracking-widest text-xl font-bold" style={{ fontFamily: "var(--font-alegreya)" }}>Date</span>
         </div>
       </div>
 

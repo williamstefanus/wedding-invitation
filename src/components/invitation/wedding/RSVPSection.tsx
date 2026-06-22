@@ -5,9 +5,10 @@ import { submitRSVP } from "@/lib/actions/rsvp";
 
 interface RSVPSectionProps {
   invitation?: any;
+  deadline?: string;
 }
 
-export function RSVPSection({ invitation }: RSVPSectionProps) {
+export function RSVPSection({ invitation, deadline: settingsDeadline }: RSVPSectionProps) {
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState("");
   const [submitState, setSubmitState] = useState<"idle" | "success_attending" | "success_not_attending" | "success_updated">("idle");
@@ -27,7 +28,7 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
   const [wishes, setWishes] = useState<string>(existingRsvp?.wish_message || "");
 
   // Deadline logic
-  const deadlineStr = invitation?.event_type?.rsvp_edit_deadline_at;
+  const deadlineStr = settingsDeadline || invitation?.event_type?.rsvp_edit_deadline_at;
   const deadline = deadlineStr ? new Date(deadlineStr).getTime() : null;
   const isPastDeadline = deadline ? new Date().getTime() > deadline : false;
 
@@ -115,14 +116,14 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
           {(submitState === "success_attending" || (submitState === "success_updated" && attending)) && (
             <button 
               onClick={handleAddToCalendar}
-              className="w-full py-3 bg-[#416130] text-white rounded-[20px] font-medium hover:bg-[#344d26] transition"
+              className="w-full py-3 bg-[#4B4B4B] text-white rounded-xl font-medium hover:bg-black transition"
             >
               Add To Google Calendar
             </button>
           )}
           <button 
             onClick={resetForm}
-            className="w-full py-3 bg-white border border-slate-300 text-slate-600 rounded-[20px] font-medium hover:bg-slate-50 transition"
+            className="w-full py-3 bg-white border border-[#E5E5E5] text-[#4B4B4B] rounded-xl font-medium hover:bg-slate-50 transition"
           >
             Back To Invitation
           </button>
@@ -132,12 +133,12 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
   }
 
   return (
-    <section className="w-full bg-[#faf9f0] flex flex-col items-center py-16 z-20 relative">
-      <h2 className="text-7xl text-[#416130] mb-8" style={{ fontFamily: "var(--font-justwrite)" }}>
+    <section className="w-full bg-[#faf9f0] flex flex-col items-center py-20 z-20 relative">
+      <h2 className="text-[6rem] text-[#4B4B4B] mb-6 leading-none" style={{ fontFamily: "var(--font-justwrite)" }}>
         RSVP
       </h2>
 
-      <div className="w-full max-w-md mx-auto px-4 flex flex-col gap-8" style={{ fontFamily: "var(--font-alegreya)" }}>
+      <div className="w-full max-w-md mx-auto px-6 flex flex-col gap-6" style={{ fontFamily: "var(--font-alegreya)" }}>
         
         {isPastDeadline && (
           <div className="bg-amber-50 text-amber-800 p-4 rounded-xl border border-amber-200 text-center text-sm leading-relaxed">
@@ -147,12 +148,12 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
 
         {/* Attendance */}
         <div className="flex flex-col items-center gap-3">
-          <p className="text-slate-800 font-medium text-lg">Will you attend our wedding?</p>
-          <div className="flex w-full gap-4">
+          <p className="text-[#4B4B4B] text-lg">Will you attend our wedding?</p>
+          <div className="flex w-full gap-3">
             <button 
               disabled={isPastDeadline || isPending}
               onClick={() => setAttending(true)}
-              className={`flex-1 py-3 border rounded-[20px] transition ${attending === true ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+              className={`flex-1 py-3 border rounded-xl transition ${attending === true ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
             >
               Yes, I will attend
             </button>
@@ -163,7 +164,7 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
                 setEvents([]);
                 setPax(null);
               }}
-              className={`flex-1 py-3 border rounded-[20px] transition ${attending === false ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+              className={`flex-1 py-3 border rounded-xl transition ${attending === false ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
             >
               No, I can't attend
             </button>
@@ -173,13 +174,13 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
         {/* Events */}
         {attending && sessions.length > 0 && (
           <div className="flex flex-col items-center gap-3 animate-fade-up">
-            <p className="text-slate-800 font-medium text-lg">Which event(s) will you attend?</p>
+            <p className="text-[#4B4B4B] text-lg">Which event(s) will you attend?</p>
             <div className="flex flex-col w-full gap-3">
               {sessions.length === 1 ? (
                 <button 
                   disabled={isPastDeadline || isPending}
                   onClick={() => setEvents([sessions[0].id])}
-                  className={`w-full py-3 border rounded-[20px] transition ${events.length === 1 && events[0] === sessions[0].id ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+                  className={`w-full py-3 border rounded-xl transition ${events.length === 1 && events[0] === sessions[0].id ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                 >
                   {sessions[0].name}
                 </button>
@@ -189,14 +190,14 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
                     <button 
                       disabled={isPastDeadline || isPending}
                       onClick={() => setEvents([sessions[0].id])}
-                      className={`flex-1 py-3 border rounded-[20px] transition ${events.length === 1 && events[0] === sessions[0].id ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+                      className={`flex-1 py-3 border rounded-xl transition ${events.length === 1 && events[0] === sessions[0].id ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                     >
                       {sessions[0].name}
                     </button>
                     <button 
                       disabled={isPastDeadline || isPending}
                       onClick={() => setEvents([sessions[1].id])}
-                      className={`flex-1 py-3 border rounded-[20px] transition ${events.length === 1 && events[0] === sessions[1].id ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+                      className={`flex-1 py-3 border rounded-xl transition ${events.length === 1 && events[0] === sessions[1].id ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                     >
                       {sessions[1].name}
                     </button>
@@ -204,7 +205,7 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
                   <button 
                     disabled={isPastDeadline || isPending}
                     onClick={() => setEvents([sessions[0].id, sessions[1].id])}
-                    className={`w-full py-3 border rounded-[20px] transition ${events.length === 2 ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+                    className={`w-full py-3 border rounded-xl transition ${events.length === 2 ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                   >
                     {sessions[0].name} & {sessions[1].name}
                   </button>
@@ -217,14 +218,14 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
         {/* Pax */}
         {attending && (
           <div className="flex flex-col items-center gap-3 animate-fade-up">
-            <p className="text-slate-800 font-medium text-lg">How many people?</p>
+            <p className="text-[#4B4B4B] text-lg">How many people?</p>
             <div className="flex w-full gap-2 justify-center">
               {Array.from({ length: maxPax }, (_, i) => i + 1).map(num => (
                 <button
                   key={num}
                   disabled={isPastDeadline || isPending}
                   onClick={() => setPax(num)}
-                  className={`w-12 h-12 flex items-center justify-center border rounded-[16px] transition ${pax === num ? 'bg-[#416130] text-white border-[#416130]' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'} disabled:opacity-50`}
+                  className={`flex-1 py-3 border rounded-xl transition ${pax === num ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                 >
                   {num}
                 </button>
@@ -235,14 +236,14 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
 
         {/* Wishes */}
         <div className="flex flex-col items-center gap-3">
-          <p className="text-slate-800 font-medium text-lg">Send your wish (Optional)</p>
+          <p className="text-[#4B4B4B] text-lg">Send your wish ( Optional )</p>
           <textarea 
             disabled={isPastDeadline || isPending}
-            placeholder="Type your message here ..."
+            placeholder="Type your message here."
             maxLength={500}
             value={wishes}
             onChange={(e) => setWishes(e.target.value)}
-            className="w-full border border-slate-300 rounded-2xl p-4 min-h-[120px] focus:outline-none focus:border-[#416130] disabled:opacity-50 disabled:bg-slate-50 bg-white text-slate-800"
+            className="w-full border border-[#E5E5E5] rounded-xl p-4 min-h-[120px] focus:outline-none focus:border-[#4B4B4B] disabled:opacity-50 disabled:bg-slate-50 bg-white text-[#4B4B4B]"
           />
         </div>
 
@@ -250,19 +251,19 @@ export function RSVPSection({ invitation }: RSVPSectionProps) {
         {errorMsg && <p className="text-red-500 text-center text-sm">{errorMsg}</p>}
 
         {/* Actions */}
-        <div className="flex flex-col gap-3 mt-2">
+        <div className="flex flex-col gap-3 mt-4">
           {!isPastDeadline && (
             <button 
               disabled={isPending}
               onClick={handleSubmit}
-              className="w-full py-4 bg-[#416130] text-white rounded-[20px] font-medium hover:bg-[#344d26] transition disabled:opacity-70"
+              className="w-full py-4 bg-[#3A592F] text-white rounded-xl hover:bg-[#2b4223] transition disabled:opacity-70"
             >
               {isPending ? "Saving..." : existingRsvp ? "Update RSVP" : "Confirm RSVP"}
             </button>
           )}
           <button 
             onClick={handleAddToCalendar}
-            className="w-full py-4 bg-white border border-slate-300 text-slate-600 rounded-[20px] font-medium hover:bg-slate-50 transition"
+            className="w-full py-4 bg-white border border-[#E5E5E5] text-[#4B4B4B] rounded-xl hover:bg-slate-50 transition"
           >
             Add to Google Calendar
           </button>

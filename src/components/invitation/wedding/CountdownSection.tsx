@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
-import { AssetPlaceholder } from "@/components/ui/AssetPlaceholder";
 
 interface CountdownSectionProps {
   targetDateStr: string;
@@ -38,51 +38,76 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
     return () => clearInterval(timer);
   }, [targetDateStr]);
 
+  const formatDigits = (num: number) => {
+    const str = String(num).padStart(2, '0');
+    return [str[0], str[1]];
+  };
+
+  const days = formatDigits(timeLeft.days);
+  const hours = formatDigits(timeLeft.hours);
+  const minutes = formatDigits(timeLeft.minutes);
+
   return (
-    <section className="relative w-full max-w-md mx-auto px-4 z-20 animate-fade-up pt-16 mb-16">
-      <div className="relative bg-[#faf9f0] rounded-3xl shadow-xl p-6 border border-[#eae6c8] overflow-hidden">
-
-        <div className="relative z-10 flex flex-col items-center gap-6 mt-2">
-          <div className="flex items-center justify-between w-full">
-            <span className="text-2xl text-slate-700 font-medium" style={{ fontFamily: "var(--font-alegreya)" }}>
-              Fri, 23 Oct 2026
-            </span>
-            <button className="p-2 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 transition">
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-center gap-2 md:gap-4 text-slate-800">
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl bg-slate-100/80 px-3 py-2 rounded-2xl shadow-inner font-medium">
-                {String(timeLeft.days).padStart(2, '0')}
-              </span>
-              <span className="text-[10px] md:text-xs mt-2 text-slate-600 font-medium tracking-wide">DAYS</span>
-            </div>
-            <span className="text-2xl font-bold -mt-6 opacity-50">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl bg-slate-100/80 px-3 py-2 rounded-2xl shadow-inner font-medium">
-                {String(timeLeft.hours).padStart(2, '0')}
-              </span>
-              <span className="text-[10px] md:text-xs mt-2 text-slate-600 font-medium tracking-wide">HOURS</span>
-            </div>
-            <span className="text-2xl font-bold -mt-6 opacity-50">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl bg-slate-100/80 px-3 py-2 rounded-2xl shadow-inner font-medium">
-                {String(timeLeft.minutes).padStart(2, '0')}
-              </span>
-              <span className="text-[10px] md:text-xs mt-2 text-slate-600 font-medium tracking-wide">MINS</span>
-            </div>
-            <span className="text-2xl font-bold -mt-6 opacity-50">:</span>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl bg-slate-100/80 px-3 py-2 rounded-2xl shadow-inner font-medium">
-                {String(timeLeft.seconds).padStart(2, '0')}
-              </span>
-              <span className="text-[10px] md:text-xs mt-2 text-slate-600 font-medium tracking-wide">SECS</span>
-            </div>
-          </div>
+    <section className="relative w-full px-4 z-40 animate-fade-up -mt-20 flex flex-col items-center">
+      
+      {/* The Countdown Card */}
+      <div className="relative bg-white rounded-[24px] shadow-xl p-5 w-[90%] max-w-[340px]">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4 px-1">
+          <h2 className="text-black text-lg font-medium">Event</h2>
+          <button className="p-1 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-50 transition">
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
 
+        {/* Countdown Digits */}
+        <div className="flex items-start justify-center gap-2">
+          
+          {/* Days */}
+          <div className="flex flex-col items-center">
+            <div className="flex gap-1">
+              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                {days[0]}
+              </div>
+              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                {days[1]}
+              </div>
+            </div>
+            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">days</span>
+          </div>
+
+          <span className="text-xl font-medium text-black mt-1 mx-1">:</span>
+
+          {/* Hours */}
+          <div className="flex flex-col items-center">
+            <div className="flex gap-1">
+              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                {hours[0]}
+              </div>
+              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                {hours[1]}
+              </div>
+            </div>
+            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">hours</span>
+          </div>
+
+          <span className="text-xl font-medium text-black mt-1 mx-1">:</span>
+
+          {/* Minutes */}
+          <div className="flex flex-col items-center">
+            <div className="flex gap-1">
+              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                {minutes[0]}
+              </div>
+              <div className="bg-[#F6F6F6] text-black text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                {minutes[1]}
+              </div>
+            </div>
+            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">minutes</span>
+          </div>
+
+        </div>
       </div>
     </section>
   );
