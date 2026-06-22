@@ -11,6 +11,15 @@ This is a comprehensive wedding invitation platform featuring dynamic public inv
 - **Import/Export Data**: Bulk import guests via CSV/Excel and export invitation data.
 - **Global Settings Management**: Update couple names, venues, maps URLs, RSVP deadlines, and gallery images without code changes.
 
+## Architecture & Data Model
+
+- **Modular Architecture**: The Admin dashboard UI uses a stateful orchestrator pattern (e.g. `GuestClient.tsx`) that acts as a container for smaller, extracted pure UI components located in `src/components/admin/[module]/`.
+- **Data Model Invariants**:
+  - A **Guest** is the master record.
+  - A guest **must** have at least one invitation (wedding, sangjit, or both). Standalone guests are strictly prohibited.
+  - There is a unique constraint on `(guest_id, event_type)` in the database.
+  - Public routes (`/invite/wedding/[code]`, `/invite/sangjit/[code]`) rigorously enforce event-type matching to prevent accessing one event with another event's code.
+
 ---
 
 ## Getting Started

@@ -34,7 +34,7 @@ const alegreya = Alegreya_Sans({
 });
 
 const justWrite = localFont({
-  src: "../../design-assets/JustWrite.otf",
+  src: "../../public/fonts/JustWrite.otf",
   variable: "--font-justwrite",
   display: "swap",
 });
