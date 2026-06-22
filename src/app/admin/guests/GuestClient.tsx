@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Edit2, Trash2, Search, Plus, X, ChevronLeft, ChevronRight, Copy, RefreshCw, Check } from "lucide-react";
 import { createGuest, updateGuest, deleteGuest, deleteInvitationAction, regenerateLink, updateMaxPax, getGuestById } from "@/lib/actions/guests";
 import type { Guest, GuestOwner, GuestCategory } from "@/types";
@@ -293,7 +294,9 @@ export function GuestClient({
                 <th className="px-6 py-4 font-medium">Owner & Category</th>
                 {currentTab === "all" ? (
                   <>
-                    <th className="px-6 py-4 font-medium">Invitations</th>
+                    {eventTypes.map(et => (
+                      <th key={et.id} className="px-6 py-4 font-medium">{et.name}</th>
+                    ))}
                     <th className="px-6 py-4 font-medium text-right">Actions</th>
                   </>
                 ) : (
@@ -318,7 +321,9 @@ export function GuestClient({
                 initialGuests.map((guest) => (
                   <tr key={guest.id} className="hover:bg-slate-50/50 transition">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-800">{guest.name}</div>
+                      <Link href={`/admin/guests/${guest.id}`} className="font-medium text-amber-600 hover:text-amber-700 hover:underline transition block">
+                        {guest.name}
+                      </Link>
                       {guest.phone && <div className="text-xs text-slate-500 mt-0.5">{guest.phone}</div>}
                     </td>
                     <td className="px-6 py-4">
@@ -332,15 +337,30 @@ export function GuestClient({
 
                     {currentTab === "all" ? (
                       <>
-                        <td className="px-6 py-4">
-                          <div className="flex gap-2">
-                            {guest.invitations?.map((inv: any) => (
-                              <span key={inv.id} className="px-2 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                                {inv.event_type.name} ({inv.max_pax})
-                              </span>
-                            ))}
-                          </div>
-                        </td>
+                        {eventTypes.map(et => {
+                          const inv = guest.invitations?.find((i: any) => i.event_type_id === et.id);
+                          if (!inv) return <td key={et.id} className="px-6 py-4 text-slate-400">-</td>;
+                          
+                          let rsvp = null;
+                          if (inv.rsvp) {
+                            rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
+                          }
+
+                          let statusDisplay;
+                          if (!rsvp) {
+                            statusDisplay = <span className="text-slate-500 font-medium">Pending ({inv.max_pax})</span>;
+                          } else if (rsvp.attendance_status === 'attending') {
+                            statusDisplay = <span className="text-green-600 font-bold">Attending ({rsvp.confirmed_pax})</span>;
+                          } else {
+                            statusDisplay = <span className="text-red-500 font-medium">Declined (0)</span>;
+                          }
+
+                          return (
+                            <td key={et.id} className="px-6 py-4 text-sm">
+                              {statusDisplay}
+                            </td>
+                          );
+                        })}
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <button onClick={() => openEditModal(guest)} className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition">
