@@ -155,7 +155,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Music className="w-3 h-3"/> Background Music URL</label>
                 <input 
                   type="text" 
-                  placeholder="e.g. https://www.youtube.com/watch?v=..."
+                  placeholder="e.g. /audio/bgm.mp3 or https://example.com/song.mp3"
                   value={config.music_url || ""} 
                   onChange={e => setConfig({...config, music_url: e.target.value})}
                   className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"

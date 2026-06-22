@@ -11,7 +11,7 @@ export function CoupleSection() {
         
         {/* 1. Background Sky/Grass - placed at the top center */}
         <div className="absolute top-0 w-[150%] max-w-[600px] h-[358px] pointer-events-none opacity-90 z-0">
-          <Image src={ASSET.tallGrassDivider} alt="Sky Decor" fill className="object-cover object-top" />
+          <Image src={ASSET.tallGrassDivider} alt="Sky Decor" fill sizes="600px" className="object-cover object-top" />
         </div>
 
         {/* 2. Envelope Composition Container */}
@@ -24,13 +24,13 @@ export function CoupleSection() {
         >
           {/* Back Panel */}
           <div className="absolute inset-0 z-10">
-            <Image src={ASSET.envelopeBackPanel} alt="Envelope Back" fill className="object-contain" />
+            <Image src={ASSET.envelopeBackPanel} alt="Envelope Back" fill sizes="420px" className="object-contain" />
           </div>
 
           {/* Meadow Flap - Centered inside top half */}
           {/* We remove the wild rotation from Figma to allow it to sit perfectly as a flap liner */}
           <div className="absolute top-[8%] left-1/2 -translate-x-1/2 w-[80%] aspect-square z-20">
-            <Image src={ASSET.envelopeMeadowFlap} alt="Envelope Flap" fill className="object-contain object-top" />
+            <Image src={ASSET.envelopeMeadowFlap} alt="Envelope Flap" fill sizes="300px" className="object-contain object-top" />
           </div>
 
           {/* Floral Bouquet - Placed blooming over the left side */}
@@ -39,7 +39,7 @@ export function CoupleSection() {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute -top-[15%] left-[-15%] w-[85%] aspect-square z-30 drop-shadow-md"
           >
-            <Image src={ASSET.floralBouquetLeft} alt="Bouquet" fill className="object-contain" />
+            <Image src={ASSET.floralBouquetLeft} alt="Bouquet" fill sizes="300px" className="object-contain" />
           </motion.div>
         </motion.div>
 
@@ -54,7 +54,7 @@ export function CoupleSection() {
         >
           {/* Paper Card Background */}
           <div className="absolute inset-0 drop-shadow-2xl z-0">
-            <Image src={ASSET.envelopePaperCard} alt="Paper Card" fill className="object-contain" />
+            <Image src={ASSET.envelopePaperCard} alt="Paper Card" fill sizes="420px" className="object-contain" />
           </div>
 
           {/* Wax Seal - Centered directly on top edge */}
@@ -65,7 +65,7 @@ export function CoupleSection() {
             transition={{ type: "spring", stiffness: 120, damping: 10, delay: 0.6 }}
             className="absolute -top-[8%] left-1/2 -translate-x-1/2 w-[22%] aspect-square z-50 drop-shadow-lg"
           >
-            <Image src={ASSET.waxSealGold} alt="Wax Seal" fill className="object-contain" />
+            <Image src={ASSET.waxSealGold} alt="Wax Seal" fill sizes="100px" className="object-contain" />
           </motion.div>
 
           {/* 4. Text and Stamps Content Container */}
@@ -77,10 +77,10 @@ export function CoupleSection() {
               <div className="relative w-[45%] aspect-[152/172] rotate-[2deg] shrink-0 drop-shadow-sm">
                 {/* We use standard inset so the photo fits nicely inside the stamp frame */}
                 <div className="absolute inset-[6%] -rotate-1 overflow-hidden bg-slate-200 z-10">
-                  <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill className="object-cover" />
+                  <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill sizes="200px" className="object-cover" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
-                  <Image src={ASSET.stampFrame} alt="Stamp" fill className="object-fill" />
+                  <Image src={ASSET.stampFrame} alt="Stamp" fill sizes="200px" className="object-fill" />
                 </div>
               </div>
 
@@ -106,10 +106,10 @@ export function CoupleSection() {
               {/* Stamp Container */}
               <div className="relative w-[45%] aspect-[152/172] -rotate-[3deg] shrink-0 drop-shadow-sm">
                 <div className="absolute inset-[6%] -rotate-1 overflow-hidden bg-slate-200 z-10">
-                  <Image src={ASSET.bridePhotoAziel} alt="Bride" fill className="object-cover object-top" />
+                  <Image src={ASSET.bridePhotoAziel} alt="Bride" fill sizes="200px" className="object-cover object-top" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
-                  <Image src={ASSET.stampFrame} alt="Stamp" fill className="object-fill" />
+                  <Image src={ASSET.stampFrame} alt="Stamp" fill sizes="200px" className="object-fill" />
                 </div>
               </div>
 

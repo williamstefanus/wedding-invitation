@@ -26,13 +26,14 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Image 
-            src={WEDDING_INVITATION_ASSETS.heroBackground}
-            alt="Hero Background" 
-            fill
-            priority
-            className="object-cover object-top"
-          />
+            <Image 
+              src={WEDDING_INVITATION_ASSETS.heroBackground}
+              alt="Hero Background" 
+              fill
+              priority
+              sizes="(max-width: 420px) 100vw, 420px"
+              className="object-cover object-top"
+            />
         </motion.div>
         
         {/* Safe Area Wrapper for Foreground (Locks proportion of couple + grass to WIDTH) */}
@@ -45,6 +46,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
               alt="Hero Couple" 
               fill
               priority
+              sizes="(max-width: 420px) 100vw, 420px"
               className="object-contain object-bottom"
             />
           </div>
@@ -60,6 +62,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
               alt="Hero Grass" 
               fill
               priority
+              sizes="(max-width: 420px) 100vw, 420px"
               className="object-cover object-bottom translate-y-[5px]"
             />
           </motion.div>

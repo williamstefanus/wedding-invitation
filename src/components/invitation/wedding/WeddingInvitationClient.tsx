@@ -52,12 +52,20 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
     }
   };
 
-  // Prevent scrolling globally when not open
+  // Prevent scrolling globally when not open, and force scroll to top
   useEffect(() => {
-    if (!isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
+    if (typeof window !== "undefined") {
+      // Prevent browser from trying to restore scroll position on reload
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      
+      if (!isOpen) {
+        document.body.style.overflow = "hidden";
+        window.scrollTo(0, 0); // Snap back to the top so the "Open" button is visible
+      } else {
+        document.body.style.overflow = ""; // Reset to default
+      }
     }
     return () => {
       document.body.style.overflow = "auto";
