@@ -13,13 +13,13 @@ interface OpeningScreenProps {
 export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps) {
   return (
     <section 
-      className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
+      className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden z-30 snap-start snap-always"
       style={{
         background: "linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 40%, #556B2F 100%)",
       }}
     >
       {/* Main Hero Layers */}
-      <div className="absolute inset-0 z-0 bg-white">
+      <div className="absolute inset-0 z-0 bg-white overflow-hidden">
         {/* Background Mountains (Bleeds to fill screen) */}
         <motion.div 
           className="absolute inset-0"
@@ -35,41 +35,24 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
               className="object-cover object-top"
             />
         </motion.div>
-        
-        {/* Safe Area Wrapper for Foreground (Locks proportion of couple + grass to WIDTH) */}
-        <div className="absolute inset-x-0 bottom-0 w-full aspect-[390/600] pointer-events-none flex flex-col justify-end">
-          
-          {/* Couple Photo */}
-          <div className="absolute inset-x-0 bottom-[12%] h-[65%] flex justify-center z-10 pointer-events-none">
-            <Image 
-              src={WEDDING_INVITATION_ASSETS.heroCouplePhoto}
-              alt="Hero Couple" 
-              fill
-              priority
-              sizes="(max-width: 420px) 100vw, 420px"
-              className="object-contain object-bottom"
-            />
-          </div>
-
-          {/* Grass Foreground */}
-          <motion.div 
-            className="absolute inset-x-0 bottom-0 h-[45%] flex flex-col justify-end z-20 pointer-events-none"
-            animate={{ scale: [1, 1.02, 1] }}
-            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          >
-            <Image 
-              src={WEDDING_INVITATION_ASSETS.heroGrassForeground}
-              alt="Hero Grass" 
-              fill
-              priority
-              sizes="(max-width: 420px) 100vw, 420px"
-              className="object-cover object-bottom translate-y-[5px]"
-            />
-          </motion.div>
-        </div>
-        
         {/* Gradient Overlay for text readability */}
         <div className="absolute inset-0 bg-black/10 z-30 pointer-events-none" />
+      </div>
+      
+      {/* Safe Area Wrapper for Foreground (Locks proportion of couple + grass to WIDTH) */}
+      <div className="absolute inset-x-0 bottom-0 w-full aspect-[390/600] pointer-events-none flex flex-col justify-end z-20">
+        
+        {/* Couple Photo */}
+        <div className="absolute inset-x-0 bottom-[12%] h-[65%] flex justify-center z-10 pointer-events-none">
+          <Image 
+            src={WEDDING_INVITATION_ASSETS.heroCouplePhoto}
+            alt="Hero Couple" 
+            fill
+            priority
+            sizes="(max-width: 420px) 100vw, 420px"
+            className="object-contain object-bottom"
+          />
+      </div>
       </div>
 
       <div className="relative z-40 flex flex-col items-center justify-between text-center px-4 w-full h-full pb-8 pt-24 sm:pb-16 pointer-events-none">

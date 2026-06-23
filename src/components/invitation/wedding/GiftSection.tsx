@@ -25,7 +25,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <section className="relative w-full flex flex-col items-center bg-[#3A592F] pt-24 pb-32 z-10 overflow-hidden text-center">
+    <section className="relative w-full snap-start min-h-[100dvh] flex flex-col justify-center items-center bg-[#3A592F] pt-24 pb-32 z-10 overflow-hidden text-center">
       
       {/* Top Meadow Transition (overlaps upwards if needed) */}
       <div className="absolute top-[-20px] left-0 w-full z-20 pointer-events-none opacity-80">

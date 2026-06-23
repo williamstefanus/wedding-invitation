@@ -11,7 +11,7 @@ export function CoupleSection() {
         
         {/* 1. Background Sky/Grass - placed at the top center */}
         <div className="absolute top-0 w-[150%] max-w-[600px] h-[358px] pointer-events-none opacity-90 z-0">
-          <Image src={ASSET.tallGrassDivider} alt="Sky Decor" fill sizes="600px" className="object-cover object-top" />
+          <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" fill sizes="600px" className="object-cover object-top" />
         </div>
 
         {/* 2. Envelope Composition Container */}

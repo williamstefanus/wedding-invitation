@@ -12,14 +12,14 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
 
   return (
     <section 
-      className="relative w-full flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center"
+      className="relative w-full snap-start min-h-[100dvh] flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center"
       style={{
-        background: "linear-gradient(to bottom, #E8E8E8 0%, #E8E8E8 35%, #F7E392 35%, #F7E392 100%)"
+        background: "linear-gradient(to bottom, #F6F6F6 0%, #F6F6F6 40%, #F7E392 40%, #F7E392 100%)"
       }}
     >
       
       {/* Meadow Hills - Normal Document Flow to dictate height naturally */}
-      <div className="relative w-full z-10 pointer-events-none mt-10">
+      <div className="relative w-full z-10 pointer-events-none mt-[25dvh]">
         <Image 
           src="/images/footer-meadow-hills.png"
           alt="Meadow Hills"
@@ -28,8 +28,8 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
           className="w-full h-auto object-cover object-top"
         />
 
-        {/* Floral Bouquets absolutely positioned relative to the hills */}
-        <div className="absolute top-[0px] left-[-30px] z-20 w-[180px] h-[240px]">
+        {/* Left Floral Bouquet anchored to the left and overlapping the hills */}
+        <div className="absolute top-[-100px] left-[-140px] z-20 w-[360px] h-[480px]">
           <Image 
             src="/images/floral-bouquet-left.png" 
             fill 
@@ -39,7 +39,7 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
         </div>
 
         {/* Right Floral Bouquet anchored to the hills */}
-        <div className="absolute bottom-[-30px] right-[-30px] z-20 w-[160px] h-[200px]">
+        <div className="absolute bottom-[0px] right-[-20px] z-20 w-[200px] h-[260px]">
           <Image 
             src="/images/floral-bouquet-right.png" 
             fill 
@@ -54,7 +54,7 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
         whileInView={{ opacity: 1 }}
         viewport={{ once: false, margin: "-50px" }}
         transition={{ duration: 1.5, ease: "easeOut" }}
-        className="relative z-30 w-full max-w-[390px] mx-auto px-6 flex flex-col items-center mt-12 text-[#4B4B4B]"
+        className="relative z-30 w-full max-w-[390px] mx-auto px-6 flex flex-col items-center flex-1 justify-center mt-6 text-[#4B4B4B]"
       >
         <p className="text-[14px] mb-6 leading-relaxed px-4" style={{ fontFamily: "var(--font-alegreya)" }}>
           It would be our greatest joy to have your presence<br />
@@ -71,6 +71,9 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
 
         <p className="text-[13px] tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
           {displayNames} - 2026
+        </p>
+        <p className="text-[11px] tracking-wide mt-2 opacity-60" style={{ fontFamily: "var(--font-alegreya)" }}>
+          &copy; {displayNames}
         </p>
       </motion.div>
     </section>

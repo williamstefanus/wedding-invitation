@@ -27,7 +27,7 @@ export function GallerySection({ images }: GallerySectionProps) {
 
   return (
     <section 
-      className="w-full flex flex-col items-center pt-16 pb-48 z-20 relative"
+      className="w-full snap-start min-h-[100dvh] flex flex-col items-center justify-center pt-16 pb-48 z-20 relative"
       style={{
         background: "linear-gradient(to bottom, #faf9f0 0%, #faf9f0 40%, #E3F2FD 80%, #90CAF9 100%)"
       }}

@@ -38,7 +38,7 @@ export function RSVPForm({
   existingRsvp
 }: RSVPFormProps) {
   return (
-    <section className="w-full bg-[#faf9f0] flex flex-col items-center py-20 z-20 relative">
+    <section className="w-full snap-start min-h-[100dvh] bg-[#faf9f0] flex flex-col justify-center items-center py-20 z-20 relative">
       <h2 className="text-[6rem] text-[#4B4B4B] mb-6 leading-none" style={{ fontFamily: "var(--font-justwrite)" }}>
         RSVP
       </h2>

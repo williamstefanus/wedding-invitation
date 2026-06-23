@@ -53,7 +53,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
   const receptionTitle = splitTitle(receptionName);
 
   return (
-    <section className="relative w-full flex flex-col items-center bg-[#3A592F] z-10 pt-16 pb-[260px]">
+    <section className="relative w-full snap-start min-h-[100dvh] flex flex-col justify-center items-center bg-[#3A592F] z-10 pt-16 pb-[260px]">
       
       {/* Top Meadow Divider */}
       <div className="absolute top-[-30px] left-0 w-full z-20 pointer-events-none">
