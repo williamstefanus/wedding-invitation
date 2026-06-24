@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -9,79 +10,165 @@ interface GallerySectionProps {
   images?: string[];
 }
 
-export function GallerySection({ images }: GallerySectionProps) {
+function BentoGalleryBlock({ images, onSelect, isPlaceholder = false }: { images: string[], onSelect: (url: string) => void, isPlaceholder?: boolean }) {
+  if (images.length < 5) return null;
+  return (
+    <div className="flex gap-3 w-full aspect-square">
+      {/* Left Column */}
+      <div className="flex flex-col gap-3 flex-1">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.6 }}
+          className="flex-[0.4] rounded-xl overflow-hidden relative cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform shadow-sm bg-[#E3F2FD]"
+          onClick={() => onSelect(isPlaceholder ? "Placeholder" : images[0])}
+        >
+          {isPlaceholder ? <Image src={images[0]} fill className="object-cover" alt="Placeholder" /> : <img src={images[0]} alt="Gallery" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex-[0.6] rounded-xl overflow-hidden relative cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform shadow-sm bg-[#E3F2FD]"
+          onClick={() => onSelect(isPlaceholder ? "Placeholder" : images[1])}
+        >
+          {isPlaceholder ? <Image src={images[1]} fill className="object-cover" alt="Placeholder" /> : <img src={images[1]} alt="Gallery" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+        </motion.div>
+      </div>
+      {/* Right Column */}
+      <div className="flex flex-col gap-3 flex-1">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex-[0.55] rounded-xl overflow-hidden relative cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform shadow-sm bg-[#E3F2FD]"
+          onClick={() => onSelect(isPlaceholder ? "Placeholder" : images[2])}
+        >
+          {isPlaceholder ? <Image src={images[2]} fill className="object-cover" alt="Placeholder" /> : <img src={images[2]} alt="Gallery" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+        </motion.div>
+        <div className="flex-[0.45] flex gap-3">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex-1 rounded-xl overflow-hidden relative cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform shadow-sm bg-[#E3F2FD]"
+            onClick={() => onSelect(isPlaceholder ? "Placeholder" : images[3])}
+          >
+            {isPlaceholder ? <Image src={images[3]} fill className="object-cover" alt="Placeholder" /> : <img src={images[3]} alt="Gallery" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex-1 rounded-xl overflow-hidden relative cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform shadow-sm bg-[#E3F2FD]"
+            onClick={() => onSelect(isPlaceholder ? "Placeholder" : images[4])}
+          >
+            {isPlaceholder ? <Image src={images[4]} fill className="object-cover" alt="Placeholder" /> : <img src={images[4]} alt="Gallery" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function GallerySection({ images = [] }: GallerySectionProps) {
+  const { t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<{ url?: string, label?: string } | null>(null);
 
   const hasImages = images && images.length > 0;
 
-  // Split images into left and right columns for the playful masonry look
-  const leftColImages: string[] = [];
-  const rightColImages: string[] = [];
+  let topHeroImage: string | null = null;
+  const bentoChunks: string[][] = [];
+  const remainingImages: string[] = [];
   
   if (hasImages) {
-    images.forEach((img, idx) => {
-      if (idx % 2 === 0) leftColImages.push(img);
-      else rightColImages.push(img);
-    });
+    topHeroImage = images[0];
+    const rest = images.slice(1);
+    
+    // Chunk images into sets of 5 for the Bento layout
+    for (let i = 0; i < rest.length; i += 5) {
+      if (i + 5 <= rest.length) {
+        bentoChunks.push(rest.slice(i, i + 5));
+      } else {
+        remainingImages.push(...rest.slice(i));
+      }
+    }
   }
+
+  const placeholderBentoImages = Array(5).fill("/images/gallery-placeholder.png");
 
   return (
     <section 
-      className="w-full snap-start min-h-[100dvh] flex flex-col items-center justify-center pt-16 pb-48 z-20 relative"
-      style={{
-        background: "linear-gradient(to bottom, #faf9f0 0%, #faf9f0 40%, #E3F2FD 80%, #90CAF9 100%)"
-      }}
+      className="w-full snap-start min-h-[100dvh] flex flex-col items-center justify-center py-[48px] z-20 relative bg-[#faf9f0] overflow-hidden"
     >
+      {/* Sky Decor background at the bottom to transition into Gift Section */}
+      <div className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-full max-w-[600px] pointer-events-none z-0">
+        <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" width={800} height={600} className="w-full h-auto object-cover object-bottom" />
+      </div>
       <motion.h2 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, margin: "-50px" }}
         transition={{ duration: 0.8 }}
-        className="text-[5.5rem] text-[#4B4B4B] mb-10 leading-none" 
+        className="text-[64px] text-[#4B4B4B] mb-10 leading-none" 
         style={{ fontFamily: "var(--font-justwrite)" }}
       >
-        Our Moments
+        {t('ourMoments')}
       </motion.h2>
 
-      <div className="w-full max-w-[390px] mx-auto px-6 relative z-30">
-        {hasImages ? (
-          <div className="grid grid-cols-2 gap-3">
-            {/* Real Images Layout */}
-            <div className="flex flex-col gap-3">
-              {leftColImages.map((url, idx) => (
+      <div className="w-full max-w-[390px] mx-auto px-4 relative z-30">
+        <div className="flex flex-col gap-3">
+          {hasImages ? (
+            <>
+              {topHeroImage && (
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  key={`left-${idx}`} 
-                  className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white"
-                  onClick={() => setSelectedImage({ url })}
+                  transition={{ duration: 0.6 }}
+                  className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white w-full aspect-[4/3]"
+                  onClick={() => setSelectedImage({ url: topHeroImage! })}
                 >
-                  <img src={url} alt={`Gallery image left ${idx + 1}`} loading="lazy" className="w-full h-auto object-cover rounded-xl" />
+                  <img src={topHeroImage} alt="Gallery hero" loading="lazy" className="w-full h-full object-cover rounded-xl" />
                 </motion.div>
+              )}
+
+              {bentoChunks.map((chunk, idx) => (
+                <BentoGalleryBlock 
+                  key={idx} 
+                  images={chunk} 
+                  onSelect={(url) => setSelectedImage({ url })} 
+                />
               ))}
-            </div>
-            <div className="flex flex-col gap-3 pt-6">
-              {rightColImages.map((url, idx) => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.6, delay: 0.2 + (idx * 0.1) }}
-                  key={`right-${idx}`} 
-                  className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white"
-                  onClick={() => setSelectedImage({ url })}
-                >
-                  <img src={url} alt={`Gallery image right ${idx + 1}`} loading="lazy" className="w-full h-auto object-cover rounded-xl" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {/* Placeholder Layout exactly matching Figma */}
-            <div className="flex flex-col gap-3">
+
+              {remainingImages.length > 0 && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-3">
+                    {remainingImages.filter((_, i) => i % 2 === 0).map((url, idx) => (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        transition={{ duration: 0.6, delay: idx * 0.1 }}
+                        key={`rem-left-${idx}`} 
+                        className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white w-full aspect-[4/3]"
+                        onClick={() => setSelectedImage({ url })}
+                      >
+                        <img src={url} alt={`Gallery image`} loading="lazy" className="w-full h-full object-cover rounded-xl" />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    {remainingImages.filter((_, i) => i % 2 !== 0).map((url, idx) => (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        transition={{ duration: 0.6, delay: 0.2 + (idx * 0.1) }}
+                        key={`rem-right-${idx}`} 
+                        className="cursor-pointer overflow-hidden rounded-xl transition-transform hover:scale-[1.02] active:scale-95 shadow-sm bg-white w-full aspect-[4/3]"
+                        onClick={() => setSelectedImage({ url })}
+                      >
+                        <img src={url} alt={`Gallery image`} loading="lazy" className="w-full h-full object-cover rounded-xl" />
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Top Large Hero Placeholder */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -92,67 +179,16 @@ export function GallerySection({ images }: GallerySectionProps) {
               >
                 <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
               </motion.div>
-              
-              <div className="flex gap-3 w-full">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="flex-1 aspect-square relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
-                  onClick={() => setSelectedImage({ label: "Placeholder" })}
-                >
-                  <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
-                </motion.div>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="flex-1 aspect-square relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
-                  onClick={() => setSelectedImage({ label: "Placeholder" })}
-                >
-                  <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
-                </motion.div>
-              </div>
 
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="w-full aspect-[4/3] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
-                onClick={() => setSelectedImage({ label: "Placeholder" })}
-              >
-                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
-              </motion.div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
-                onClick={() => setSelectedImage({ label: "Placeholder" })}
-              >
-                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="w-full aspect-[4/5] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#E3F2FD]"
-                onClick={() => setSelectedImage({ label: "Placeholder" })}
-              >
-                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
-              </motion.div>
-            </div>
-          </div>
-        )}
+              {/* Bento Box Layout for Placeholder */}
+              <BentoGalleryBlock 
+                images={placeholderBentoImages} 
+                onSelect={() => setSelectedImage({ label: "Placeholder" })} 
+                isPlaceholder={true} 
+              />
+            </>
+          )}
+        </div>
       </div>
 
       {/* Lightbox Modal */}

@@ -4,6 +4,7 @@ import { getInvitationDetails } from "@/lib/actions/invitation";
 import { getSettings } from "@/lib/actions/settings";
 import { InviteNotFound } from "@/components/invitation/InviteNotFound";
 import { WeddingInvitationClient } from "@/components/invitation/wedding/WeddingInvitationClient";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 interface WeddingInvitePageProps {
   params: Promise<{ code: string }>;
@@ -68,10 +69,12 @@ export default async function WeddingInvitePage({
   const guest = invitation.guest;
 
   return (
-    <WeddingInvitationClient 
-      invitation={invitation} 
-      code={code} 
-      settings={settingsRes.data} 
-    />
+    <LanguageProvider>
+      <WeddingInvitationClient 
+        invitation={invitation} 
+        code={code} 
+        settings={settingsRes.data} 
+      />
+    </LanguageProvider>
   );
 }

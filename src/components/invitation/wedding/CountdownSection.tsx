@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CountdownSectionProps {
   targetDateStr: string;
 }
 
 export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
+  const { t, language } = useLanguage();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -21,7 +23,7 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
     const target = new Date(targetDateStr);
     
     // Format the date using Intl.DateTimeFormat to prevent hydration mismatch
-    const formatted = new Intl.DateTimeFormat('en-US', {
+    const formatted = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
@@ -83,7 +85,7 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
                 </div>
               ))}
             </div>
-            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">days</span>
+            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">{t('days')}</span>
           </div>
 
           <span className="text-xl font-medium text-[#4B4B4B] mt-1 mx-1">:</span>
@@ -97,7 +99,7 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
                 </div>
               ))}
             </div>
-            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">hours</span>
+            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">{t('hours')}</span>
           </div>
 
           <span className="text-xl font-medium text-[#4B4B4B] mt-1 mx-1">:</span>
@@ -111,9 +113,8 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
                 </div>
               ))}
             </div>
-            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">minutes</span>
+            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">{t('minutes')}</span>
           </div>
-
         </div>
       </div>
     </section>

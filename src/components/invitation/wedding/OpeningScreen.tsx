@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface OpeningScreenProps {
   guestName: string | null;
@@ -11,6 +12,8 @@ interface OpeningScreenProps {
 }
 
 export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps) {
+  const { language, setLanguage, t } = useLanguage();
+
   return (
     <section 
       className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden z-30 snap-start snap-always"
@@ -52,7 +55,19 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
             sizes="(max-width: 420px) 100vw, 420px"
             className="object-contain object-bottom"
           />
-      </div>
+        </div>
+
+        {/* Grass Foreground */}
+        <div className="absolute inset-x-0 bottom-0 h-[45%] flex justify-center z-20 pointer-events-none">
+          <Image 
+            src={WEDDING_INVITATION_ASSETS.heroGrassForeground}
+            alt="Hero Grass" 
+            fill
+            priority
+            sizes="(max-width: 420px) 100vw, 420px"
+            className="object-cover object-bottom"
+          />
+        </div>
       </div>
 
       <div className="relative z-40 flex flex-col items-center justify-between text-center px-4 w-full h-full pb-8 pt-24 sm:pb-16 pointer-events-none">
@@ -66,7 +81,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
             className="text-white text-3xl md:text-4xl tracking-wide mb-2" 
             style={{ fontFamily: "var(--font-justwrite)" }}
           >
-            The Wedding of
+            {t('theWeddingOf')}
           </motion.span>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -89,25 +104,79 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
               transition={{ duration: 0.8, delay: 1.2, ease: "easeInOut" }}
               className="mt-auto flex flex-col items-center gap-4 w-full justify-end pb-[env(safe-area-inset-bottom)] pointer-events-auto"
             >
-              <p className="text-white text-xl font-medium drop-shadow-md tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
-                Dear {guestName || "Guest"},
-              </p>
+              <div className="flex flex-col items-center text-center">
+                <p className="text-white text-[14px] drop-shadow-md tracking-wide mb-1" style={{ fontFamily: "var(--font-alegreya)" }}>
+                  {t('dear')}
+                </p>
+                <div className="border-b border-white/60 px-4 pb-1 mb-2 min-w-[140px]">
+                  <p className="text-white text-xl font-medium drop-shadow-md tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
+                    {guestName || ""}
+                  </p>
+                </div>
+              </div>
               
               <motion.button
-                animate={{ scale: [1, 1.03, 1] }}
+                animate={language ? { scale: [1, 1.03, 1] } : undefined}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onOpen}
-                className="rounded-full bg-[#FFF9ED] text-[#4B4B4B] px-8 py-3 shadow-lg font-medium tracking-wider mt-2 mb-4 transition-colors hover:shadow-xl hover:bg-white"
+                whileHover={language ? { scale: 1.05 } : undefined}
+                whileTap={language ? { scale: 0.95 } : undefined}
+                onClick={language ? onOpen : undefined}
+                disabled={!language}
+                className={`rounded-full bg-[#FFF9ED] text-[#4B4B4B] px-8 flex items-center justify-center h-[36px] shadow-lg font-medium tracking-wider mt-2 mb-4 transition-all ${
+                  language ? "hover:shadow-xl hover:bg-white" : "opacity-60 grayscale cursor-not-allowed"
+                }`}
                 style={{ fontFamily: "var(--font-alegreya)" }}
               >
-                Open Invitation
+                {t('openInvitation')}
               </motion.button>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* Language Selection Overlay */}
+      <AnimatePresence>
+        {!language && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px] px-4"
+          >
+            <div className="bg-white rounded-xl shadow-2xl p-4 flex gap-4 pointer-events-auto">
+              <button onClick={() => setLanguage('en')} className="flex flex-col items-center gap-3 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition w-[110px]">
+                <div className="w-16 h-16 rounded-full overflow-hidden shadow-sm flex-shrink-0 relative">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" className="w-full h-full object-cover">
+                     <clipPath id="s">
+                        <path d="M0,0 v60 h60 v-60 z"/>
+                      </clipPath>
+                      <clipPath id="t">
+                        <path d="M30,30 h30 v30 z v-30 h-30 z h-30 v-30 z v30 h30 z"/>
+                      </clipPath>
+                      <g clipPath="url(#s)">
+                        <path d="M0,0 v60 h60 v-60 z" fill="#012169"/>
+                        <path d="M0,0 L60,60 M60,0 L0,60" stroke="#fff" strokeWidth="6"/>
+                        <path d="M0,0 L60,60 M60,0 L0,60" clipPath="url(#t)" stroke="#C8102E" strokeWidth="4"/>
+                        <path d="M30,0 v60 M0,30 h60" stroke="#fff" strokeWidth="10"/>
+                        <path d="M30,0 v60 M0,30 h60" stroke="#C8102E" strokeWidth="6"/>
+                      </g>
+                  </svg>
+                </div>
+                <span className="text-gray-800 font-serif text-[15px]">English</span>
+              </button>
+              <button onClick={() => setLanguage('id')} className="flex flex-col items-center gap-3 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition w-[110px]">
+                <div className="w-16 h-16 rounded-full overflow-hidden shadow-sm flex-shrink-0 border border-gray-100 relative">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" className="w-full h-full object-cover">
+                    <rect width="60" height="30" fill="#ce1126"/>
+                    <rect y="30" width="60" height="30" fill="#fff"/>
+                  </svg>
+                </div>
+                <span className="text-gray-800 font-serif text-[15px]">Indonesian</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </section>
   );

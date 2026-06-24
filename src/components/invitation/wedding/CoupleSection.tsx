@@ -1,17 +1,20 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { WEDDING_INVITATION_ASSETS as ASSET } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function CoupleSection() {
+  const { t } = useLanguage();
+
   return (
-    <section className="relative w-full flex flex-col items-center bg-[#faf9f0] overflow-hidden pb-[120px]">
+    <section className="relative w-full flex flex-col items-center bg-[#faf9f0] overflow-hidden pb-[48px]">
       
       {/* Container matching Figma's 390px canvas width */}
       <div className="relative w-full max-w-[390px] flex flex-col items-center">
         
         {/* 1. Background Sky/Grass - placed at the top center */}
-        <div className="absolute top-0 w-[150%] max-w-[600px] h-[358px] pointer-events-none opacity-90 z-0">
-          <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" fill sizes="600px" className="object-cover object-top" />
+        <div className="absolute top-0 w-full max-w-[600px] pointer-events-none opacity-90 z-0 flex justify-center">
+          <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" width={800} height={600} className="w-full h-auto" />
         </div>
 
         {/* 2. Envelope Composition Container */}
@@ -74,9 +77,9 @@ export function CoupleSection() {
             {/* Groom Row */}
             <div className="flex items-center justify-between w-full h-[35%]">
               {/* Stamp Container */}
-              <div className="relative w-[45%] aspect-[152/172] rotate-[2deg] shrink-0 drop-shadow-sm">
+              <div className="relative w-[45%] aspect-[152/172] rotate-[2deg] shrink-0 drop-shadow-sm scale-[1.1]">
                 {/* We use standard inset so the photo fits nicely inside the stamp frame */}
-                <div className="absolute inset-[6%] -rotate-1 overflow-hidden bg-slate-200 z-10">
+                <div className="absolute inset-[6%] overflow-hidden bg-slate-200 z-10">
                   <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill sizes="200px" className="object-cover" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
@@ -90,22 +93,22 @@ export function CoupleSection() {
                   William<br/>Stefanus,
                   <div className="text-[1.8rem] mt-1">S.Kom</div>
                 </div>
-                <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  First son of Mr. Hadi Stefanus <br/>& Mrs. Lanny Mariana
+                <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
+                  {t('firstSonOf')}
                 </div>
               </div>
             </div>
 
             {/* Middle */}
             <div className="w-full text-center text-[#4B4B4B] text-[1.2rem] my-2" style={{ fontFamily: "var(--font-alegreya)" }}>
-              – and –
+              {t('and')}
             </div>
 
             {/* Bride Row */}
             <div className="flex items-center justify-between w-full h-[35%] flex-row-reverse">
               {/* Stamp Container */}
-              <div className="relative w-[45%] aspect-[152/172] -rotate-[3deg] shrink-0 drop-shadow-sm">
-                <div className="absolute inset-[6%] -rotate-1 overflow-hidden bg-slate-200 z-10">
+              <div className="relative w-[45%] aspect-[152/172] -rotate-[3deg] shrink-0 drop-shadow-sm scale-[1.1]">
+                <div className="absolute inset-[6%] overflow-hidden bg-slate-200 z-10">
                   <Image src={ASSET.bridePhotoAziel} alt="Bride" fill sizes="200px" className="object-cover object-top" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
@@ -119,8 +122,8 @@ export function CoupleSection() {
                   Aziel<br/>Yorieza,
                   <div className="text-[1.8rem] mt-1">B.A</div>
                 </div>
-                <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  Second daughter of<br/>Mr. Yopie Kusnandar & <br/>Mrs. Ina Rostiana Rahardja
+                <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
+                  {t('secondDaughterOf')}
                 </div>
               </div>
             </div>

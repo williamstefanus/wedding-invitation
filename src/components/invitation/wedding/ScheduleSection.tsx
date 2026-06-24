@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
 
@@ -9,6 +10,8 @@ interface ScheduleSectionProps {
 }
 
 export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
+  const { t, language } = useLanguage();
+  
   const holyMatrimonySession = sessions.length > 0 ? sessions[0] : {
     name: "Holy Matrimony",
     start_time: "11:00",
@@ -45,12 +48,26 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
     return { first: title, second: "" };
   };
 
-  // Ensure there's a fallback name even if the session object exists but name is null/undefined
-  const holyName = holyMatrimonySession.name || "Holy Matrimony";
+  // Translate the names
+  const getSessionName = (name: string) => {
+    if (name.includes("Holy Matrimony")) return t('holyMatrimony');
+    if (name.includes("Reception")) return t('reception');
+    return name;
+  };
+
+  const holyName = getSessionName(holyMatrimonySession.name || "Holy Matrimony");
   const holyTitle = splitTitle(holyName);
 
-  const receptionName = receptionSession.name || "Reception Dinner";
+  const receptionName = getSessionName(receptionSession.name || "Reception Dinner");
   const receptionTitle = splitTitle(receptionName);
+
+  const dateObj = new Date("2026-10-23");
+  const formattedDate = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(dateObj);
 
   return (
     <section className="relative w-full snap-start min-h-[100dvh] flex flex-col justify-center items-center bg-[#3A592F] z-10 pt-16 pb-[260px]">
@@ -81,8 +98,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
           >
             <Image src="/images/torn-date-paper.png" fill className="object-contain" alt="Torn Paper" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-[#4B4B4B] pl-10 pr-2">
-              <span className="text-xl text-[#3A592F] leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>Friday,</span>
-              <span className="text-[22px] text-[#3A592F] leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>23 Oct 2026</span>
+              <span className="text-[16px] text-[#3A592F] leading-tight mt-1" style={{ fontFamily: "var(--font-alegreya)" }}>{formattedDate}</span>
             </div>
           </motion.div>
 
@@ -119,13 +135,13 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
                   <span>{holyTitle.first}</span>
                   {holyTitle.second && <span className="mr-6">{holyTitle.second}</span>}
                 </h3>
-                <p className="text-[17px] mb-1 font-bold tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[18px] mb-1 font-bold tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {formatTime(holyMatrimonySession.start_time)} - {formatTime(holyMatrimonySession.end_time)}
                 </p>
-                <p className="text-[13px] font-bold mb-0.5 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[16px] font-bold mb-0.5 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {holyMatrimonySession.venue_name}
                 </p>
-                <p className="text-[11px] opacity-90 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[16px] opacity-90 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {holyMatrimonySession.address}
                 </p>
               </div>
@@ -139,10 +155,10 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
                 href={holyMatrimonySession.google_maps_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-[90%] text-center rounded-2xl border border-white/80 text-white py-3 text-sm hover:bg-white/10 transition-colors font-medium active:scale-95"
+                className="w-[90%] flex items-center justify-center h-[36px] rounded-2xl border border-white/80 text-white text-sm hover:bg-white/10 transition-colors font-medium active:scale-95"
                 style={{ fontFamily: "var(--font-alegreya)" }}
               >
-                Open in Google Maps
+                {t('openGoogleMaps')}
               </a>
             )}
           </motion.div>
@@ -164,13 +180,13 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
                   <span>{receptionTitle.first}</span>
                   {receptionTitle.second && <span className="ml-4">{receptionTitle.second}</span>}
                 </h3>
-                <p className="text-[17px] mb-1 font-bold tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[18px] mb-1 font-bold tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {formatTime(receptionSession.start_time)} - {formatTime(receptionSession.end_time)}
                 </p>
-                <p className="text-[13px] font-bold mb-0.5 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[16px] font-bold mb-0.5 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {receptionSession.venue_name}
                 </p>
-                <p className="text-[11px] opacity-90 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[16px] opacity-90 leading-tight" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {receptionSession.address}
                 </p>
               </div>
@@ -181,10 +197,10 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
                 href={receptionSession.google_maps_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-[90%] text-center rounded-2xl border border-white/80 text-white py-3 text-sm hover:bg-white/10 transition-colors font-medium active:scale-95"
+                className="w-[90%] flex items-center justify-center h-[36px] rounded-2xl border border-white/80 text-white text-sm hover:bg-white/10 transition-colors font-medium active:scale-95"
                 style={{ fontFamily: "var(--font-alegreya)" }}
               >
-                Open in Google Maps
+                {t('openGoogleMaps')}
               </a>
             )}
           </motion.div>

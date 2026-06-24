@@ -2,22 +2,26 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ThankYouSectionProps {
   names?: string;
 }
 
 export function ThankYouSection({ names }: ThankYouSectionProps) {
+  const { t } = useLanguage();
   const displayNames = names || "William & Aziel";
 
   return (
     <section 
-      className="relative w-full snap-start min-h-[100dvh] flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center"
-      style={{
-        background: "linear-gradient(to bottom, #F6F6F6 0%, #F6F6F6 40%, #F7E392 40%, #F7E392 100%)"
-      }}
+      className="relative w-full snap-start min-h-[100dvh] flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center bg-[#F7E392]"
     >
       
+      {/* Tall Grass background filling the top section */}
+      <div className="absolute top-0 left-0 w-full h-[30dvh] pointer-events-none opacity-100 z-0">
+        <Image src="/images/tall-grass-divider.png" alt="Tall Grass" fill className="object-cover object-bottom" />
+      </div>
+
       {/* Meadow Hills - Normal Document Flow to dictate height naturally */}
       <div className="relative w-full z-10 pointer-events-none mt-[25dvh]">
         <Image 
@@ -56,24 +60,20 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
         transition={{ duration: 1.5, ease: "easeOut" }}
         className="relative z-30 w-full max-w-[390px] mx-auto px-6 flex flex-col items-center flex-1 justify-center mt-6 text-[#4B4B4B]"
       >
-        <p className="text-[14px] mb-6 leading-relaxed px-4" style={{ fontFamily: "var(--font-alegreya)" }}>
-          It would be our greatest joy to have your presence<br />
-          as we celebrate this special moment together.
+        <p className="text-[14px] mb-6 leading-relaxed px-4 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
+          {t('greatestJoy')}
         </p>
 
         <h2 className="text-[4rem] mb-4 leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-justwrite)" }}>
-          Thank You
+          {t('thankYou')}
         </h2>
         
         <p className="text-[16px] mb-12" style={{ fontFamily: "var(--font-alegreya)" }}>
-          for your love and blessings
+          {t('forYourLove')}
         </p>
 
-        <p className="text-[13px] tracking-wide" style={{ fontFamily: "var(--font-alegreya)" }}>
-          {displayNames} - 2026
-        </p>
         <p className="text-[11px] tracking-wide mt-2 opacity-60" style={{ fontFamily: "var(--font-alegreya)" }}>
-          &copy; {displayNames}
+          &copy; {displayNames} 2026
         </p>
       </motion.div>
     </section>

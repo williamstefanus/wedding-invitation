@@ -151,23 +151,44 @@ export function WeddingSettingsForm({
         )}
       </div>
 
-      {/* Gift Info */}
+      {/* William's Gift Info */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <Gift className="w-5 h-5 text-amber-600" /> Gift Information
+          <Gift className="w-5 h-5 text-amber-600" /> William's Gift Information
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bank Name</label>
-            <input type="text" value={config.gift_bank || ""} onChange={e => setConfig({...config, gift_bank: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
+            <input type="text" value={config.gift_bank_william || ""} onChange={e => setConfig({...config, gift_bank_william: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Account Number</label>
-            <input type="text" value={config.gift_account || ""} onChange={e => setConfig({...config, gift_account: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
+            <input type="text" value={config.gift_account_william || ""} onChange={e => setConfig({...config, gift_account_william: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Recipient Name</label>
-            <input type="text" value={config.gift_name || ""} onChange={e => setConfig({...config, gift_name: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. William Stefanus"/>
+            <input type="text" value={config.gift_name_william || ""} onChange={e => setConfig({...config, gift_name_william: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. William Stefanus"/>
+          </div>
+        </div>
+      </div>
+
+      {/* Aziel's Gift Info */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <Gift className="w-5 h-5 text-amber-600" /> Aziel's Gift Information
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bank Name</label>
+            <input type="text" value={config.gift_bank_aziel || ""} onChange={e => setConfig({...config, gift_bank_aziel: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Account Number</label>
+            <input type="text" value={config.gift_account_aziel || ""} onChange={e => setConfig({...config, gift_account_aziel: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Recipient Name</label>
+            <input type="text" value={config.gift_name_aziel || ""} onChange={e => setConfig({...config, gift_name_aziel: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. Aziel"/>
           </div>
         </div>
       </div>

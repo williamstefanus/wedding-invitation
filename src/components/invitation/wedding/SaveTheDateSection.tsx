@@ -1,7 +1,19 @@
 import Image from "next/image";
 import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function SaveTheDateSection() {
+  const { language } = useLanguage();
+  
+  const targetDate = new Date("2026-10-23T11:00:00");
+  const formattedDay = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
+    weekday: 'long',
+  }).format(targetDate);
+  const formattedDate = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(targetDate);
   return (
     <section className="w-full flex flex-col items-center py-16 bg-[#416130] z-20 relative">
       <div className="relative mb-8 flex justify-center items-center w-[140px] h-[140px]">
@@ -14,8 +26,8 @@ export function SaveTheDateSection() {
       </div>
 
       <div className="flex flex-col items-center justify-center text-[#faf9f0]" style={{ fontFamily: "var(--font-alegreya)" }}>
-        <span className="text-2xl font-light">Friday,</span>
-        <span className="text-4xl font-medium">23 Oct 2026</span>
+        <span className="text-2xl font-light">{formattedDay},</span>
+        <span className="text-4xl font-medium">{formattedDate}</span>
       </div>
     </section>
   );

@@ -1,11 +1,20 @@
 import Image from "next/image";
 import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface EventDetailsSectionProps {
   sessions: any[];
 }
 
 export function EventDetailsSection({ sessions = [] }: EventDetailsSectionProps) {
+  const { t } = useLanguage();
+
+  const getSessionName = (name: string) => {
+    if (name.includes("Holy Matrimony")) return t('holyMatrimony');
+    if (name.includes("Reception")) return t('reception');
+    return name;
+  };
+
   return (
     <section className="w-full flex flex-col items-center bg-[#416130] pb-16 z-20 relative overflow-hidden">
       
@@ -35,7 +44,7 @@ export function EventDetailsSection({ sessions = [] }: EventDetailsSectionProps)
           <div key={session.id} className={`w-full max-w-md mx-auto px-4 flex ${layoutClass}`}>
             <div className={`flex flex-col text-white z-10 ${textAlignmentClass}`}>
               <h3 className="text-5xl lg:text-6xl mb-2" style={{ fontFamily: "var(--font-justwrite)" }}>
-                {session.name}
+                {getSessionName(session.name)}
               </h3>
               <p className="text-base mb-1" style={{ fontFamily: "var(--font-alegreya)" }}>
                 {formatTime(session.start_time)} - {formatTime(session.end_time)}
@@ -54,7 +63,7 @@ export function EventDetailsSection({ sessions = [] }: EventDetailsSectionProps)
                   className="rounded-full border border-white/60 px-6 py-2 text-white text-sm hover:bg-white/10 transition font-medium"
                   style={{ fontFamily: "var(--font-alegreya)" }}
                 >
-                  Open Google Maps
+                  {t('openGoogleMaps')}
                 </a>
               )}
             </div>

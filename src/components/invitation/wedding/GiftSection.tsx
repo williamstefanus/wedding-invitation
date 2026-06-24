@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface GiftSectionProps {
   bank?: string;
@@ -12,6 +13,7 @@ interface GiftSectionProps {
 }
 
 export function GiftSection({ bank, account, name }: GiftSectionProps) {
+  const { t } = useLanguage();
   const [showGift, setShowGift] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -47,7 +49,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
           className="text-7xl text-[#FFF9ED] mb-6 leading-none" 
           style={{ fontFamily: "var(--font-justwrite)" }}
         >
-          Wedding Gift
+          {t('weddingGift')}
         </motion.h2>
 
         <motion.p 
@@ -55,26 +57,11 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: false }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-[#FFF9ED] text-[15px] leading-relaxed mb-8" 
+          className="text-[#FFF9ED] text-[15px] leading-relaxed mb-8 whitespace-pre-line" 
           style={{ fontFamily: "var(--font-alegreya)" }}
         >
-          Your prayer and presence is the best gift,<br />
-          but if giving is your expression of love,<br />
-          you may use the following feature.
+          {t('giftMessage')}
         </motion.p>
-
-        {!showGift && (
-          <motion.button 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-            onClick={() => setShowGift(true)}
-            className="w-full rounded-xl bg-[#E5E5E5] py-3 text-[#4B4B4B] font-medium text-base hover:bg-white transition active:scale-95 shadow-sm"
-            style={{ fontFamily: "var(--font-alegreya)" }}
-          >
-            Send Gift
-          </motion.button>
-        )}
 
         {/* Bank Card Accordion */}
         <AnimatePresence>
@@ -84,46 +71,53 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="w-full overflow-hidden"
+              className="w-full overflow-hidden mb-4"
             >
-              <div className="w-full bg-[#FFF9ED] rounded-xl shadow-lg p-6 flex flex-col items-center gap-3 mt-2">
-                <p className="text-[#4B4B4B] text-[15px]" style={{ fontFamily: "var(--font-alegreya)" }}>
+              <div className="w-full bg-[#FAF5E6] rounded-2xl shadow-lg p-6 flex flex-col items-center mt-2">
+                <p className="text-[#4B4B4B] text-[15px] mb-1" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {displayBank}
                 </p>
-                <div className="flex items-center justify-center w-full relative">
-                  <span className="text-[28px] font-bold text-[#4B4B4B]" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <div className="flex items-center justify-center w-full relative mb-1">
+                  <span className="text-[24px] font-bold text-[#4B4B4B]" style={{ fontFamily: "var(--font-alegreya)" }}>
                     {displayAccount}
                   </span>
                 </div>
-                <p className="text-[#4B4B4B] text-[15px] mb-2" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[#4B4B4B] text-[15px] mb-4" style={{ fontFamily: "var(--font-alegreya)" }}>
                   a/n {displayName}
                 </p>
 
                 <button 
                   onClick={handleCopy}
-                  className="w-full rounded-xl bg-white border border-[#E5E5E5] py-3 text-[#4B4B4B] text-[15px] font-medium hover:bg-slate-50 transition active:scale-95 relative overflow-hidden"
+                  className="w-full rounded-xl bg-white border border-[#E5E5E5] flex items-center justify-center h-[36px] text-[#4B4B4B] text-[15px] font-medium hover:bg-slate-50 transition active:scale-95 relative overflow-hidden"
                   style={{ fontFamily: "var(--font-alegreya)" }}
                 >
                   {copied ? (
                     <span className="flex items-center justify-center gap-2 text-[#3A592F]">
-                      <Check className="w-4 h-4" /> Copied!
+                      <Check className="w-4 h-4" /> {t('copied')}
                     </span>
                   ) : (
-                    "Click to Copy Account Number"
+                    t('clickToCopy')
                   )}
                 </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
 
-      {/* Bottom Floral Bouquets Transition */}
-      <div className="absolute bottom-[-20px] left-[-20px] z-20 pointer-events-none w-[180px] h-[180px]">
-        <Image src="/images/floral-bouquet-left.png" fill className="object-contain object-bottom-left" alt="Floral Left" />
-      </div>
-      <div className="absolute bottom-[-20px] right-[-20px] z-20 pointer-events-none w-[180px] h-[180px]">
-        <Image src="/images/floral-bouquet-right.png" fill className="object-contain object-bottom-right" alt="Floral Right" />
+        <motion.button 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false }}
+          onClick={() => setShowGift(!showGift)}
+          className={`w-full rounded-xl flex items-center justify-center h-[36px] text-[15px] font-medium transition active:scale-95 shadow-sm ${
+            showGift 
+              ? "bg-[#3A592F] border border-[#FFF9ED]/50 text-[#FFF9ED]" 
+              : "bg-[#E5E5E5] border border-transparent text-[#4B4B4B] hover:bg-white"
+          }`}
+          style={{ fontFamily: "var(--font-alegreya)" }}
+        >
+          {showGift ? t('done') : t('sendGift')}
+        </motion.button>
       </div>
 
     </section>
