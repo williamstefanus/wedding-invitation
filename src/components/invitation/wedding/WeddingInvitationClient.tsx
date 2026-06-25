@@ -87,7 +87,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   return (
     <LanguageProvider>
       <div className="min-h-[100dvh] w-full bg-neutral-100 flex justify-center">
-        <main className="relative h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl">
+        <main className={`relative h-[100dvh] snap-y snap-mandatory scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
           {/* Background Audio */}
           <audio ref={audioRef} src={musicUrl} loop />
 
