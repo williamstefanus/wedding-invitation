@@ -30,7 +30,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
 
   const handleOpen = () => {
     setIsOpen(true);
-    
+
     // Attempt to play music
     if (audioRef.current) {
       audioRef.current.play()
@@ -63,7 +63,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
       if ("scrollRestoration" in window.history) {
         window.history.scrollRestoration = "manual";
       }
-      
+
       if (!isOpen) {
         document.body.style.overflow = "hidden";
         window.scrollTo(0, 0); // Snap back to the top so the "Open" button is visible
@@ -78,7 +78,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
 
   const config = settings?.config || {};
   const musicUrl = config.music_url || "/audio/bgm.mp3";
-  
+
   const owner = invitation?.guest?.owner;
   const giftBank = owner === "Aziel" ? config.gift_bank_aziel : config.gift_bank_william;
   const giftAccount = owner === "Aziel" ? config.gift_account_aziel : config.gift_account_william;
@@ -91,7 +91,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
           {/* Background Audio */}
           <audio ref={audioRef} src={musicUrl} loop />
 
-          <OpeningScreen 
+          <OpeningScreen
             guestName={invitation?.guest?.name || null}
             isOpen={isOpen}
             onOpen={handleOpen}
@@ -101,21 +101,20 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
           {isOpen && (
             <button
               onClick={toggleMusic}
-              className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#3A592F] text-[#F7E392] shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 ${
-                isPlaying ? "animate-pulse" : "opacity-80"
-              }`}
+              className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#3A592F] text-[#F7E392] shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 ${isPlaying ? "animate-pulse" : "opacity-80"
+                }`}
               aria-label="Toggle music"
             >
               {isPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-music"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-music"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" x2="17" y1="9" y2="15"/><line x1="17" x2="23" y1="9" y2="15"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" x2="17" y1="9" y2="15" /><line x1="17" x2="23" y1="9" y2="15" /></svg>
               )}
             </button>
           )}
 
           {/* The main content that shows underneath */}
-          <div 
+          <div
             ref={contentRef}
             className="w-full flex flex-col relative z-20 bg-[#faf9f0]"
           >
@@ -123,24 +122,24 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
             <section className="snap-start snap-always min-h-[100dvh] w-full flex flex-col relative pt-[15vh]">
               {/* The single grass foreground spanning the hero and countdown section to hide the separation */}
               <div className="w-full h-[40vh] -mt-[32vh] relative z-30 pointer-events-none overflow-visible">
-                <motion.div 
+                <motion.div
                   className="w-full h-full"
                   animate={{ scale: [1, 1.02, 1] }}
                   transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
                 >
-                  <Image 
+                  <Image
                     src={WEDDING_INVITATION_ASSETS.heroGrassForeground}
-                    alt="Hero Grass" 
+                    alt="Hero Grass"
                     fill
                     priority
                     sizes="(max-width: 420px) 100vw, 420px"
-                    className="object-cover object-bottom" 
+                    className="object-cover object-bottom"
                   />
                 </motion.div>
               </div>
 
               <CountdownSection targetDateStr={config.countdown_date || "2026-10-23T11:00:00"} />
-              
+
               {/* Transition Verse */}
               <TransitionVerse />
 
@@ -163,8 +162,8 @@ function TransitionVerse() {
   const { t } = useLanguage();
   return (
     <section className="relative w-full flex flex-col items-center px-6 pt-10 pb-6 z-30">
-      <p 
-        className="text-center text-[#4B4B4B] text-[16px] leading-relaxed whitespace-pre-line" 
+      <p
+        className="text-center text-[#4B4B4B] text-[16px] leading-relaxed whitespace-pre-line"
         style={{ fontFamily: "var(--font-alegreya)" }}
       >
         {t('verseText')}
