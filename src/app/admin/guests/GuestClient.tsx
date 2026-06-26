@@ -26,6 +26,7 @@ interface GuestClientProps {
   currentTab: string;
   currentSort: string;
   eventTypes: any[];
+  config?: any;
 }
 
 export function GuestClient({
@@ -38,7 +39,8 @@ export function GuestClient({
   currentCategory,
   currentTab,
   currentSort,
-  eventTypes
+  eventTypes,
+  config
 }: GuestClientProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -98,15 +100,10 @@ export function GuestClient({
     });
   };
 
-  // Read WA template from localStorage (set by Settings page) or fall back to a default
+  // Read WA template from config prop (database) or fall back to a default
   const getWaTemplate = (eventSlug: string) => {
-    if (typeof window !== "undefined") {
-      try {
-        const settings = JSON.parse(localStorage.getItem("wedding_config") || "{}");
-        if (eventSlug === "wedding" && settings.wa_template_wedding) return settings.wa_template_wedding;
-        if (eventSlug === "sangjit" && settings.wa_template_sangjit) return settings.wa_template_sangjit;
-      } catch {}
-    }
+    if (eventSlug === "wedding" && config?.wa_template_wedding) return config.wa_template_wedding;
+    if (eventSlug === "sangjit" && config?.wa_template_sangjit) return config.wa_template_sangjit;
     return "Halo {nama}! 🎉 Kami mengundang kamu ke acara kami.\n\nLink undangan: {link}";
   };
 
@@ -114,7 +111,13 @@ export function GuestClient({
     const url = `${window.location.origin}/invite/${inv.event_type.slug}/${inv.invitation_code}`;
     const name = guestName || inv.guest?.name || "";
     const template = getWaTemplate(inv.event_type.slug);
-    const message = template.replace("{nama}", name).replace("{link}", url);
+    const deadlineStr = inv.event_type?.rsvp_edit_deadline_at
+      ? new Date(inv.event_type.rsvp_edit_deadline_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })
+      : "-";
+    const message = template
+      .replace(/{nama}/g, name)
+      .replace(/{link}/g, url)
+      .replace(/{deadline}/g, deadlineStr);
     navigator.clipboard.writeText(message);
     setCopiedId(inv.id);
     setTimeout(() => setCopiedId(null), 2000);

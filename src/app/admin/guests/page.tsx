@@ -1,4 +1,5 @@
 import { getGuests } from "@/lib/actions/guests";
+import { getSettings } from "@/lib/actions/settings";
 import { GuestClient } from "./GuestClient";
 import type { GuestOwner, GuestCategory } from "@/types";
 import { createClient } from "@/lib/supabase/server";
@@ -32,6 +33,8 @@ export default async function GuestsPage({
 
   const supabase = await createClient();
   const { data: eventTypes } = await supabase.from("event_types").select("*");
+  const settingsRes = await getSettings();
+  const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
@@ -46,6 +49,7 @@ export default async function GuestsPage({
         currentTab={tab}
         currentSort={sort}
         eventTypes={eventTypes || []}
+        config={config}
       />
     </div>
   );

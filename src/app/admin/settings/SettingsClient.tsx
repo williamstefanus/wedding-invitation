@@ -33,6 +33,12 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   });
 
   const [uploading, setUploading] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const showNotification = (type: 'success' | 'error', text: string) => {
+    setNotification({ type, text });
+    setTimeout(() => setNotification(null), 4000);
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -41,12 +47,12 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
     setIsSaving(false);
 
     if (res.success) {
-      alert("Settings saved successfully!");
+      showNotification('success', "Settings saved successfully!");
       startTransition(() => {
         router.refresh();
       });
     } else {
-      alert("Failed to save settings: " + res.error);
+      showNotification('error', "Failed to save settings: " + res.error);
     }
   };
 
@@ -56,7 +62,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
 
     // 5MB Limit
     if (file.size > 5 * 1024 * 1024) {
-      alert("File size exceeds 5MB limit.");
+      showNotification('error', "File size exceeds 5MB limit.");
       return;
     }
 
@@ -81,7 +87,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
       }));
 
     } catch (err: any) {
-      alert(`Upload failed: ${err.message}. Ensure 'gallery' bucket exists and is public.`);
+      showNotification('error', `Upload failed: ${err.message}. Ensure 'gallery' bucket exists and is public.`);
     } finally {
       setUploading(false);
     }
@@ -96,7 +102,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   return (
     <div className="w-full max-w-5xl mx-auto p-4 md:p-8 font-sans pb-24">
       
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Settings</h1>
           <p className="text-slate-500 mt-1">Manage public invitation content dynamically.</p>
@@ -110,6 +116,17 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
           Save Changes
         </button>
       </div>
+
+      {notification && (
+        <div className={`p-4 rounded-xl mb-6 font-bold flex items-center gap-2 shadow-sm transition-all duration-300 ${
+          notification.type === 'success' 
+            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
+            : 'bg-rose-50 text-rose-800 border border-rose-200'
+        }`}>
+          <span>{notification.type === 'success' ? '✓' : '✕'}</span>
+          <span>{notification.text}</span>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex gap-2 p-1 bg-slate-200/50 rounded-xl mb-8 w-fit">

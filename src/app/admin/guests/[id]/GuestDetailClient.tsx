@@ -10,9 +10,10 @@ import type { GuestOwner, GuestCategory } from "@/types";
 interface GuestDetailClientProps {
   guest: any;
   eventTypes: any[];
+  config?: any;
 }
 
-export function GuestDetailClient({ guest, eventTypes }: GuestDetailClientProps) {
+export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClientProps) {
   const router = useRouter();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
@@ -40,20 +41,21 @@ export function GuestDetailClient({ guest, eventTypes }: GuestDetailClientProps)
   const [formError, setFormError] = useState("");
 
   const getWaTemplate = (eventSlug: string) => {
-    if (typeof window !== "undefined") {
-      try {
-        const settings = JSON.parse(localStorage.getItem("wedding_config") || "{}");
-        if (eventSlug === "wedding" && settings.wa_template_wedding) return settings.wa_template_wedding;
-        if (eventSlug === "sangjit" && settings.wa_template_sangjit) return settings.wa_template_sangjit;
-      } catch {}
-    }
+    if (eventSlug === "wedding" && config?.wa_template_wedding) return config.wa_template_wedding;
+    if (eventSlug === "sangjit" && config?.wa_template_sangjit) return config.wa_template_sangjit;
     return "Halo {nama}! 🎉 Kami mengundang kamu ke acara kami.\n\nLink undangan: {link}";
   };
 
   const handleCopyLink = (inv: any) => {
     const url = `${window.location.origin}/invite/${inv.event_type.slug}/${inv.invitation_code}`;
     const template = getWaTemplate(inv.event_type.slug);
-    const message = template.replace("{nama}", guest.name).replace("{link}", url);
+    const deadlineStr = inv.event_type?.rsvp_edit_deadline_at
+      ? new Date(inv.event_type.rsvp_edit_deadline_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })
+      : "-";
+    const message = template
+      .replace(/{nama}/g, guest.name)
+      .replace(/{link}/g, url)
+      .replace(/{deadline}/g, deadlineStr);
     navigator.clipboard.writeText(message);
     setCopiedId(inv.id);
     setTimeout(() => setCopiedId(null), 2000);

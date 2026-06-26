@@ -65,7 +65,7 @@ export function RsvpClient({
     });
     
     // Changing filters resets pagination
-    if (Object.keys(updates).some(k => k !== "page")) {
+    if (updates.search !== undefined || updates.owner !== undefined || updates.category !== undefined || updates.status !== undefined || updates.tab !== undefined || updates.sort !== undefined) {
       params.set("page", "1");
     }
 
@@ -81,6 +81,7 @@ export function RsvpClient({
 
   // Export
   const handleExport = async () => {
+    setExportError(null);
     const res = await getAllRsvpsForExport({
       search: currentSearch,
       eventType: currentTab === "all" ? "All" : currentTab,
@@ -92,7 +93,8 @@ export function RsvpClient({
     if (res.success && res.data) {
       exportToExcel(res.data, `RSVP_Export_${new Date().toISOString().split('T')[0]}`);
     } else {
-      alert("Failed to export data.");
+      setExportError("Failed to export RSVP data.");
+      setTimeout(() => setExportError(null), 4000);
     }
   };
 
@@ -153,7 +155,7 @@ export function RsvpClient({
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-8 font-sans">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-800 tracking-tight">RSVP Management</h1>
           <p className="text-slate-500 mt-1">Monitor, edit, and export guest submissions.</p>
@@ -166,6 +168,12 @@ export function RsvpClient({
           Export to Excel
         </button>
       </div>
+
+      {exportError && (
+        <div className="p-4 rounded-xl mb-6 font-bold flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-200">
+          <span>✕</span> {exportError}
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">

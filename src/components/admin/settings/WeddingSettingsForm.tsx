@@ -233,9 +233,10 @@ export function WeddingSettingsForm({
           <MessageSquare className="w-5 h-5 text-amber-600" /> WhatsApp Message Template
         </h2>
         <p className="text-sm text-slate-500 mb-6">
-          Use <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{nama}"}</code> and{" "}
-          <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{link}"}</code> as placeholders.
-          They will be replaced with the guest&apos;s name and invitation link when copying.
+          Use <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{nama}"}</code>,{" "}
+          <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{link}"}</code>, and{" "}
+          <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{deadline}"}</code> as placeholders.
+          They will be replaced dynamically when copying.
         </p>
         <textarea
           rows={5}

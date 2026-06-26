@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, User, Phone, Tag, Building } from "lucide-react";
 import Link from "next/link";
 import { GuestDetailClient } from "./GuestDetailClient";
+import { getSettings } from "@/lib/actions/settings";
 
 export const revalidate = 0;
 
@@ -20,7 +21,7 @@ export default async function GuestDetailPage({ params }: { params: Promise<{ id
         invitation_code,
         max_pax,
         is_sent,
-        event_type:event_types(name, slug),
+        event_type:event_types(name, slug, rsvp_edit_deadline_at),
         rsvp:rsvps(attendance_status, confirmed_pax, wish_message, submitted_at),
         seating_assignment:seating_assignments(assigned_pax, seating_table:seating_tables(table_name))
       )
@@ -34,6 +35,8 @@ export default async function GuestDetailPage({ params }: { params: Promise<{ id
 
   // Fetch event types for the edit modal
   const { data: eventTypes } = await supabase.from("event_types").select("id, name, slug");
+  const settingsRes = await getSettings();
+  const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 p-4 md:p-8 font-sans">
@@ -88,6 +91,7 @@ export default async function GuestDetailPage({ params }: { params: Promise<{ id
         <GuestDetailClient 
           guest={guest} 
           eventTypes={eventTypes || []} 
+          config={config}
         />
 
       </div>

@@ -27,14 +27,14 @@ export async function getGuests({ search, owner, category, tab, sort, page, limi
         max_pax,
         is_sent,
         event_type_id,
-        event_type:event_types${(tab && tab !== "all") ? "!inner" : ""}(id, slug, name),
+        event_type:event_types${(tab && tab !== "all") ? "!inner" : ""}(id, slug, name, rsvp_edit_deadline_at),
         rsvp:rsvps(attendance_status, confirmed_pax),
         seating_assignment:seating_assignments(assigned_pax, seating_table:seating_tables(table_name))
       )
     `, { count: "exact" });
 
     if (search) {
-      query = query.ilike("name", `%${search}%`);
+      query = query.or(`name.ilike.%${search}%,phone.ilike.%${search}%`);
     }
 
     if (owner && owner !== "All") {
@@ -49,16 +49,17 @@ export async function getGuests({ search, owner, category, tab, sort, page, limi
       query = query.eq("invitations.event_type.slug", tab);
     }
 
+    if (sort === "az") {
+      query = query.order("name", { ascending: true });
+    } else if (sort === "za") {
+      query = query.order("name", { ascending: false });
+    } else {
+      query = query.order("created_at", { ascending: false });
+    }
+
     const from = (page - 1) * limit;
     const to = from + limit - 1;
-    
-    if (sort === "az") {
-      query = query.order("name", { ascending: true }).range(from, to);
-    } else if (sort === "za") {
-      query = query.order("name", { ascending: false }).range(from, to);
-    } else {
-      query = query.order("created_at", { ascending: false }).range(from, to);
-    }
+    query = query.range(from, to);
 
     const { data, count, error } = await query;
 
@@ -88,7 +89,7 @@ export async function getGuestById(id: string) {
         max_pax,
         is_sent,
         event_type_id,
-        event_type:event_types(id, slug, name),
+        event_type:event_types(id, slug, name, rsvp_edit_deadline_at),
         rsvp:rsvps(attendance_status, confirmed_pax),
         seating_assignment:seating_assignments(assigned_pax, seating_table:seating_tables(table_name))
       )

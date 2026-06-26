@@ -35,6 +35,12 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
   const [isImporting, setIsImporting] = useState(false);
   
   const [parsedData, setParsedData] = useState<ParsedRow[] | null>(null);
+  const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const showStatus = (type: 'success' | 'error', text: string) => {
+    setStatusMsg({ type, text });
+    setTimeout(() => setStatusMsg(null), 4000);
+  };
 
   // EXPORT LOGIC
   const handleExport = async (type: string, filename: string) => {
@@ -43,11 +49,12 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
       const res = await generateExportData(type);
       if (res.success && res.data) {
         exportToExcel(res.data, filename);
+        showStatus('success', `Exported ${filename} successfully.`);
       } else {
-        alert("Export failed: " + res.error);
+        showStatus('error', "Export failed: " + res.error);
       }
     } catch (e: any) {
-      alert("Error generating export: " + e.message);
+      showStatus('error', "Error generating export: " + e.message);
     } finally {
       setIsExporting(null);
     }
@@ -57,6 +64,13 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Check extension
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (!['csv', 'xlsx', 'xls'].includes(ext || '')) {
+      showStatus('error', "Invalid file format. Please upload a CSV or Excel file.");
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (evt) => {
@@ -69,7 +83,7 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
 
         validateAndSetData(data);
       } catch (err) {
-        alert("Failed to parse file. Ensure it is a valid CSV or XLSX.");
+        showStatus('error', "Failed to parse file. Ensure it is a valid CSV or XLSX.");
       }
       // Reset input so the same file can be uploaded again if needed
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -152,7 +166,7 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
     const validRows = parsedData.filter(r => r.status === "valid");
 
     if (validRows.length === 0) {
-      alert("No valid rows to import.");
+      showStatus('error', "No valid rows to import.");
       return;
     }
 
@@ -163,7 +177,7 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
     setIsImporting(false);
 
     if (res.success) {
-      alert(`Successfully imported ${res.count} guests!`);
+      showStatus('success', `Successfully imported ${res.count} guests!`);
       setParsedData(null);
       
       // Refresh router to update any prefetched data
@@ -171,7 +185,7 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
         router.refresh();
       });
     } else {
-      alert("Import failed: " + res.error);
+      showStatus('error', "Import failed: " + res.error);
     }
   };
 
@@ -182,10 +196,21 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
   return (
     <div className="w-full max-w-6xl mx-auto p-4 md:p-8 font-sans">
       
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Data Management</h1>
         <p className="text-slate-500 mt-1">Bulk import guests or export system data.</p>
       </div>
+
+      {statusMsg && (
+        <div className={`p-4 rounded-xl mb-6 font-bold flex items-center gap-2 shadow-sm transition-all duration-300 ${
+          statusMsg.type === 'success' 
+            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
+            : 'bg-rose-50 text-rose-800 border border-rose-200'
+        }`}>
+          <span>{statusMsg.type === 'success' ? '✓' : '✕'}</span>
+          <span>{statusMsg.text}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         
