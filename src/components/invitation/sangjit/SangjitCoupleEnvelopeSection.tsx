@@ -77,14 +77,20 @@ export function SangjitCoupleEnvelopeSection({ invitation }: SangjitCoupleEnvelo
           }}
         >
           {/* Right Upper Background Floral (behind cream paper card zIndex: 5) */}
-          <div style={{ position: 'absolute', right: '-32%', top: '-15%', width: '100%', height: '100%', zIndex: 5, pointerEvents: 'none' }}>
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, margin: "-60px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            style={{ position: 'absolute', right: '-32%', top: '-15%', width: '100%', height: '100%', zIndex: 5, pointerEvents: 'none' }}
+          >
             <Image
               src={SANGJIT_INVITATION_ASSETS.sangjitEnvelopeRightBackgroundFloral}
               alt="Right Upper Floral"
               fill
               className="object-contain object-top-right"
             />
-          </div>
+          </motion.div>
 
           {/* Actual Paper Card Box (zIndex: 10) */}
           <div
@@ -117,24 +123,36 @@ export function SangjitCoupleEnvelopeSection({ invitation }: SangjitCoupleEnvelo
             </div>
 
             {/* Left Climbing Floral Arrangement */}
-            <div style={{ position: 'absolute', left: '-28%', bottom: '-10%', width: '150%', aspectRatio: '1/1', zIndex: 30, pointerEvents: 'none', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}>
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, margin: "-60px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              style={{ position: 'absolute', left: '-28%', bottom: '-10%', width: '150%', aspectRatio: '1/1', zIndex: 30, pointerEvents: 'none', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}
+            >
               <Image
                 src={SANGJIT_INVITATION_ASSETS.sangjitEnvelopeLeftFloral}
                 alt="Left Floral"
                 fill
                 className="object-contain object-bottom-left"
               />
-            </div>
+            </motion.div>
 
             {/* Right Lower Foreground Floral */}
-            <div style={{ position: 'absolute', right: '-32%', bottom: '-13%', width: '128%', height: '128%', aspectRatio: '1/1', zIndex: 30, pointerEvents: 'none', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}>
+            <motion.div
+              initial={{ opacity: 0, x: 60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, margin: "-60px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+              style={{ position: 'absolute', right: '-32%', bottom: '-13%', width: '128%', height: '128%', aspectRatio: '1/1', zIndex: 30, pointerEvents: 'none', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }}
+            >
               <Image
                 src={SANGJIT_INVITATION_ASSETS.sangjitEnvelopeRightForegroundFloral}
                 alt="Right Lower Floral"
                 fill
                 className="object-contain object-bottom-right"
               />
-            </div>
+            </motion.div>
 
             {/* Typography Content */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', zIndex: 20 }}>

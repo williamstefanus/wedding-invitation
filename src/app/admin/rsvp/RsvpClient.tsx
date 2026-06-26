@@ -21,10 +21,11 @@ export function RsvpClient({
   totalPages,
   currentPage,
   currentSearch,
-  currentEventType,
+  currentTab,
   currentOwner,
   currentCategory,
-  currentStatus
+  currentStatus,
+  currentSort
 }: any) {
   const router = useRouter();
   const pathname = usePathname();
@@ -80,10 +81,9 @@ export function RsvpClient({
 
   // Export
   const handleExport = async () => {
-    // Fetch all records for the current filters
     const res = await getAllRsvpsForExport({
       search: currentSearch,
-      eventType: currentEventType,
+      eventType: currentTab === "all" ? "All" : currentTab,
       owner: currentOwner,
       category: currentCategory,
       status: currentStatus
@@ -131,7 +131,6 @@ export function RsvpClient({
     e.preventDefault();
     if (selectedInv) {
       if (editStatus === "pending") {
-        // Equivalent to reset if they change it back to pending
         await resetRsvp(selectedInv.id);
       } else {
         await adminUpdateRsvp({
@@ -168,13 +167,39 @@ export function RsvpClient({
         </button>
       </div>
 
+      {/* Tabs */}
+      <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
+        <button
+          onClick={() => updateUrl({ tab: "all" })}
+          className={`px-6 py-3 font-medium text-sm whitespace-nowrap transition-colors border-b-2 ${
+            currentTab === "all" || !currentTab
+              ? "border-emerald-500 text-emerald-600"
+              : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+          }`}
+        >
+          All RSVPs
+        </button>
+        {eventTypes.map((et: any) => (
+          <button
+            key={et.id}
+            onClick={() => updateUrl({ tab: et.slug })}
+            className={`px-6 py-3 font-medium text-sm whitespace-nowrap transition-colors border-b-2 ${
+              currentTab === et.slug
+                ? "border-emerald-500 text-emerald-600"
+                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+            }`}
+          >
+            {et.name}
+          </button>
+        ))}
+      </div>
+
       <RsvpFilters 
         currentSearch={currentSearch}
-        currentEventType={currentEventType}
         currentOwner={currentOwner}
         currentCategory={currentCategory}
         currentStatus={currentStatus}
-        eventTypes={eventTypes}
+        currentSort={currentSort}
         updateUrl={updateUrl}
       />
 

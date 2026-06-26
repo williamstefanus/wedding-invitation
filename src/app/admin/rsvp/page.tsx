@@ -13,11 +13,15 @@ export default async function RsvpPage({
   
   const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
   const search = typeof resolvedParams.search === "string" ? resolvedParams.search : "";
-  const eventType = typeof resolvedParams.eventType === "string" ? resolvedParams.eventType : "All";
+  const tab = typeof resolvedParams.tab === "string" ? resolvedParams.tab : "all";
   const owner = typeof resolvedParams.owner === "string" ? resolvedParams.owner : "All";
   const category = typeof resolvedParams.category === "string" ? resolvedParams.category : "All";
   const status = typeof resolvedParams.status === "string" ? resolvedParams.status : "All";
+  const sort = typeof resolvedParams.sort === "string" ? resolvedParams.sort as "az" | "za" | "default" : "default";
   const limit = 10;
+
+  // Map tab to eventType filter
+  const eventType = tab === "all" ? "All" : tab;
 
   // Fetch paginated RSVPs
   const { data: invitations, total, totalPages } = await getAdminRsvps({
@@ -26,13 +30,14 @@ export default async function RsvpPage({
     owner,
     category,
     status,
+    sort,
     page,
     limit
   });
 
   const supabase = await createClient();
 
-  // Fetch event types for dropdown
+  // Fetch event types for tabs
   const { data: eventTypes } = await supabase
     .from("event_types")
     .select("id, name, slug");
@@ -53,10 +58,11 @@ export default async function RsvpPage({
         totalPages={totalPages || 0}
         currentPage={page}
         currentSearch={search}
-        currentEventType={eventType}
+        currentTab={tab}
         currentOwner={owner}
         currentCategory={category}
         currentStatus={status}
+        currentSort={sort}
       />
     </div>
   );

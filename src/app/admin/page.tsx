@@ -1,37 +1,33 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardClient } from "./DashboardClient";
 
-export const revalidate = 0; // Disable caching for the admin dashboard
+export const revalidate = 0;
 
 export default async function AdminPage() {
   const supabase = await createClient();
 
-  // Fetch all invitations and inner join event_types, left join rsvps
-  const { data: invitations, error: inviteError } = await supabase
+  // Fetch invitations with guest owner, confirmed pax, and selected sessions for breakdown
+  const { data: invitations } = await supabase
     .from("invitations")
     .select(`
       id,
       max_pax,
       invitation_code,
       event_type:event_types!inner(slug, name),
-      rsvp:rsvps(attendance_status, confirmed_pax)
+      guest:guests!inner(owner),
+      rsvp:rsvps(
+        attendance_status, 
+        confirmed_pax,
+        selected_sessions:rsvp_selected_sessions(
+          event_session:event_sessions(name, slug)
+        )
+      )
     `);
 
-  // Optionally fetch raw guests count
-  const { count: totalGuestsCount, error: guestsError } = await supabase
+  // Fetch raw guests count
+  const { count: totalGuestsCount } = await supabase
     .from("guests")
     .select("*", { count: "exact", head: true });
-
-  if (inviteError) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-slate-50">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">Error Loading Dashboard</h2>
-          <p className="text-slate-600">{inviteError.message}</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">

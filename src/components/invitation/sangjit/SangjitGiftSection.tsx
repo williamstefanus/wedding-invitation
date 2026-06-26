@@ -57,13 +57,19 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
       >
 
         {/* Left Floral Image (fluid responsive width up to 187px) */}
-        <div style={{ width: '43%', maxWidth: 187, flexShrink: 0, pointerEvents: 'none' }}>
+        <motion.div
+          initial={{ opacity: 0, x: -60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ width: '43%', maxWidth: 187, flexShrink: 0, pointerEvents: 'none' }}
+        >
           <img
             style={{ width: '100%', height: 'auto', display: 'block' }}
             src={SANGJIT_INVITATION_ASSETS.sangjitGiftLeftFloral}
             alt="Left Floral"
           />
-        </div>
+        </motion.div>
 
         {/* Right Detail Stack */}
         <div style={{ flex: '1 1 0', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: 18, paddingTop: 10 }}>

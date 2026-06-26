@@ -9,6 +9,7 @@ export async function getAdminRsvps({
   owner,
   category,
   status,
+  sort,
   page = 1,
   limit = 10
 }: {
@@ -17,6 +18,7 @@ export async function getAdminRsvps({
   owner?: string | "All";
   category?: string | "All";
   status?: string | "All";
+  sort?: "az" | "za" | "default";
   page?: number;
   limit?: number;
 }) {
@@ -71,7 +73,13 @@ export async function getAdminRsvps({
     if (!isStatusFiltered) {
       const from = (page - 1) * limit;
       const to = from + limit - 1;
-      query = query.order("created_at", { ascending: false }).range(from, to);
+      if (sort === "az") {
+        query = query.order("guest(name)", { ascending: true }).range(from, to);
+      } else if (sort === "za") {
+        query = query.order("guest(name)", { ascending: false }).range(from, to);
+      } else {
+        query = query.order("created_at", { ascending: false }).range(from, to);
+      }
     }
 
     const { data, count, error } = await query;

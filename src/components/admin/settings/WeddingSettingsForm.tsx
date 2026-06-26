@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2 } from "lucide-react";
+import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, MessageSquare } from "lucide-react";
 
 interface WeddingSettingsFormProps {
   config: any;
@@ -225,6 +225,25 @@ export function WeddingSettingsForm({
             <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
           </label>
         </div>
+      </div>
+
+      {/* WhatsApp Message Template */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+          <MessageSquare className="w-5 h-5 text-amber-600" /> WhatsApp Message Template
+        </h2>
+        <p className="text-sm text-slate-500 mb-6">
+          Use <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{nama}"}</code> and{" "}
+          <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{link}"}</code> as placeholders.
+          They will be replaced with the guest&apos;s name and invitation link when copying.
+        </p>
+        <textarea
+          rows={5}
+          value={config.wa_template_wedding || ""}
+          onChange={e => setConfig({ ...config, wa_template_wedding: e.target.value })}
+          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm font-mono focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+          placeholder="Halo {nama}! ..."
+        />
       </div>
 
     </div>

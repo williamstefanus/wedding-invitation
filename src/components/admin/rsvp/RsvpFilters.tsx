@@ -4,21 +4,19 @@ import { Search } from "lucide-react";
 
 interface RsvpFiltersProps {
   currentSearch: string;
-  currentEventType: string;
   currentOwner: string;
   currentCategory: string;
   currentStatus: string;
-  eventTypes: any[];
+  currentSort: string;
   updateUrl: (updates: Record<string, string | null>) => void;
 }
 
 export function RsvpFilters({
   currentSearch,
-  currentEventType,
   currentOwner,
   currentCategory,
   currentStatus,
-  eventTypes,
+  currentSort,
   updateUrl
 }: RsvpFiltersProps) {
   return (
@@ -33,17 +31,6 @@ export function RsvpFilters({
           className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
         />
       </div>
-      
-      <select 
-        value={currentEventType} 
-        onChange={(e) => updateUrl({ eventType: e.target.value })}
-        className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-      >
-        <option value="All">All Event Types</option>
-        {eventTypes.map((et: any) => (
-          <option key={et.id} value={et.slug}>{et.name}</option>
-        ))}
-      </select>
 
       <select 
         value={currentOwner} 
@@ -75,6 +62,16 @@ export function RsvpFilters({
         <option value="pending">Pending</option>
         <option value="attending">Attending</option>
         <option value="not_attending">Declined</option>
+      </select>
+
+      <select 
+        value={currentSort || "default"} 
+        onChange={(e) => updateUrl({ sort: e.target.value })}
+        className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+      >
+        <option value="default">Sort: Latest</option>
+        <option value="az">Sort: A → Z</option>
+        <option value="za">Sort: Z → A</option>
       </select>
     </div>
   );

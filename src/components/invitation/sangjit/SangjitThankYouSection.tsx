@@ -33,10 +33,14 @@ export function SangjitThankYouSection({ invitation }: SangjitThankYouSectionPro
       {/* Outer 3-Column Canvas */}
       <div style={{ width: '100%', maxWidth: 480, display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', minHeight: 220 }}>
         
-        {/* Left Floral Column (flex: 1 1 0, gap -32px) */}
+        {/* Left Floral Column */}
         <div style={{ flex: '1 1 0', height: '100%', position: 'relative', display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>
-          <img
-            style={{ width: '250%', maxWidth: 'none', height: 'auto', display: 'block', transform: 'rotate(0deg)', transformOrigin: 'center', position: 'absolute', right: -48 }}
+          <motion.img
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ width: '250%', maxWidth: 'none', height: 'auto', display: 'block', transformOrigin: 'center', position: 'absolute', right: -48 }}
             src={SANGJIT_INVITATION_ASSETS.sangjitThankYouLeftFloral}
             alt="Left Floral"
           />
@@ -65,10 +69,14 @@ export function SangjitThankYouSection({ invitation }: SangjitThankYouSectionPro
           </div>
         </motion.div>
 
-        {/* Right Floral Column (flex: 1 1 0, gap -32px) */}
+        {/* Right Floral Column */}
         <div style={{ flex: '1 1 0', height: '100%', position: 'relative', display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>
-          <img
-            style={{ width: '200%', maxWidth: 'none', height: 'auto', display: 'block', transform: 'rotate(-19deg)', transformOrigin: 'center', position: 'absolute', left: -32 }}
+          <motion.img
+            initial={{ opacity: 0, x: 60, rotate: -19 }}
+            whileInView={{ opacity: 1, x: 0, rotate: -19 }}
+            viewport={{ once: false, amount: 0.1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            style={{ width: '200%', maxWidth: 'none', height: 'auto', display: 'block', transformOrigin: 'center', position: 'absolute', left: -32 }}
             src={SANGJIT_INVITATION_ASSETS.sangjitThankYouRightFloral}
             alt="Right Floral"
           />

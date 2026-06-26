@@ -52,11 +52,15 @@ export async function getSettings() {
         config: settingsRow?.value || {
           couple_names: "William & Aziel",
           music_url: "",
+          sangjit_music_url: "",
           countdown_date: "2026-10-23T11:00:00",
+          sangjit_countdown_date: "",
           gift_bank: "BCA",
           gift_account: "1234567890",
           gift_name: "William Stefanus",
-          gallery_images: []
+          gallery_images: [],
+          wa_template_wedding: "Halo {nama}! 🎉 Kami dengan hormat mengundang kamu ke pernikahan kami.\n\nSilakan konfirmasi kehadiran melalui link berikut:\n{link}\n\nTerima kasih 🙏",
+          wa_template_sangjit: "Halo {nama}! 🎉 Kami mengundang kamu ke acara Sangjit kami.\n\nSilakan konfirmasi kehadiran melalui link berikut:\n{link}\n\nTerima kasih 🙏"
         }
       }
     };

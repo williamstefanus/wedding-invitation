@@ -23,7 +23,7 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
   const contentRef = useRef<HTMLDivElement>(null);
 
   const config = settings?.config || {};
-  const musicUrl = config.music_url || "/audio/bgm.mp3";
+  const musicUrl = config.sangjit_music_url || config.music_url || "/audio/bgm.mp3";
 
   const handleOpen = () => {
     setIsOpen(true);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Edit2, Trash2, Check, Copy, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit2, Trash2, Check, Copy, RefreshCw, ChevronLeft, ChevronRight, Send, CheckCheck } from "lucide-react";
 
 interface GuestTableProps {
   initialGuests: any[];
@@ -19,7 +19,8 @@ interface GuestTableProps {
   setIsEditPaxOpen: (isOpen: boolean) => void;
   setIsRegenerateOpen: (isOpen: boolean) => void;
   setIsDeleteInvOpen: (isOpen: boolean) => void;
-  handleCopyLink: (inv: any) => void;
+  handleCopyLink: (inv: any, guestName?: string) => void;
+  handleToggleSent: (invId: string, currentSentStatus: boolean) => void;
   handlePageChange: (newPage: number) => void;
 }
 
@@ -40,6 +41,7 @@ export function GuestTable({
   setIsRegenerateOpen,
   setIsDeleteInvOpen,
   handleCopyLink,
+  handleToggleSent,
   handlePageChange
 }: GuestTableProps) {
   return (
@@ -49,7 +51,7 @@ export function GuestTable({
           <thead className="bg-slate-50 text-slate-500 border-b border-slate-100">
             <tr>
               <th className="px-6 py-4 font-medium">Name</th>
-              <th className="px-6 py-4 font-medium">Owner & Category</th>
+              <th className="px-6 py-4 font-medium">Owner &amp; Category</th>
               {currentTab === "all" ? (
                 <>
                   {eventTypes.map(et => (
@@ -63,6 +65,7 @@ export function GuestTable({
                   <th className="px-6 py-4 font-medium">Pax</th>
                   <th className="px-6 py-4 font-medium">RSVP / Confirmed</th>
                   <th className="px-6 py-4 font-medium">Table</th>
+                  <th className="px-6 py-4 font-medium text-center">Sent</th>
                   <th className="px-6 py-4 font-medium text-right">Actions</th>
                 </>
               )}
@@ -71,7 +74,7 @@ export function GuestTable({
           <tbody className="divide-y divide-slate-100">
             {initialGuests.length === 0 ? (
               <tr>
-                <td colSpan={currentTab === "all" ? 4 : 7} className="px-6 py-12 text-center text-slate-500">
+                <td colSpan={currentTab === "all" ? 4 : 8} className="px-6 py-12 text-center text-slate-500">
                   No records found matching your criteria.
                 </td>
               </tr>
@@ -133,7 +136,7 @@ export function GuestTable({
                   ) : (
                     <>{(() => {
                       const inv = guest.invitations?.[0]; // Because of !inner, there is only one match
-                      if (!inv) return <td colSpan={5}></td>;
+                      if (!inv) return <td colSpan={6}></td>;
 
                       let rsvp = null;
                       if (inv.rsvp) {
@@ -159,9 +162,24 @@ export function GuestTable({
                           <td className="px-6 py-4 text-slate-600">
                             {inv.seating_assignment?.[0]?.seating_table?.table_name || "-"}
                           </td>
+                          {/* Mark as Sent */}
+                          <td className="px-6 py-4 text-center">
+                            <button
+                              onClick={() => handleToggleSent(inv.id, !!inv.is_sent)}
+                              title={inv.is_sent ? "Mark as Not Sent" : "Mark as Sent"}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
+                                inv.is_sent
+                                  ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                                  : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
+                              }`}
+                            >
+                              {inv.is_sent ? <CheckCheck className="w-3.5 h-3.5" /> : <Send className="w-3.5 h-3.5" />}
+                              {inv.is_sent ? "Sent" : "Not Sent"}
+                            </button>
+                          </td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
-                              <button onClick={() => handleCopyLink(inv)} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition" title="Copy Link">
+                              <button onClick={() => handleCopyLink(inv, guest.name)} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition" title="Copy WhatsApp Message">
                                 {copiedId === inv.id ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                               </button>
                               <button onClick={() => { setSelectedGuest(guest); setSelectedInv(inv); setEditMaxPax(inv.max_pax); setIsEditPaxOpen(true); }} className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition" title="Edit Max Pax">

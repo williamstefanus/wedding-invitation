@@ -10,11 +10,12 @@ interface GetGuestsParams {
   owner?: GuestOwner | "All";
   category?: GuestCategory | "All";
   tab?: string | "all";
+  sort?: "az" | "za" | "default";
   page: number;
   limit: number;
 }
 
-export async function getGuests({ search, owner, category, tab, page, limit }: GetGuestsParams) {
+export async function getGuests({ search, owner, category, tab, sort, page, limit }: GetGuestsParams) {
   try {
     const supabase = await createClient();
     
@@ -24,6 +25,7 @@ export async function getGuests({ search, owner, category, tab, page, limit }: G
         id,
         invitation_code,
         max_pax,
+        is_sent,
         event_type_id,
         event_type:event_types${(tab && tab !== "all") ? "!inner" : ""}(id, slug, name),
         rsvp:rsvps(attendance_status, confirmed_pax),
@@ -50,7 +52,13 @@ export async function getGuests({ search, owner, category, tab, page, limit }: G
     const from = (page - 1) * limit;
     const to = from + limit - 1;
     
-    query = query.order("created_at", { ascending: false }).range(from, to);
+    if (sort === "az") {
+      query = query.order("name", { ascending: true }).range(from, to);
+    } else if (sort === "za") {
+      query = query.order("name", { ascending: false }).range(from, to);
+    } else {
+      query = query.order("created_at", { ascending: false }).range(from, to);
+    }
 
     const { data, count, error } = await query;
 
@@ -78,6 +86,7 @@ export async function getGuestById(id: string) {
         id,
         invitation_code,
         max_pax,
+        is_sent,
         event_type_id,
         event_type:event_types(id, slug, name),
         rsvp:rsvps(attendance_status, confirmed_pax),
@@ -90,6 +99,25 @@ export async function getGuestById(id: string) {
     return { success: true, data };
   } catch (error: any) {
     console.error("Failed to fetch guest:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function toggleInvitationSent(id: string, is_sent: boolean) {
+  try {
+    const supabase = await createClient();
+    
+    const { error } = await supabase
+      .from("invitations")
+      .update({ is_sent } as any)
+      .eq("id", id);
+
+    if (error) throw error;
+
+    revalidatePath("/admin/guests");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to toggle sent status:", error);
     return { success: false, error: error.message };
   }
 }

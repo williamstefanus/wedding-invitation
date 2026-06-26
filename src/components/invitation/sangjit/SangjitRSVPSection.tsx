@@ -85,9 +85,15 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
         {/* Header Block */}
         <div style={{ justifyContent: 'flex-start', alignItems: 'center', display: 'flex', position: 'relative', marginBottom: 10, height: 175 }}>
           <div style={{ width: 120, color: '#761B33', fontSize: 48, fontFamily: 'var(--font-egizio), "EgizioEF Condensed", serif', fontWeight: 500, lineHeight: '45.6px', wordWrap: 'break-word', flexShrink: 0 }}>RSVP</div>
-          <div style={{ position: 'absolute', left: 130, top: 0, width: 320, pointerEvents: 'none', transform: 'rotate(6deg)', transformOrigin: 'top left', zIndex: 10 }}>
+          <motion.div
+            initial={{ opacity: 0, x: 70 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, margin: "-60px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            style={{ position: 'absolute', left: 130, top: 0, width: 320, pointerEvents: 'none', transform: 'rotate(6deg)', transformOrigin: 'top left', zIndex: 10 }}
+          >
             <img style={{ width: '100%', height: 'auto', display: 'block', maxWidth: 'none' }} src={SANGJIT_INVITATION_ASSETS.sangjitRsvpFloralHeader} alt="Floral Header" />
-          </div>
+          </motion.div>
         </div>
 
         {isSuccess ? (

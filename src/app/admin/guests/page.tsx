@@ -17,6 +17,7 @@ export default async function GuestsPage({
   const owner = typeof resolvedParams.owner === "string" ? (resolvedParams.owner as GuestOwner | "All") : "All";
   const category = typeof resolvedParams.category === "string" ? (resolvedParams.category as GuestCategory | "All") : "All";
   const tab = typeof resolvedParams.tab === "string" ? resolvedParams.tab : "all";
+  const sort = typeof resolvedParams.sort === "string" ? resolvedParams.sort as "az" | "za" | "default" : "default";
   const limit = 10;
 
   const { data: guests, total, totalPages } = await getGuests({
@@ -24,6 +25,7 @@ export default async function GuestsPage({
     owner,
     category,
     tab,
+    sort,
     page,
     limit
   });
@@ -42,6 +44,7 @@ export default async function GuestsPage({
         currentOwner={owner}
         currentCategory={category}
         currentTab={tab}
+        currentSort={sort}
         eventTypes={eventTypes || []}
       />
     </div>

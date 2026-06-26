@@ -143,6 +143,8 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
 
       {activeTab === "sangjit" && (
         <SangjitSettingsForm 
+          config={config}
+          setConfig={setConfig}
           deadlines={deadlines}
           setDeadlines={setDeadlines}
           sessions={sessions}

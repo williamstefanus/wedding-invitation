@@ -3,7 +3,7 @@
 import { useState, useTransition, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
-import { createGuest, updateGuest, deleteGuest, deleteInvitationAction, regenerateLink, updateMaxPax, getGuestById } from "@/lib/actions/guests";
+import { createGuest, updateGuest, deleteGuest, deleteInvitationAction, regenerateLink, updateMaxPax, getGuestById, toggleInvitationSent } from "@/lib/actions/guests";
 import type { GuestOwner, GuestCategory } from "@/types";
 
 // Import Extracted Components
@@ -24,6 +24,7 @@ interface GuestClientProps {
   currentOwner: string;
   currentCategory: string;
   currentTab: string;
+  currentSort: string;
   eventTypes: any[];
 }
 
@@ -36,6 +37,7 @@ export function GuestClient({
   currentOwner,
   currentCategory,
   currentTab,
+  currentSort,
   eventTypes
 }: GuestClientProps) {
   const router = useRouter();
@@ -78,7 +80,7 @@ export function GuestClient({
       }
     });
     
-    if (updates.search !== undefined || updates.owner !== undefined || updates.category !== undefined || updates.tab !== undefined) {
+    if (updates.search !== undefined || updates.owner !== undefined || updates.category !== undefined || updates.tab !== undefined || updates.sort !== undefined) {
       params.set("page", "1");
     }
 
@@ -96,11 +98,30 @@ export function GuestClient({
     });
   };
 
-  const handleCopyLink = (inv: any) => {
+  // Read WA template from localStorage (set by Settings page) or fall back to a default
+  const getWaTemplate = (eventSlug: string) => {
+    if (typeof window !== "undefined") {
+      try {
+        const settings = JSON.parse(localStorage.getItem("wedding_config") || "{}");
+        if (eventSlug === "wedding" && settings.wa_template_wedding) return settings.wa_template_wedding;
+        if (eventSlug === "sangjit" && settings.wa_template_sangjit) return settings.wa_template_sangjit;
+      } catch {}
+    }
+    return "Halo {nama}! 🎉 Kami mengundang kamu ke acara kami.\n\nLink undangan: {link}";
+  };
+
+  const handleCopyLink = (inv: any, guestName?: string) => {
     const url = `${window.location.origin}/invite/${inv.event_type.slug}/${inv.invitation_code}`;
-    navigator.clipboard.writeText(url);
+    const name = guestName || inv.guest?.name || "";
+    const template = getWaTemplate(inv.event_type.slug);
+    const message = template.replace("{nama}", name).replace("{link}", url);
+    navigator.clipboard.writeText(message);
     setCopiedId(inv.id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleToggleSent = async (invId: string, currentSentStatus: boolean) => {
+    await toggleInvitationSent(invId, !currentSentStatus);
   };
 
   const openAddModal = () => {
@@ -259,6 +280,7 @@ export function GuestClient({
         currentSearch={currentSearch}
         currentOwner={currentOwner}
         currentCategory={currentCategory}
+        currentSort={currentSort}
         updateUrl={updateUrl}
       />
 
@@ -279,6 +301,7 @@ export function GuestClient({
         setIsRegenerateOpen={setIsRegenerateOpen}
         setIsDeleteInvOpen={setIsDeleteInvOpen}
         handleCopyLink={handleCopyLink}
+        handleToggleSent={handleToggleSent}
         handlePageChange={handlePageChange}
       />
 
