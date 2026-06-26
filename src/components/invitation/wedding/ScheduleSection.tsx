@@ -62,24 +62,26 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
   const receptionTitle = splitTitle(receptionName);
 
   const dateObj = new Date("2026-10-23");
-  const formattedDate = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
+  const weekdayStr = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
     weekday: 'long',
+  }).format(dateObj);
+  const dayMonthYearStr = new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   }).format(dateObj);
 
   return (
-    <section className="relative w-full snap-start min-h-[100dvh] flex flex-col justify-center items-center bg-[#3A592F] z-10 pt-16 pb-[260px]">
+    <section className="relative w-full flex flex-col items-center bg-[#3A592F] z-10 pt-16 pb-[360px]">
       
       {/* Top Meadow Divider */}
       <div className="absolute top-[-30px] left-0 w-full z-20 pointer-events-none">
         <Image 
           src="/images/meadow-flower-divider.png"
           alt="Meadow Top Divider"
-          width={480}
-          height={295}
-          className="w-full h-auto object-cover object-bottom"
+          width={750}
+          height={579}
+          className="w-full h-auto object-contain object-bottom"
         />
       </div>
 
@@ -97,8 +99,9 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
             className="absolute right-2 top-1/2 -translate-y-1/2 w-[220px] aspect-[241/82] flex items-center justify-center z-10"
           >
             <Image src="/images/torn-date-paper.png" fill className="object-contain" alt="Torn Paper" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-[#4B4B4B] pl-10 pr-2">
-              <span className="text-[16px] text-[#3A592F] leading-tight mt-1" style={{ fontFamily: "var(--font-alegreya)" }}>{formattedDate}</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-[#3A592F] pl-8 pr-2 text-center">
+              <span className="text-[19px] sm:text-[20px] font-medium leading-[1.2]" style={{ fontFamily: "var(--font-alegreya)" }}>{weekdayStr},</span>
+              <span className="text-[18px] sm:text-[19px] font-medium leading-[1.2]" style={{ fontFamily: "var(--font-alegreya)" }}>{dayMonthYearStr}</span>
             </div>
           </motion.div>
 
@@ -213,9 +216,9 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
         <Image 
           src="/images/daisy-garden-divider.png"
           alt="Daisy Garden Divider"
-          width={390}
-          height={254}
-          className="w-full h-auto object-cover object-bottom"
+          width={500}
+          height={373}
+          className="w-full h-auto object-contain object-bottom"
         />
       </div>
 

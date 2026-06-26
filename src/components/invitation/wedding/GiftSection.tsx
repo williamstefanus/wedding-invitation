@@ -27,16 +27,16 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <section className="relative w-full snap-start min-h-[100dvh] flex flex-col justify-center items-center bg-[#3A592F] pt-24 pb-32 z-10 overflow-hidden text-center">
+    <section className="relative w-full flex flex-col items-center bg-[#3A592F] pt-[260px] pb-[24px] z-10 overflow-hidden text-center">
       
-      {/* Top Meadow Transition (overlaps upwards if needed) */}
-      <div className="absolute top-[-20px] left-0 w-full z-20 pointer-events-none opacity-80">
+      {/* Top Meadow Divider */}
+      <div className="absolute top-[-30px] left-0 w-full z-20 pointer-events-none">
         <Image 
           src="/images/meadow-flower-divider.png" 
-          alt="Meadow Divider" 
-          width={480} 
-          height={295} 
-          className="w-full h-auto object-cover object-top" 
+          alt="Meadow Top Divider" 
+          width={750} 
+          height={579} 
+          className="w-full h-auto object-contain object-bottom" 
         />
       </div>
 
@@ -57,7 +57,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: false }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-[#FFF9ED] text-[15px] leading-relaxed mb-8 whitespace-pre-line" 
+          className="text-[#FFF9ED] text-[14px] leading-relaxed mb-8 whitespace-pre-line" 
           style={{ fontFamily: "var(--font-alegreya)" }}
         >
           {t('giftMessage')}
@@ -74,7 +74,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
               className="w-full overflow-hidden mb-4"
             >
               <div className="w-full bg-[#FAF5E6] rounded-2xl shadow-lg p-6 flex flex-col items-center mt-2">
-                <p className="text-[#4B4B4B] text-[15px] mb-1" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[#4B4B4B] text-[14px] mb-1" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {displayBank}
                 </p>
                 <div className="flex items-center justify-center w-full relative mb-1">
@@ -82,7 +82,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
                     {displayAccount}
                   </span>
                 </div>
-                <p className="text-[#4B4B4B] text-[15px] mb-4" style={{ fontFamily: "var(--font-alegreya)" }}>
+                <p className="text-[#4B4B4B] text-[14px] mb-4" style={{ fontFamily: "var(--font-alegreya)" }}>
                   a/n {displayName}
                 </p>
 
@@ -109,7 +109,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false }}
           onClick={() => setShowGift(!showGift)}
-          className={`w-full rounded-xl flex items-center justify-center h-[36px] text-[15px] font-medium transition active:scale-95 shadow-sm ${
+          className={`w-full rounded-xl flex items-center justify-center h-[36px] text-[14px] font-medium transition active:scale-95 shadow-sm ${
             showGift 
               ? "bg-[#3A592F] border border-[#FFF9ED]/50 text-[#FFF9ED]" 
               : "bg-[#E5E5E5] border border-transparent text-[#4B4B4B] hover:bg-white"

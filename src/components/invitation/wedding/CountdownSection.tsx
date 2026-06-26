@@ -63,7 +63,7 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
     <section className="relative w-full px-4 z-40 animate-fade-up -mt-20 flex flex-col items-center">
       
       {/* The Countdown Card */}
-      <div className="relative bg-white rounded-[24px] shadow-xl p-5 w-[90%] max-w-[340px]">
+      <div className="relative bg-white rounded-[24px] shadow-xl w-[90%] max-w-[360px]" style={{ paddingTop: 20, paddingBottom: 16, paddingLeft: 12, paddingRight: 12, fontFamily: 'var(--font-montserrat), Montserrat, sans-serif' }}>
         
         {/* Header */}
         <div className="flex items-center justify-between mb-4 px-1">
@@ -74,46 +74,46 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
         </div>
 
         {/* Countdown Digits */}
-        <div className="flex items-start justify-center gap-2">
+        <div className="flex items-start justify-around w-full px-1">
           
           {/* Days */}
           <div className="flex flex-col items-center">
             <div className="flex gap-1">
               {days.map((digit, idx) => (
-                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-normal">
                   {digit}
                 </div>
               ))}
             </div>
-            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">{t('days')}</span>
+            <span className="text-[14px] mt-2 text-gray-500 font-normal lowercase">{t('days')}</span>
           </div>
 
-          <span className="text-xl font-medium text-[#4B4B4B] mt-1 mx-1">:</span>
+          <span className="text-xl font-normal text-[#4B4B4B] mt-1 mx-1">:</span>
 
           {/* Hours */}
           <div className="flex flex-col items-center">
             <div className="flex gap-1">
               {hours.map((digit, idx) => (
-                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-normal">
                   {digit}
                 </div>
               ))}
             </div>
-            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">{t('hours')}</span>
+            <span className="text-[14px] mt-2 text-gray-500 font-normal lowercase">{t('hours')}</span>
           </div>
 
-          <span className="text-xl font-medium text-[#4B4B4B] mt-1 mx-1">:</span>
+          <span className="text-xl font-normal text-[#4B4B4B] mt-1 mx-1">:</span>
 
           {/* Minutes */}
           <div className="flex flex-col items-center">
             <div className="flex gap-1">
               {minutes.map((digit, idx) => (
-                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-medium">
+                <div key={idx} className="bg-[#F6F6F6] text-[#4B4B4B] text-2xl w-[32px] h-[40px] rounded-lg flex items-center justify-center font-normal">
                   {digit}
                 </div>
               ))}
             </div>
-            <span className="text-[10px] mt-2 text-gray-500 font-medium lowercase">{t('minutes')}</span>
+            <span className="text-[14px] mt-2 text-gray-500 font-normal lowercase">{t('minutes')}</span>
           </div>
         </div>
       </div>

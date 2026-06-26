@@ -16,7 +16,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
 
   return (
     <section 
-      className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden z-30 snap-start snap-always"
+      className="relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden z-30"
       style={{
         background: "linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 40%, #556B2F 100%)",
       }}
@@ -41,6 +41,23 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
         {/* Gradient Overlay for text readability */}
         <div className="absolute inset-0 bg-black/10 z-30 pointer-events-none" />
       </div>
+      
+      {/* Title Graphic - Placed behind couple photo (z-10 vs z-20) */}
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0, delay: 0.2 }}
+        className="absolute top-[13%] inset-x-0 flex justify-center z-10 pointer-events-none px-4"
+      >
+        <Image 
+          src={WEDDING_INVITATION_ASSETS.heroOpeningTitle}
+          alt="William & Aziel"
+          width={320}
+          height={180}
+          priority
+          className="w-full max-w-[320px] h-auto object-contain drop-shadow-md"
+        />
+      </motion.div>
       
       {/* Safe Area Wrapper for Foreground (Locks proportion of couple + grass to WIDTH) */}
       <div className="absolute inset-x-0 bottom-0 w-full aspect-[390/600] pointer-events-none flex flex-col justify-end z-20">
@@ -71,29 +88,6 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
       </div>
 
       <div className="relative z-40 flex flex-col items-center justify-between text-center px-4 w-full h-full pb-8 pt-24 sm:pb-16 pointer-events-none">
-        
-        {/* Title Section - Remains visible */}
-        <div className="flex flex-col items-center rotate-[-2deg] drop-shadow-md">
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.0, delay: 0.2 }}
-            className="text-white text-3xl md:text-4xl tracking-wide mb-2" 
-            style={{ fontFamily: "var(--font-justwrite)" }}
-          >
-            {t('theWeddingOf')}
-          </motion.span>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.0, delay: 0.6 }}
-            className="flex flex-col items-center text-[#FFDE59] text-6xl md:text-7xl leading-[0.8]" 
-            style={{ fontFamily: "var(--font-justwrite)" }}
-          >
-            <span>William</span>
-            <span className="ml-8">& Aziel</span>
-          </motion.div>
-        </div>
 
         <AnimatePresence>
           {!isOpen && (

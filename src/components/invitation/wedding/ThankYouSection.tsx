@@ -14,12 +14,12 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
 
   return (
     <section 
-      className="relative w-full snap-start min-h-[100dvh] flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center bg-[#F7E392]"
+      className="relative w-full flex flex-col items-center pt-0 pb-16 z-10 overflow-hidden text-center bg-[#F7E392]"
     >
       
       {/* Tall Grass background filling the top section */}
-      <div className="absolute top-0 left-0 w-full h-[30dvh] pointer-events-none opacity-100 z-0">
-        <Image src="/images/tall-grass-divider.png" alt="Tall Grass" fill className="object-cover object-bottom" />
+      <div className="absolute top-0 left-0 w-full pointer-events-none opacity-100 z-0">
+        <Image src="/images/tall-grass-divider.png" alt="Tall Grass" width={750} height={579} className="w-full h-auto object-contain object-top" />
       </div>
 
       {/* Meadow Hills - Normal Document Flow to dictate height naturally */}
@@ -68,7 +68,7 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
           {t('thankYou')}
         </h2>
         
-        <p className="text-[16px] mb-12" style={{ fontFamily: "var(--font-alegreya)" }}>
+        <p className="text-[14px] mb-12" style={{ fontFamily: "var(--font-alegreya)" }}>
           {t('forYourLove')}
         </p>
 

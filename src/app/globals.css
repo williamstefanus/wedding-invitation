@@ -7,7 +7,10 @@
 @theme {
   /* Typography */
   --font-display: var(--font-playfair), Georgia, serif;
-  --font-body:    var(--font-alegreya), "Alegreya Sans", system-ui, sans-serif;
+  --font-serif:   var(--font-egizio), var(--font-playfair), Georgia, serif;
+  --font-egizio:  var(--font-egizio), Georgia, serif;
+  --font-body:    var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+  --font-sans:    var(--font-montserrat), "Montserrat", system-ui, sans-serif;
   --font-script:  var(--font-justwrite), "Cormorant Garamond", Georgia, serif;
 
   /* Gold palette (invitation) */
@@ -112,6 +115,7 @@ html {
 
 body {
   font-family: var(--font-body);
+  font-size: 16px;
   min-height: 100vh;
 }
 

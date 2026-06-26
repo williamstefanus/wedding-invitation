@@ -9,13 +9,13 @@ export function CoupleSection() {
   return (
     <section className="relative w-full flex flex-col items-center bg-[#faf9f0] overflow-hidden pb-[48px]">
       
+      {/* 1. Background Sky/Grass - Bleeds to fill screen width without side gaps */}
+      <div className="absolute top-0 inset-x-0 w-full pointer-events-none opacity-90 z-0 flex justify-center scale-[1.2] origin-top">
+        <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" width={800} height={600} priority className="w-full h-auto object-cover" />
+      </div>
+
       {/* Container matching Figma's 390px canvas width */}
-      <div className="relative w-full max-w-[390px] flex flex-col items-center">
-        
-        {/* 1. Background Sky/Grass - placed at the top center */}
-        <div className="absolute top-0 w-full max-w-[600px] pointer-events-none opacity-90 z-0 flex justify-center">
-          <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" width={800} height={600} className="w-full h-auto" />
-        </div>
+      <div className="relative w-full max-w-[390px] flex flex-col items-center z-10">
 
         {/* 2. Envelope Composition Container */}
         <motion.div 
@@ -79,8 +79,8 @@ export function CoupleSection() {
               {/* Stamp Container */}
               <div className="relative w-[45%] aspect-[152/172] rotate-[2deg] shrink-0 drop-shadow-sm scale-[1.1]">
                 {/* We use standard inset so the photo fits nicely inside the stamp frame */}
-                <div className="absolute inset-[6%] overflow-hidden bg-slate-200 z-10">
-                  <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill sizes="200px" className="object-cover" />
+                <div className="absolute inset-[6.5%] overflow-hidden bg-slate-200 z-10 rounded-sm">
+                  <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill sizes="200px" className="object-cover rotate-[2deg] scale-[1.04]" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
                   <Image src={ASSET.stampFrame} alt="Stamp" fill sizes="200px" className="object-fill" />
@@ -108,8 +108,8 @@ export function CoupleSection() {
             <div className="flex items-center justify-between w-full h-[35%] flex-row-reverse">
               {/* Stamp Container */}
               <div className="relative w-[45%] aspect-[152/172] -rotate-[3deg] shrink-0 drop-shadow-sm scale-[1.1]">
-                <div className="absolute inset-[6%] overflow-hidden bg-slate-200 z-10">
-                  <Image src={ASSET.bridePhotoAziel} alt="Bride" fill sizes="200px" className="object-cover object-top" />
+                <div className="absolute inset-[6.5%] overflow-hidden bg-slate-200 z-10 rounded-sm">
+                  <Image src={ASSET.bridePhotoAziel} alt="Bride" fill sizes="200px" className="object-cover object-top -rotate-[3deg] scale-[1.04]" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
                   <Image src={ASSET.stampFrame} alt="Stamp" fill sizes="200px" className="object-fill" />

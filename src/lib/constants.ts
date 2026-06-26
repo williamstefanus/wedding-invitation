@@ -68,6 +68,7 @@ export const ADMIN_NAV_ITEMS = [
 ] as const;
 
 export const WEDDING_INVITATION_ASSETS = {
+  heroOpeningTitle: "/images/hero-opening-title.png",
   heroBackground: "/images/hero-background-mountains.png",
   heroCouplePhoto: "/images/hero-couple-photo.png",
   heroGrassForeground: "/images/hero-grass-foreground.png",

@@ -87,7 +87,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   return (
     <LanguageProvider>
       <div className="min-h-[100dvh] w-full bg-neutral-100 flex justify-center">
-        <main className={`relative h-[100dvh] snap-y snap-mandatory scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+        <main className={`relative h-[100dvh] scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
           {/* Background Audio */}
           <audio ref={audioRef} src={musicUrl} loop />
 
@@ -119,7 +119,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
             className="w-full flex flex-col relative z-20 bg-[#faf9f0]"
           >
             {/* Page 2: Transition & Couple Section */}
-            <section className="snap-start snap-always min-h-[100dvh] w-full flex flex-col relative pt-[15vh]">
+            <section className="w-full flex flex-col relative pt-[15vh]">
               {/* The single grass foreground spanning the hero and countdown section to hide the separation */}
               <div className="w-full h-[40vh] -mt-[32vh] relative z-30 pointer-events-none overflow-visible">
                 <motion.div

@@ -40,7 +40,7 @@ export function RSVPForm({
 }: RSVPFormProps) {
   const { t } = useLanguage();
   return (
-    <section className="w-full snap-start min-h-[100dvh] bg-[#faf9f0] flex flex-col justify-center items-center py-[48px] z-20 relative">
+    <section className="w-full bg-[#faf9f0] flex flex-col items-center py-[48px] z-20 relative">
       <h2 className="text-[64px] text-[#4B4B4B] mb-6 leading-none" style={{ fontFamily: "var(--font-justwrite)" }}>
         {t('rsvpTitle')}
       </h2>

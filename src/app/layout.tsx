@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Inter, Playfair_Display, Cormorant_Garamond, Alegreya_Sans } from "next/font/google";
+import { Inter, Playfair_Display, Cormorant_Garamond, Alegreya_Sans, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 
@@ -39,6 +45,12 @@ const justWrite = localFont({
   display: "swap",
 });
 
+const egizio = localFont({
+  src: "../../public/fonts/EgizioEF Condensed Regular.otf",
+  variable: "--font-egizio",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Wedding Invitation — William & Aziel",
@@ -57,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${cormorant.variable} ${alegreya.variable} ${justWrite.variable} h-full`}
+      className={`${inter.variable} ${playfair.variable} ${cormorant.variable} ${alegreya.variable} ${justWrite.variable} ${egizio.variable} ${montserrat.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-white text-slate-900 antialiased">

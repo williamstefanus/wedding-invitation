@@ -89,12 +89,8 @@ export function GallerySection({ images = [] }: GallerySectionProps) {
 
   return (
     <section 
-      className="w-full snap-start min-h-[100dvh] flex flex-col items-center justify-center py-[48px] z-20 relative bg-[#faf9f0] overflow-hidden"
+      className="w-full flex flex-col items-center py-[48px] z-20 relative bg-[#faf9f0] overflow-hidden"
     >
-      {/* Sky Decor background at the bottom to transition into Gift Section */}
-      <div className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-full max-w-[600px] pointer-events-none z-0">
-        <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" width={800} height={600} className="w-full h-auto object-cover object-bottom" />
-      </div>
       <motion.h2 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

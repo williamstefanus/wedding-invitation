@@ -19,7 +19,7 @@ export function RSVPSuccessMessage({
   if (submitState === "idle") return null;
 
   return (
-    <section className="w-full snap-start min-h-[100dvh] bg-[#faf9f0] flex flex-col items-center justify-center py-24 z-20 relative px-6 text-center animate-fade-in">
+    <section className="w-full bg-[#faf9f0] flex flex-col items-center py-24 z-20 relative px-6 text-center animate-fade-in">
       <h2 className="text-6xl text-[#416130] mb-6" style={{ fontFamily: "var(--font-justwrite)" }}>
         {t('thankYou')}
       </h2>
