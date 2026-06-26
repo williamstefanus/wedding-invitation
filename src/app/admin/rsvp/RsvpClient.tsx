@@ -42,6 +42,7 @@ export function RsvpClient({
   const [editStatus, setEditStatus] = useState("pending");
   const [editPax, setEditPax] = useState(0);
   const [editSelectedSessions, setEditSelectedSessions] = useState<string[]>([]);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   let currentRsvp = null;
   if (selectedInv?.rsvp) {
