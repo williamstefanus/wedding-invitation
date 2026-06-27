@@ -11,9 +11,12 @@ This is a comprehensive wedding invitation platform featuring dynamic public inv
 - **Import/Export Data**: Bulk import guests via CSV/Excel and export invitation data.
 - **Global Settings Management**: Update couple names, venues, maps URLs, RSVP deadlines, and gallery images without code changes.
 
-## Architecture & Data Model
+## Architecture & Project Structure
 
-- **Modular Architecture**: The Admin dashboard UI uses a stateful orchestrator pattern (e.g. `GuestClient.tsx`) that acts as a container for smaller, extracted pure UI components located in `src/components/admin/[module]/`.
+- **Modular UI Pattern**: The Admin dashboard UI uses a stateful orchestrator pattern (e.g. `GuestClient.tsx`) that acts as a container for smaller pure UI components located in `src/components/admin/[module]/`.
+- **Centralized Constants**: All application constants and asset mapping references are grouped neatly inside `src/lib/constants/` (`index.ts`, `sangjitInvitationAssets.ts`, `sangjitScreenReferences.ts`).
+- **Utility Scripts**: Standalone maintenance and data inspection scripts live in `scripts/` (e.g. `testCheck.mjs`).
+- **Next.js 16 Proxy Layer**: Request interceptors are handled via Next.js 16 Proxy conventions (`src/proxy.ts` re-exporting from `src/lib/supabase/proxy.ts`), enforcing HTTP Basic Auth on `/admin` routes while refreshing Supabase session cookies.
 - **Data Model Invariants**:
   - A **Guest** is the master record.
   - A guest **must** have at least one invitation (wedding, sangjit, or both). Standalone guests are strictly prohibited.
@@ -38,6 +41,8 @@ Create a `.env.local` file in the root directory and add the following keys:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key # For admin actions bypassing RLS
+ADMIN_USERNAME=admin # HTTP Basic Auth username for /admin routes
+ADMIN_PASSWORD=your_secure_password # HTTP Basic Auth password for /admin routes
 ```
 
 ### 3. Supabase Setup & Database Initialization
@@ -65,10 +70,11 @@ You must manually create a storage bucket in your Supabase Dashboard:
 
 ### 4. Asset Placement
 
-Before running the project, place your custom design assets into the `/public` folder:
-- `/public/images/`: `hero_background.png`, `floral_envelope.png`, `wax_seal.png`, `grass_texture.png`, etc.
+Before running the project, place your visual design assets into the `/public` folder:
+- `/public/images/`: General invitation images (`hero_background.png`, `floral_envelope.png`, `wax_seal.png`, etc.).
+- `/public/images/sangjit-invitation/`: Watercolor backgrounds, floral emblems, and wax seals for the Sangjit invitation.
+- `/public/images/sangjit-screen/`: Screen reference screenshots used for layout styling.
 - `/public/audio/`: `bgm.mp3` (Background music for the public invitation).
-- Ensure any file names referenced in `AssetPlaceholder` components are placed accurately.
 
 ### 5. Local Development Commands
 
@@ -104,13 +110,15 @@ The application will be available at [http://localhost:3000](http://localhost:30
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY`
+   - `ADMIN_USERNAME`
+   - `ADMIN_PASSWORD`
 4. Click **Deploy**. Vercel will automatically run `npm run build` and launch the application.
 
 ---
 
 ## Known Limitations and MVP Scope
 
-- **No Authentication Mechanism**: The admin dashboard is currently unprotected. It requires a hardcoded authentication guard or integration with Supabase Auth before production deployment.
+- **Basic Auth Guard**: The admin dashboard (`/admin`) currently relies on HTTP Basic Auth enforced via Next.js Proxy (`src/proxy.ts`). For multi-user role-based access, full integration with Supabase Auth session cookies can be adapted inside `src/lib/supabase/proxy.ts`.
 - **Local Media Storage constraints**: The gallery image uploader requires a pre-existing `gallery` public bucket. 
 - **Seating Map Constraints**: The seating UI visually groups guests but does not yet feature a drag-and-drop 2D visual floor plan mapping tool.
 
