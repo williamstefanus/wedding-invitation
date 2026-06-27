@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { SANGJIT_INVITATION_ASSETS } from "@/constants/sangjitInvitationAssets";
+import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 import { submitRSVP } from "@/lib/actions/rsvp";
 
 interface SangjitRSVPSectionProps {

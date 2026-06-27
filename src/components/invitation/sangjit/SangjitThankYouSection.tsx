@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { SANGJIT_INVITATION_ASSETS } from "@/constants/sangjitInvitationAssets";
+import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 
 interface SangjitThankYouSectionProps {
   invitation?: any;

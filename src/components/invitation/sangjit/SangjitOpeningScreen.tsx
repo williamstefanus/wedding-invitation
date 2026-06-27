@@ -3,7 +3,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { SANGJIT_INVITATION_ASSETS } from "@/constants/sangjitInvitationAssets";
+import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitOpeningScreenProps {

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { SANGJIT_INVITATION_ASSETS } from "@/constants/sangjitInvitationAssets";
+import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitHeroCountdownSectionProps {

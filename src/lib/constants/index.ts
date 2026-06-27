@@ -92,6 +92,8 @@ export const WEDDING_INVITATION_ASSETS = {
   receptionDinnerIllustration: "/images/reception-dinner-illustration.png",
   daisyGardenDivider: "/images/daisy-garden-divider.png",
   galleryPlaceholder: "/images/gallery-placeholder.png",
-  footerMeadowHills: "/images/footer-meadow-hills.png",
   textareaResizeGrab: "/images/textarea-resize-grab.svg",
 } as const;
+
+export * from "./sangjitInvitationAssets";
+export * from "./sangjitScreenReferences";
