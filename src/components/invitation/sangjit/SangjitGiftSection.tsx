@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitGiftSectionProps {
   bank?: string;
@@ -13,6 +14,7 @@ interface SangjitGiftSectionProps {
 }
 
 export function SangjitGiftSection({ bank, account, name, invitation }: SangjitGiftSectionProps) {
+  const { t } = useLanguage();
   const [showGift, setShowGift] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -27,7 +29,7 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
   };
 
   return (
-    <section className="relative w-full bg-white flex flex-col items-center select-none overflow-hidden z-20">
+    <section className="relative w-full bg-white flex flex-col items-center select-none overflow-hidden z-20 pb-12">
 
       {/* Background Texture (sangjitGiftBackground at 30% opacity) */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-30">
@@ -77,11 +79,11 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
           {/* Heading & Paragraph Block */}
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: 14 }}>
             <div style={{ width: '100%', textAlign: 'center', color: '#761B33', fontSize: 48, fontFamily: 'var(--font-egizio), EgizioEF Condensed, serif', fontWeight: 500, lineHeight: '45.6px', wordWrap: 'break-word' }}>
-              Gift
+              {t('giftTitle')}
             </div>
 
-            <div style={{ width: '100%', maxWidth: 248, textAlign: 'center', color: '#761B33', fontSize: 14, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word' }}>
-              Your prayer and presence is the best gift, but if giving is your expression of love, you may use the following feature.
+            <div style={{ width: '100%', maxWidth: 248, textAlign: 'center', color: '#761B33', fontSize: 14, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word', whiteSpace: 'pre-line' }}>
+              {t('giftMessage')}
             </div>
           </div>
 
@@ -93,7 +95,7 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
           >
             <div style={{ justifyContent: 'center', alignItems: 'center', gap: 10, display: 'inline-flex' }}>
               <div style={{ color: showGift ? '#761B33' : 'white', fontSize: 14, fontFamily: 'Inter', fontWeight: 500, lineHeight: '20px', wordWrap: 'break-word' }}>
-                {showGift ? "Done" : "Send Gift"}
+                {showGift ? t('done') : t('sendGift')}
               </div>
             </div>
           </button>
@@ -124,7 +126,7 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
                 >
                   <div style={{ justifyContent: 'center', alignItems: 'center', gap: 10, display: 'inline-flex' }}>
                     <div style={{ color: '#761B33', fontSize: 14, fontFamily: 'Inter', fontWeight: 500, lineHeight: '20px', wordWrap: 'break-word' }}>
-                      {copied ? "Copied!" : "Click to Copy"}
+                      {copied ? t('copied') : t('clickToCopyShort')}
                     </div>
                   </div>
                 </button>

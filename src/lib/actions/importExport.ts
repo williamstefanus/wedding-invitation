@@ -96,7 +96,14 @@ export async function generateExportData(type: string) {
     if (type === "guests") {
       const { data, error } = await supabase.from("guests").select("name, phone, owner, category, notes").order("created_at");
       if (error) throw error;
-      return { success: true, data };
+      const flatData = (data || []).map((d: any) => ({
+        "Guest Name": d.name,
+        "Phone": d.phone || "",
+        "Owner": d.owner,
+        "Category": d.category,
+        "Notes": d.notes || ""
+      }));
+      return { success: true, data: flatData };
     }
     
     if (type === "invitations") {

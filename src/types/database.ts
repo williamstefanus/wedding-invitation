@@ -180,29 +180,38 @@ export interface Database {
       }
       invitations: {
         Row: {
+          checked_in_at: string | null
+          checked_in_pax: number | null
           created_at: string
           event_type_id: string
           guest_id: string
           id: string
           invitation_code: string
+          is_sent: boolean | null
           max_pax: number
           updated_at: string
         }
         Insert: {
+          checked_in_at?: string | null
+          checked_in_pax?: number | null
           created_at?: string
           event_type_id: string
           guest_id: string
           id?: string
           invitation_code: string
+          is_sent?: boolean | null
           max_pax?: number
           updated_at?: string
         }
         Update: {
+          checked_in_at?: string | null
+          checked_in_pax?: number | null
           created_at?: string
           event_type_id?: string
           guest_id?: string
           id?: string
           invitation_code?: string
+          is_sent?: boolean | null
           max_pax?: number
           updated_at?: string
         }

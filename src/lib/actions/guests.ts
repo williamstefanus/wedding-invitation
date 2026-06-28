@@ -309,3 +309,29 @@ export async function updateMaxPax(id: string, max_pax: number) {
     return { success: false, error: error.message };
   }
 }
+
+export async function bulkDeleteGuests(ids: string[]) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("guests").delete().in("id", ids);
+    if (error) throw error;
+    revalidatePath("/admin/guests");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to bulk delete guests:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function bulkDeleteInvitations(ids: string[]) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("invitations").delete().in("id", ids);
+    if (error) throw error;
+    revalidatePath("/admin/guests");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to bulk delete invitations:", error);
+    return { success: false, error: error.message };
+  }
+}

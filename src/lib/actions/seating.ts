@@ -195,3 +195,122 @@ export async function updateTableCapacity(table_id: string, new_capacity: number
     return { success: false, error: error.message };
   }
 }
+
+// Add Table
+export async function addTable(eventTypeSlug: string, tableName?: string, capacity = 10) {
+  try {
+    const supabase = await createClient();
+    
+    const { data: eventTypes, error: etError } = await supabase.from("event_types").select("id").eq("slug", eventTypeSlug).single();
+    if (etError || !eventTypes) throw new Error("Event type not found");
+
+    // Get max sort_order
+    const { data: tables } = await supabase.from("seating_tables").select("sort_order").eq("event_type_id", eventTypes.id).order("sort_order", { ascending: false }).limit(1);
+    const nextSortOrder = (tables?.[0]?.sort_order || 0) + 1;
+    const name = tableName || `Table ${nextSortOrder}`;
+
+    const { error } = await supabase.from("seating_tables").insert({
+      event_type_id: eventTypes.id,
+      table_name: name,
+      capacity,
+      sort_order: nextSortOrder
+    });
+
+    if (error) throw error;
+    revalidatePath("/admin/seating");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to add table:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// Delete Table
+export async function deleteTable(table_id: string) {
+  try {
+    const supabase = await createClient();
+    
+    // Check if table has assignments
+    const { count } = await supabase.from("seating_assignments").select("*", { count: "exact", head: true }).eq("seating_table_id", table_id);
+    if (count && count > 0) {
+      return { success: false, error: "Cannot delete table that has assigned guests. Please unassign guests first." };
+    }
+
+    const { error } = await supabase.from("seating_tables").delete().eq("id", table_id);
+    if (error) throw error;
+
+    revalidatePath("/admin/seating");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to delete table:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// Update Table Map Slot Position (swaps if occupied)
+export async function updateTableMapPosition(table_id: string, target_slot_id: number) {
+  try {
+    const supabase = await createClient();
+
+    // 1. Get current table info
+    const { data: currentTable, error: fetchErr } = await supabase
+      .from("seating_tables")
+      .select("id, event_type_id, sort_order")
+      .eq("id", table_id)
+      .single();
+
+    if (fetchErr || !currentTable) throw new Error("Table not found");
+
+    const oldSlot = currentTable.sort_order;
+
+    // 2. Check if another table occupies target_slot_id
+    const { data: occupyingTable } = await supabase
+      .from("seating_tables")
+      .select("id")
+      .eq("event_type_id", currentTable.event_type_id)
+      .eq("sort_order", target_slot_id)
+      .neq("id", table_id)
+      .maybeSingle();
+
+    if (occupyingTable) {
+      // Swap or unassign the occupying table
+      await supabase
+        .from("seating_tables")
+        .update({ sort_order: oldSlot && oldSlot <= 26 ? oldSlot : 0 })
+        .eq("id", occupyingTable.id);
+    }
+
+    // 3. Assign target table to new slot
+    const { error: updateErr } = await supabase
+      .from("seating_tables")
+      .update({ sort_order: target_slot_id })
+      .eq("id", table_id);
+
+    if (updateErr) throw updateErr;
+
+    revalidatePath("/admin/seating");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to update map position:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// Unassign table from map slot
+export async function unassignTableMapPosition(table_id: string) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from("seating_tables")
+      .update({ sort_order: 0 })
+      .eq("id", table_id);
+
+    if (error) throw error;
+
+    revalidatePath("/admin/seating");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to unassign table position:", error);
+    return { success: false, error: error.message };
+  }
+}

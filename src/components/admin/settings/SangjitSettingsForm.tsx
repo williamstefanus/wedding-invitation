@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Calendar, MapPin, Link as LinkIcon, Music, MessageSquare } from "lucide-react";
+import { Clock, Calendar, MapPin, Link as LinkIcon, Music, MessageSquare, Gift } from "lucide-react";
 
 interface SangjitSettingsFormProps {
   config: any;
@@ -95,6 +95,48 @@ export function SangjitSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1"><LinkIcon className="w-3 h-3 inline"/> Google Maps URL</label>
             <input type="text" value={sessions.sangjit?.google_maps_url || ""} onChange={e => setSessions({...sessions, sangjit: {...(sessions.sangjit || {}), google_maps_url: e.target.value}})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" />
+          </div>
+        </div>
+      </div>
+
+      {/* William's Gift Info */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <Gift className="w-5 h-5 text-rose-600" /> William's Gift Information
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bank Name</label>
+            <input type="text" value={config.gift_bank_william_sangjit ?? config.gift_bank_william ?? ""} onChange={e => setConfig({...config, gift_bank_william_sangjit: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition" placeholder="e.g. BCA"/>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Account Number</label>
+            <input type="text" value={config.gift_account_william_sangjit ?? config.gift_account_william ?? ""} onChange={e => setConfig({...config, gift_account_william_sangjit: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition" placeholder="e.g. 1234567890"/>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Recipient Name</label>
+            <input type="text" value={config.gift_name_william_sangjit ?? config.gift_name_william ?? ""} onChange={e => setConfig({...config, gift_name_william_sangjit: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition" placeholder="e.g. William Stefanus"/>
+          </div>
+        </div>
+      </div>
+
+      {/* Aziel's Gift Info */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <Gift className="w-5 h-5 text-rose-600" /> Aziel's Gift Information
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bank Name</label>
+            <input type="text" value={config.gift_bank_aziel_sangjit ?? config.gift_bank_aziel ?? ""} onChange={e => setConfig({...config, gift_bank_aziel_sangjit: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition" placeholder="e.g. BCA"/>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Account Number</label>
+            <input type="text" value={config.gift_account_aziel_sangjit ?? config.gift_account_aziel ?? ""} onChange={e => setConfig({...config, gift_account_aziel_sangjit: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition" placeholder="e.g. 1234567890"/>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Recipient Name</label>
+            <input type="text" value={config.gift_name_aziel_sangjit ?? config.gift_name_aziel ?? ""} onChange={e => setConfig({...config, gift_name_aziel_sangjit: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition" placeholder="e.g. Aziel"/>
           </div>
         </div>
       </div>

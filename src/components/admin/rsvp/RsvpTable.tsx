@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Eye, Edit2, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { bulkResetRsvps, bulkDeleteRsvpInvitations } from "@/lib/actions/adminRsvp";
 
 interface RsvpTableProps {
   initialInvitations: any[];
@@ -23,12 +25,94 @@ export function RsvpTable({
   openResetModal,
   handlePageChange
 }: RsvpTableProps) {
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
+
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [currentPage]);
+
+  const currentVisibleIds = initialInvitations.map(inv => inv.id).filter(Boolean);
+  const allSelected = currentVisibleIds.length > 0 && currentVisibleIds.every(id => selectedIds.includes(id));
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(Array.from(new Set([...selectedIds, ...currentVisibleIds])));
+    } else {
+      setSelectedIds(selectedIds.filter(id => !currentVisibleIds.includes(id)));
+    }
+  };
+
+  const handleBulkReset = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Are you sure you want to reset RSVPs for ${selectedIds.length} selected invitation(s)? This will clear their RSVP responses and seating assignments.`)) {
+      return;
+    }
+    setIsBulkProcessing(true);
+    await bulkResetRsvps(selectedIds);
+    setIsBulkProcessing(false);
+    setSelectedIds([]);
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Are you sure you want to permanently delete ${selectedIds.length} selected invitation(s)? This cannot be undone.`)) {
+      return;
+    }
+    setIsBulkProcessing(true);
+    await bulkDeleteRsvpInvitations(selectedIds);
+    setIsBulkProcessing(false);
+    setSelectedIds([]);
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      {/* ── Bulk Actions Banner ── */}
+      {selectedIds.length > 0 && (
+        <div className="bg-amber-50 border-b border-amber-200 px-6 py-3 flex items-center justify-between animate-fadeIn">
+          <span className="text-sm font-bold text-amber-900">
+            {selectedIds.length} invitation(s) selected
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSelectedIds([])}
+              className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 transition"
+            >
+              Clear Selection
+            </button>
+            <button
+              disabled={isBulkProcessing}
+              onClick={handleBulkReset}
+              className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              {isBulkProcessing ? "Processing..." : "Reset RSVPs"}
+            </button>
+            <button
+              disabled={isBulkProcessing}
+              onClick={handleBulkDelete}
+              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              {isBulkProcessing ? "Processing..." : "Delete Invitations"}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm whitespace-nowrap">
           <thead className="bg-slate-50 text-slate-500 border-b border-slate-100">
             <tr>
+              <th className="px-6 py-4 font-medium text-center w-12">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={handleSelectAll}
+                  className="rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4 cursor-pointer"
+                  title="Select All"
+                />
+              </th>
               <th className="px-6 py-4 font-medium">Guest Name</th>
               <th className="px-6 py-4 font-medium">Event</th>
               <th className="px-6 py-4 font-medium">Owner / Cat</th>
@@ -42,7 +126,7 @@ export function RsvpTable({
           <tbody className="divide-y divide-slate-100">
             {initialInvitations.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-6 py-12 text-center text-slate-500">
+                <td colSpan={9} className="px-6 py-12 text-center text-slate-500">
                   No RSVP records found.
                 </td>
               </tr>
@@ -55,9 +139,23 @@ export function RsvpTable({
                   rsvp = inv.rsvp;
                 }
                 const isPend = !rsvp;
+                const isChecked = selectedIds.includes(inv.id);
+
+                const toggleRow = () => {
+                  if (isChecked) setSelectedIds(selectedIds.filter(id => id !== inv.id));
+                  else setSelectedIds([...selectedIds, inv.id]);
+                };
                 
                 return (
-                  <tr key={inv.id} className="hover:bg-slate-50/50 transition">
+                  <tr key={inv.id} className={`hover:bg-slate-50/50 transition ${isChecked ? "bg-amber-50/30" : ""}`}>
+                    <td className="px-6 py-4 text-center">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={toggleRow}
+                        className="rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4 cursor-pointer"
+                      />
+                    </td>
                     <td className="px-6 py-4 font-medium text-slate-800">{inv.guest.name}</td>
                     <td className="px-6 py-4 text-slate-600">{inv.event_type.name}</td>
                     <td className="px-6 py-4">

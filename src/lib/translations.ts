@@ -61,6 +61,17 @@ export const translations = {
     thankYou: "Thank You",
     forYourLove: "for your prayers and blessings",
     greatestJoy: "It would be our greatest joy to have your presence\nas we celebrate this special moment together.",
+
+    // Sangjit specific
+    theSangjitOf: "The Sangjit of",
+    willYouAttendSangjit: "Will you attend our Sangjit?",
+    sangjitVerseText: "And over all these virtues put on love,\nwhich binds them all together in perfect unity.",
+    sangjitVerseRef: "Colossians 3:14",
+    forYourLoveAndBlessings: "for your love and blessings",
+    clickToCopyShort: "Click to Copy",
+    giftTitle: "Gift",
+    rsvpSuccessSangjit: "Your RSVP response has been recorded. We look forward to seeing you!",
+    editRSVP: "Edit RSVP Response",
   },
   id: {
     // Opening
@@ -123,5 +134,16 @@ export const translations = {
     thankYou: "Terima Kasih",
     forYourLove: "atas kasih dan doa restu Anda",
     greatestJoy: "Merupakan suatu kehormatan dan kebahagiaan bagi kami\napabila Bapak/Ibu/Saudara/i berkenan hadir.",
+
+    // Sangjit specific
+    theSangjitOf: "Sangjit dari",
+    willYouAttendSangjit: "Apakah Anda akan hadir di Sangjit kami?",
+    sangjitVerseText: "Dan di atas semuanya itu: kenakanlah kasih,\nsebagai pengikat yang mempersatukan dan menyempurnakan.",
+    sangjitVerseRef: "Kolose 3:14",
+    forYourLoveAndBlessings: "atas kasih dan doa restu Anda",
+    clickToCopyShort: "Klik untuk Salin",
+    giftTitle: "Tanda Kasih",
+    rsvpSuccessSangjit: "Respons RSVP Anda telah dicatat. Sampai jumpa di acara bahagia kami!",
+    editRSVP: "Ubah Respons RSVP",
   }
 };

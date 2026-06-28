@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useTransition, useCallback } from "react";
+import { useState, useTransition, useCallback, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Download } from "lucide-react";
 import { adminUpdateRsvp, resetRsvp, getAllRsvpsForExport } from "@/lib/actions/adminRsvp";
 import { exportToExcel } from "@/lib/utils";
+import { RsvpMetrics } from "@/components/admin/rsvp/RsvpMetrics";
 
 // Extracted Components
 import { RsvpFilters } from "@/components/admin/rsvp/RsvpFilters";
@@ -15,6 +16,7 @@ import { ResetRsvpModal } from "@/components/admin/rsvp/modals/ResetRsvpModal";
 
 export function RsvpClient({
   initialInvitations,
+  allInvitations = [],
   eventTypes,
   eventSessions,
   total,
@@ -31,6 +33,12 @@ export function RsvpClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+
+  const filteredOverviewInvitations = useMemo(() => {
+    if (!allInvitations) return [];
+    if (!currentTab || currentTab === "all") return allInvitations;
+    return allInvitations.filter((inv: any) => inv.event_type?.slug === currentTab);
+  }, [allInvitations, currentTab]);
 
   // Modals state
   const [isViewOpen, setIsViewOpen] = useState(false);
@@ -174,6 +182,10 @@ export function RsvpClient({
         <div className="p-4 rounded-xl mb-6 font-bold flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-200">
           <span>✕</span> {exportError}
         </div>
+      )}
+
+      {allInvitations && allInvitations.length > 0 && (
+        <RsvpMetrics invitations={filteredOverviewInvitations} />
       )}
 
       {/* Tabs */}

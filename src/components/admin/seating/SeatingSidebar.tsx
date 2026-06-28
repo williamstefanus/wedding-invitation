@@ -1,6 +1,7 @@
 "use client";
 
-import { X, Edit2, Trash2, Plus } from "lucide-react";
+import { X, Edit2, Trash2, Plus, MapPin } from "lucide-react";
+import { unassignTableMapPosition } from "@/lib/actions/seating";
 
 interface SeatingSidebarProps {
   selectedTableId: string | null;
@@ -10,6 +11,7 @@ interface SeatingSidebarProps {
   setIsCapacityModalOpen: (isOpen: boolean) => void;
   setIsSearchModalOpen: (isOpen: boolean) => void;
   handleRemoveGuest: (assignmentId: string) => void;
+  handleDeleteTable?: (tableId: string) => void;
 }
 
 export function SeatingSidebar({
@@ -19,7 +21,8 @@ export function SeatingSidebar({
   setNewCapacity,
   setIsCapacityModalOpen,
   setIsSearchModalOpen,
-  handleRemoveGuest
+  handleRemoveGuest,
+  handleDeleteTable
 }: SeatingSidebarProps) {
   return (
     <div 
@@ -84,13 +87,33 @@ export function SeatingSidebar({
           </div>
 
           {/* Sidebar Footer */}
-          <div className="p-6 border-t border-slate-100 bg-white">
+          <div className="p-6 border-t border-slate-100 bg-white space-y-3">
             <button 
               onClick={() => setIsSearchModalOpen(true)}
               className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-sm"
             >
               <Plus className="w-5 h-5" /> Add Guest to Table
             </button>
+            {selectedTable.sort_order >= 1 && selectedTable.sort_order <= 26 && (
+              <button 
+                onClick={async () => {
+                  if (!confirm(`Remove ${selectedTable.table_name} from the floor plan map? (Guests will remain assigned to the table)`)) return;
+                  await unassignTableMapPosition(selectedTable.id);
+                  setSelectedTableId(null);
+                }}
+                className="w-full bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition text-sm"
+              >
+                <MapPin className="w-4 h-4" /> Remove from Floor Map
+              </button>
+            )}
+            {handleDeleteTable && (
+              <button 
+                onClick={() => handleDeleteTable(selectedTable.id)}
+                className="w-full bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition text-sm"
+              >
+                <Trash2 className="w-4 h-4" /> Delete Table
+              </button>
+            )}
           </div>
         </>
       )}

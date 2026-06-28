@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Edit2, Copy, Check, CheckCheck, Send, Loader2 } from "lucide-react";
 import { getGuestById, updateGuest, toggleInvitationSent } from "@/lib/actions/guests";
@@ -17,6 +17,11 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
   const router = useRouter();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+
+  const [currentGuest, setCurrentGuest] = useState(guest);
+  useEffect(() => {
+    setCurrentGuest(guest);
+  }, [guest]);
 
   // Edit modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,9 +67,11 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
   };
 
   const handleToggleSent = async (inv: any) => {
-    setTogglingId(inv.id);
+    setCurrentGuest((prev: any) => ({
+      ...prev,
+      invitations: prev.invitations?.map((i: any) => i.id === inv.id ? { ...i, is_sent: !inv.is_sent } : i)
+    }));
     await toggleInvitationSent(inv.id, !inv.is_sent);
-    setTogglingId(null);
     router.refresh();
   };
 
@@ -131,12 +138,12 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
           </button>
         </div>
         
-        {guest.invitations.length === 0 ? (
+        {currentGuest.invitations?.length === 0 ? (
           <div className="bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
             This guest has no active invitations.
           </div>
         ) : (
-          guest.invitations.map((inv: any) => {
+          currentGuest.invitations?.map((inv: any) => {
             const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
             const assignment = Array.isArray(inv.seating_assignment) ? inv.seating_assignment[0] : inv.seating_assignment;
 

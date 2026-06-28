@@ -17,7 +17,7 @@ export function SangjitOpeningScreen({
   isOpen = false,
   onOpen,
 }: SangjitOpeningScreenProps) {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   return (
     <motion.section
@@ -69,7 +69,7 @@ export function SangjitOpeningScreen({
           className="flex flex-col items-center text-center text-[#761B33]"
         >
           <span className="text-[26px] sm:text-[32px] font-serif tracking-wider mb-1">
-            The Sangjit of
+            {t('theSangjitOf')}
           </span>
           <span className="text-[52px] font-serif font-bold tracking-tight leading-none">
             Aziel &amp; William
@@ -85,10 +85,10 @@ export function SangjitOpeningScreen({
         >
           <div className="flex flex-col items-center text-center text-[#761B33]">
             <p className="text-[14px] font-sans font-medium tracking-wide opacity-90">
-              Dear Mr. / Mrs. / Ms.
+              {t('dear')}
             </p>
             <p className="text-[24px] font-serif font-bold mt-1 border-b border-[#761B33]/40 pb-1 px-6 min-w-[180px]">
-              {guestName || "Special Guest"}
+              {guestName || ""}
             </p>
           </div>
 
@@ -103,7 +103,7 @@ export function SangjitOpeningScreen({
                 : "opacity-60 grayscale cursor-not-allowed"
             }`}
           >
-            Open Invitation
+            {t('openInvitation')}
           </motion.button>
         </motion.div>
       </div>

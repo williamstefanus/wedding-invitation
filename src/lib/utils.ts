@@ -110,8 +110,12 @@ export function generateInvitationCode(guestName: string): string {
 import * as XLSX from 'xlsx';
 
 export function exportToExcel(data: any[], filename: string) {
-  // Format the data into a flat structure suitable for Excel
-  const formattedData = data.map(item => {
+  if (!data || data.length === 0) return;
+
+  // Check if data items are already flat dictionary objects (e.g. from generateExportData) vs raw database objects (from RsvpClient)
+  const isPreFormatted = !data[0].guest && !data[0].event_type && (data[0]["Guest Name"] !== undefined || data[0]["Event Name"] !== undefined || data[0]["Table Name"] !== undefined || data[0]["Event"] !== undefined || data[0]["Phone"] !== undefined);
+
+  const formattedData = isPreFormatted ? data : data.map(item => {
     let rsvpData = null;
     if (item.rsvp) {
       if (Array.isArray(item.rsvp)) {
@@ -133,7 +137,7 @@ export function exportToExcel(data: any[], filename: string) {
       "Submission Time": isPending ? "-" : new Date(rsvpData?.submitted_at).toLocaleString(),
       "Table Assignment": item.seating_assignment?.[0]?.seating_table?.table_name || "Unassigned",
       "Wishes": isPending ? "-" : (rsvpData?.wish_message || "-"),
-      "Invitation Code": item.invitation_code
+      "Invitation Code": item.invitation_code || "-"
     };
   });
 
@@ -142,7 +146,7 @@ export function exportToExcel(data: any[], filename: string) {
   const workbook = XLSX.utils.book_new();
   
   // Append the worksheet to the workbook
-  XLSX.utils.book_append_sheet(workbook, worksheet, "RSVPs");
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
 
   // Generate Excel file and trigger download
   XLSX.writeFile(workbook, `${filename}.xlsx`);

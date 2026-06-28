@@ -4,35 +4,47 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitScheduleSectionProps {
-  session?: {
-    title?: string;
-    date?: string;
-    time?: string;
-    venue?: string;
-    address?: string;
-    map_url?: string;
-  };
+  session?: any;
   invitation?: any;
 }
 
 export function SangjitScheduleSection({ session, invitation }: SangjitScheduleSectionProps) {
-  const timeStr = session?.time || invitation?.time || "11:00 - 13:00";
-  const venueStr = session?.venue || invitation?.venue || "Sentosa Seafood";
-  const addressStr = session?.address || invitation?.address || "Jl. Aruna No. 30";
-  const mapUrl = session?.map_url || invitation?.map_url || "https://maps.google.com/?q=Sentosa+Seafood+Aruna";
+  const { language, t } = useLanguage();
 
-  // Format date dynamically or fallback to prompt spec
-  let displayDate = session?.date || "Saturday,\n17 October 2026";
-  if (!session?.date && invitation?.date) {
+  const formatTime = (timeString?: string) => {
+    if (!timeString) return "";
+    const parts = timeString.split(":");
+    if (parts.length >= 2) {
+      return `${parts[0]}:${parts[1]}`;
+    }
+    return timeString;
+  };
+
+  const startTime = formatTime(session?.start_time);
+  const endTime = formatTime(session?.end_time);
+  const rawTime = session?.time || invitation?.time || "11:00 - 13:00";
+  const formattedRawTime = rawTime.includes("-") ? rawTime.split("-").map((t: string) => formatTime(t.trim())).join(" - ") : formatTime(rawTime);
+  const timeStr = (startTime && endTime) ? `${startTime} - ${endTime}` : formattedRawTime;
+  const venueStr = session?.venue_name || session?.venue || invitation?.venue || "Sentosa Seafood";
+  const addressStr = session?.address || invitation?.address || "Jl. Aruna No. 30";
+  const mapUrl = session?.google_maps_url || session?.map_url || invitation?.map_url || "https://maps.google.com/?q=Sentosa+Seafood+Aruna";
+
+  const locale = language === 'id' ? 'id-ID' : 'en-US';
+  let displayDate = language === 'id' ? "Sabtu,\n17 Oktober 2026" : "Saturday,\n17 October 2026";
+  const dateVal = session?.date || invitation?.date;
+  if (dateVal) {
     try {
-      const d = new Date(invitation.date);
-      const dayName = d.toLocaleDateString("en-US", { weekday: "long" });
-      const dayNum = d.getDate();
-      const monthName = d.toLocaleDateString("en-US", { month: "long" });
-      const year = d.getFullYear();
-      displayDate = `${dayName},\n${dayNum} ${monthName} ${year}`;
+      const d = new Date(dateVal);
+      if (!isNaN(d.getTime())) {
+        const dayName = d.toLocaleDateString(locale, { weekday: "long" });
+        const dayNum = d.getDate();
+        const monthName = d.toLocaleDateString(locale, { month: "long" });
+        const year = d.getFullYear();
+        displayDate = `${dayName},\n${dayNum} ${monthName} ${year}`;
+      }
     } catch (e) { }
   }
 
@@ -125,7 +137,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
               style={{ width: 'fit-content', height: 36, paddingLeft: 16, paddingRight: 16, paddingTop: 8, paddingBottom: 8, background: 'white', boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.10)', borderRadius: 10, outline: '1px solid #761B33', outlineOffset: -1, display: 'inline-flex', justifyContent: 'center', alignItems: 'center', gap: 10, textDecoration: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
               <div style={{ color: '#761B33', fontSize: 14, fontFamily: 'Inter', fontWeight: 500, lineHeight: '20px', whiteSpace: 'nowrap' }}>
-                Open in Google Maps
+                {t('openGoogleMaps')}
               </div>
             </a>
 

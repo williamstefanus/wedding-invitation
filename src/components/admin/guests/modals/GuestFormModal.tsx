@@ -36,6 +36,20 @@ export function GuestFormModal({
 }: GuestFormModalProps) {
   if (!isModalOpen) return null;
 
+  const isVip = !!formData.notes?.toLowerCase().includes("vip");
+  const handleVipToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    let currentNotes = formData.notes || "";
+    if (checked) {
+      if (!currentNotes.toLowerCase().includes("vip")) {
+        currentNotes = currentNotes ? `[VIP] ${currentNotes}` : "[VIP]";
+      }
+    } else {
+      currentNotes = currentNotes.replace(/\[?vip\]?/gi, "").replace(/\s+/g, " ").trim();
+    }
+    setFormData({ ...formData, notes: currentNotes });
+  };
+
   return (
     <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl animate-fade-up">
@@ -79,6 +93,17 @@ export function GuestFormModal({
                 <label className="block text-sm font-medium text-slate-700 mb-1">Notes (Optional)</label>
                 <input type="text" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500" />
               </div>
+            </div>
+            <div className="pt-1">
+              <label className="inline-flex items-center gap-2.5 cursor-pointer bg-amber-50/80 hover:bg-amber-100/80 border border-amber-200/80 px-3.5 py-2 rounded-xl transition">
+                <input
+                  type="checkbox"
+                  checked={isVip}
+                  onChange={handleVipToggle}
+                  className="w-4 h-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                />
+                <span className="text-xs font-bold text-amber-900">★ Mark as VIP Guest</span>
+              </label>
             </div>
           </div>
 

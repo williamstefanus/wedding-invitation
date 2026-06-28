@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 import { submitRSVP } from "@/lib/actions/rsvp";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitRSVPSectionProps {
   invitation?: any;
@@ -12,6 +13,7 @@ interface SangjitRSVPSectionProps {
 }
 
 export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
+  const { t } = useLanguage();
   const [isPending, startTransition] = useTransition();
   const [attending, setAttending] = useState<boolean | null>(null);
   const [pax, setPax] = useState<number>(1);
@@ -84,7 +86,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
 
         {/* Header Block */}
         <div style={{ justifyContent: 'flex-start', alignItems: 'center', display: 'flex', position: 'relative', marginBottom: 10, height: 175 }}>
-          <div style={{ width: 120, color: '#761B33', fontSize: 48, fontFamily: 'var(--font-egizio), "EgizioEF Condensed", serif', fontWeight: 500, lineHeight: '45.6px', wordWrap: 'break-word', flexShrink: 0 }}>RSVP</div>
+          <div style={{ width: 120, color: '#761B33', fontSize: 48, fontFamily: 'var(--font-egizio), "EgizioEF Condensed", serif', fontWeight: 500, lineHeight: '45.6px', wordWrap: 'break-word', flexShrink: 0 }}>{t('rsvpTitle')}</div>
           <motion.div
             initial={{ opacity: 0, x: 70 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -98,15 +100,15 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
 
         {isSuccess ? (
           <div className="bg-white/95 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] rounded-xl p-8 text-center flex flex-col gap-3 my-4 outline outline-1 outline-[#E5E5E5]">
-            <h3 className="font-serif text-2xl font-bold text-[#761B33]">Thank You!</h3>
+            <h3 className="font-serif text-2xl font-bold text-[#761B33]">{t('thankYou')}!</h3>
             <p className="font-sans text-sm text-[#761B33]/85">
-              Your RSVP response has been recorded. We look forward to seeing you!
+              {t('rsvpSuccessSangjit')}
             </p>
             <button
               onClick={() => setIsSuccess(false)}
               className="mt-3 text-xs font-sans text-[#761B33] underline font-medium cursor-pointer"
             >
-              Edit RSVP Response
+              {t('editRSVP')}
             </button>
           </div>
         ) : (
@@ -116,7 +118,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
             {/* Question 1: Will you attend our Sangjit? */}
             <div className="flex flex-col gap-2 w-full">
               <label className="text-[#761B33] text-[16px] font-sans font-normal block">
-                Will you attend our Sangjit?
+                {t('willYouAttendSangjit')}
               </label>
               <div className="flex items-center gap-1 w-full">
                 <button
@@ -127,7 +129,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
                     : "bg-white text-[#761B33] outline outline-1 outline-[#E5E5E5] -outline-offset-1 hover:bg-slate-50"
                     }`}
                 >
-                  Yes, I will attend
+                  {t('yesAttend')}
                 </button>
                 <button
                   type="button"
@@ -137,7 +139,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
                     : "bg-white text-[#761B33] outline outline-1 outline-[#E5E5E5] -outline-offset-1 hover:bg-slate-50"
                     }`}
                 >
-                  No, I can&rsquo;t attend
+                  {t('noAttend')}
                 </button>
               </div>
             </div>
@@ -146,7 +148,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
             {attending !== false && (
               <div className="flex flex-col gap-2 w-full animate-fade-in">
                 <label className="text-[#761B33] text-[16px] font-sans font-normal block">
-                  How many people?
+                  {t('howManyPeople')}
                 </label>
                 <div className="flex items-center gap-1 w-full">
                   {paxOptions.map((num) => (
@@ -169,13 +171,13 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
             {/* Question 3: Send your wish */}
             <div className="flex flex-col gap-2 w-full">
               <label className="text-[#761B33] text-[16px] font-sans font-normal block">
-                Send your wish ( Optional )
+                {t('sendWish')}
               </label>
               <div className="relative w-full bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.10)] rounded-lg outline outline-1 outline-[#E5E5E5] -outline-offset-1 overflow-hidden">
                 <textarea
                   value={wishes}
                   onChange={(e) => setWishes(e.target.value)}
-                  placeholder="Type your message here."
+                  placeholder={t('typeWish')}
                   rows={3}
                   className="w-full h-16 p-3 bg-transparent text-slate-800 placeholder-[#737373] font-['Inter'] text-[16px] leading-6 focus:outline-none resize-none block"
                 />
@@ -196,7 +198,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
                 disabled={isPending}
                 className="w-full h-9 bg-[#761B33] text-[#FAFAFA] rounded-[10px] shadow-[0px_1px_2px_rgba(0,0,0,0.10)] font-['Inter'] font-medium text-[14px] hover:bg-[#761B33]/90 transition cursor-pointer flex items-center justify-center disabled:opacity-60"
               >
-                {isPending ? "Submitting..." : "Confirm RSVP"}
+                {isPending ? t('submitting') : t('confirmRSVP')}
               </button>
 
               <button
@@ -204,7 +206,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
                 onClick={handleAddToCalendar}
                 className="w-full h-9 bg-white text-[#761B33] rounded-[10px] shadow-[0px_1px_2px_rgba(0,0,0,0.10)] outline outline-1 outline-[#E5E5E5] -outline-offset-1 font-['Inter'] font-medium text-[14px] hover:bg-slate-50 transition cursor-pointer flex items-center justify-center"
               >
-                Add to Google Calendar
+                {t('addToCalendar')}
               </button>
             </div>
 

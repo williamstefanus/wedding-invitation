@@ -1,4 +1,5 @@
 import { getSeatingData, getEligibleGuests } from "@/lib/actions/seating";
+import { createClient } from "@/lib/supabase/server";
 import { SeatingClient } from "./SeatingClient";
 
 export const revalidate = 0;
@@ -19,21 +20,39 @@ export default async function SeatingPage({
   // Fetch tables and assignments
   const { data: tables } = await getSeatingData(event);
 
-  // Fetch eligible guests (only if modal search params or just default load)
-  // To avoid huge payloads, we can rely on the Client component to refetch or we can just pass initial.
-  // Actually Server Actions can be called from Client to search, so we don't strictly need to pass all eligible guests here if we use a client action.
-  // But since we want URL-driven search for the modal, we can fetch here.
+  // Fetch eligible guests
   const { data: eligibleGuests } = await getEligibleGuests(event, {
     search: guestSearch,
     owner: guestOwner,
     category: guestCategory
   });
 
+  const supabase = await createClient();
+  const { data: eventInvitations } = await supabase
+    .from("invitations")
+    .select(`
+      max_pax,
+      event_type:event_types!inner(slug),
+      rsvp:rsvps(attendance_status, confirmed_pax)
+    `)
+    .eq("event_type.slug", event);
+
+  const totalAttendingPax = (eventInvitations || []).reduce((sum: number, inv: any) => {
+    const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
+    if (rsvp?.attendance_status === "attending") {
+      return sum + (rsvp.confirmed_pax || 0);
+    }
+    return sum;
+  }, 0);
+  const totalInvitedPax = (eventInvitations || []).reduce((sum: number, inv: any) => sum + (inv.max_pax || 0), 0);
+  const allPax = totalAttendingPax > 0 ? totalAttendingPax : totalInvitedPax;
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
       <SeatingClient 
         initialTables={tables || []} 
         initialEligibleGuests={eligibleGuests || []}
+        allPax={allPax}
         currentEvent={event}
         currentSearch={guestSearch}
         currentOwner={guestOwner}

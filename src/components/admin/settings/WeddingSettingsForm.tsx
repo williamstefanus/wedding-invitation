@@ -25,6 +25,17 @@ export function WeddingSettingsForm({
   handleImageUpload,
   removeImage
 }: WeddingSettingsFormProps) {
+  const moveImage = (index: number, direction: 'left' | 'right') => {
+    if (!config.gallery_images) return;
+    const newIdx = direction === 'left' ? index - 1 : index + 1;
+    if (newIdx < 0 || newIdx >= config.gallery_images.length) return;
+    const updated = [...config.gallery_images];
+    const temp = updated[index];
+    updated[index] = updated[newIdx];
+    updated[newIdx] = temp;
+    setConfig({ ...config, gallery_images: updated });
+  };
+
   return (
     <div className="space-y-8 animate-fade-up">
       {/* General Config */}
@@ -70,6 +81,17 @@ export function WeddingSettingsForm({
               className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
             <p className="text-xs text-slate-400 mt-2">After this date, guests will not be able to modify their RSVP status.</p>
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">WO Access PIN Code</label>
+            <input 
+              type="text" 
+              placeholder="e.g. 123456 (default)"
+              value={config.wo_pin || ""} 
+              onChange={e => setConfig({...config, wo_pin: e.target.value})}
+              className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+            />
+            <p className="text-xs text-slate-400 mt-2">PIN code used by ushers and receptionists to unlock the /usher check-in portal.</p>
           </div>
         </div>
       </div>
@@ -195,35 +217,102 @@ export function WeddingSettingsForm({
 
       {/* Gallery */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <ImageIcon className="w-5 h-5 text-amber-600" /> Image Gallery
-        </h2>
-        <p className="text-sm text-slate-500 mb-6">Upload images directly to Supabase Storage (Max 5MB per file).</p>
-        
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6">
-          {config.gallery_images?.map((url: string, idx: number) => (
-            <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-slate-200">
-              <img src={url} alt="Gallery item" className="object-cover w-full h-full" />
-              <button 
-                onClick={() => removeImage(idx)}
-                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition hover:bg-red-600 shadow-md"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-          
-          <label className="aspect-square rounded-xl border-2 border-dashed border-slate-300 hover:border-amber-400 bg-slate-50 flex flex-col items-center justify-center cursor-pointer transition hover:bg-amber-50 relative">
-            {uploading ? (
-              <Loader2 className="w-6 h-6 text-amber-500 animate-spin" />
-            ) : (
-              <>
-                <UploadCloud className="w-6 h-6 text-slate-400 mb-2" />
-                <span className="text-xs font-bold text-slate-500">Upload Image</span>
-              </>
-            )}
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <ImageIcon className="w-5 h-5 text-amber-600" /> Image Gallery & Layout Preview
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">Use arrow buttons to rearrange photos. The order below reflects the exact arrangement on the web invitation.</p>
+          </div>
+          <label className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-sm cursor-pointer flex items-center gap-2 transition active:scale-95">
+            {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+            <span>Upload Image</span>
             <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
           </label>
+        </div>
+
+        {/* Web Layout Preview Structure */}
+        <div className="space-y-6">
+          {/* Section 1: Top Hero Image */}
+          <div className="border border-amber-200 bg-amber-50/30 rounded-xl p-4">
+            <h3 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <span>🌟 Top Featured Hero Image (Web Cover)</span>
+            </h3>
+            {(!config.gallery_images || config.gallery_images.length === 0) ? (
+              <p className="text-xs text-slate-400 italic">No images uploaded yet.</p>
+            ) : (
+              <div className="relative aspect-[16/9] max-w-md rounded-lg overflow-hidden border border-amber-300 group shadow-sm bg-white">
+                <img src={config.gallery_images[0]} alt="Hero preview" className="object-cover w-full h-full" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                  <button type="button" onClick={() => moveImage(0, 'right')} disabled={config.gallery_images.length <= 1} className="p-2 bg-white/90 hover:bg-white text-slate-800 rounded-lg text-xs font-bold shadow disabled:opacity-30">
+                    Move Next ▶
+                  </button>
+                  <button type="button" onClick={() => removeImage(0)} className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-bold shadow">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <span className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded">#1 Featured</span>
+              </div>
+            )}
+          </div>
+
+          {/* Section 2: Bento Block 1 (Next 5 images) */}
+          {config.gallery_images && config.gallery_images.length > 1 && (
+            <div className="border border-slate-200 bg-slate-50/50 rounded-xl p-4">
+              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                🍱 Bento Grid Block 1 (Positions #2 to #6 on Web)
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {config.gallery_images.slice(1, 6).map((url: string, subIdx: number) => {
+                  const actualIdx = subIdx + 1;
+                  return (
+                    <div key={actualIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-300 group bg-white shadow-sm">
+                      <img src={url} alt="Bento item" className="object-cover w-full h-full" />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1">
+                        <div className="flex gap-1">
+                          <button type="button" onClick={() => moveImage(actualIdx, 'left')} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow">◀</button>
+                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.gallery_images.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
+                        </div>
+                        <button type="button" onClick={() => removeImage(actualIdx)} className="p-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">#{actualIdx + 1}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Section 3: Bento Block 2 / Remaining Grid */}
+          {config.gallery_images && config.gallery_images.length > 6 && (
+            <div className="border border-slate-200 bg-slate-50/50 rounded-xl p-4">
+              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                📱 Additional Gallery Photos (Positions #7+ on Web)
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {config.gallery_images.slice(6).map((url: string, subIdx: number) => {
+                  const actualIdx = subIdx + 6;
+                  return (
+                    <div key={actualIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-300 group bg-white shadow-sm">
+                      <img src={url} alt="Grid item" className="object-cover w-full h-full" />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1">
+                        <div className="flex gap-1">
+                          <button type="button" onClick={() => moveImage(actualIdx, 'left')} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow">◀</button>
+                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.gallery_images.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
+                        </div>
+                        <button type="button" onClick={() => removeImage(actualIdx)} className="p-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">#{actualIdx + 1}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

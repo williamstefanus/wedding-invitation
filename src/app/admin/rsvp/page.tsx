@@ -48,10 +48,21 @@ export default async function RsvpPage({
     .select("id, name, event_type_id")
     .order("sort_order");
 
+  const { data: allInvitations } = await supabase
+    .from("invitations")
+    .select(`
+      id,
+      max_pax,
+      event_type:event_types!inner(slug, name),
+      guest:guests!inner(owner),
+      rsvp:rsvps(attendance_status, confirmed_pax)
+    `);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
       <RsvpClient 
         initialInvitations={invitations || []} 
+        allInvitations={allInvitations || []}
         eventTypes={eventTypes || []}
         eventSessions={eventSessions || []}
         total={total || 0}

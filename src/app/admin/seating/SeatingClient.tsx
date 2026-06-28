@@ -6,17 +6,22 @@ import {
   initializeTables, 
   assignGuestToTable, 
   removeGuestFromTable, 
-  updateTableCapacity 
+  updateTableCapacity,
+  addTable,
+  deleteTable
 } from "@/lib/actions/seating";
 
 import { SeatingVisualizer } from "@/components/admin/seating/SeatingVisualizer";
 import { SeatingSidebar } from "@/components/admin/seating/SeatingSidebar";
 import { EditCapacityModal } from "@/components/admin/seating/modals/EditCapacityModal";
 import { AssignGuestModal } from "@/components/admin/seating/modals/AssignGuestModal";
+import { AddTableModal } from "@/components/admin/seating/modals/AddTableModal";
+import { DeleteTableModal } from "@/components/admin/seating/modals/DeleteTableModal";
 
 export function SeatingClient({
   initialTables,
   initialEligibleGuests,
+  allPax = 0,
   currentEvent,
   currentSearch,
   currentOwner,
@@ -34,6 +39,8 @@ export function SeatingClient({
   // Modals
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isCapacityModalOpen, setIsCapacityModalOpen] = useState(false);
+  const [isAddTableOpen, setIsAddTableOpen] = useState(false);
+  const [tableToDelete, setTableToDelete] = useState<any>(null);
   
   // Capacity Form
   const [newCapacity, setNewCapacity] = useState(10);
@@ -112,6 +119,19 @@ export function SeatingClient({
     updateUrl({ guestSearch: null, guestOwner: null, guestCategory: null });
   };
 
+  const handleAddTable = () => {
+    setIsAddTableOpen(true);
+  };
+
+  const confirmAddTable = async (name?: string, capacity?: number) => {
+    await addTable(currentEvent, name, capacity || 10);
+  };
+
+  const handleDeleteTable = async (tableId: string) => {
+    const t = initialTables.find((tb: any) => tb.id === tableId);
+    if (t) setTableToDelete(t);
+  };
+
   return (
     <div className="w-full h-full md:h-[calc(100vh-64px)] flex overflow-hidden font-sans relative bg-slate-100">
       
@@ -122,11 +142,13 @@ export function SeatingClient({
         setSelectedTableId={setSelectedTableId}
         updateUrl={updateUrl}
         handleInitialize={handleInitialize}
+        handleAddTable={handleAddTable}
         totalTables={totalTables}
         occupiedSeats={occupiedSeats}
         totalCapacity={totalCapacity}
         remainingSeats={remainingSeats}
         totalAssignedGuests={totalAssignedGuests}
+        allPax={allPax}
       />
 
       <SeatingSidebar 
@@ -137,6 +159,7 @@ export function SeatingClient({
         setIsCapacityModalOpen={setIsCapacityModalOpen}
         setIsSearchModalOpen={setIsSearchModalOpen}
         handleRemoveGuest={handleRemoveGuest}
+        handleDeleteTable={handleDeleteTable}
       />
 
       <EditCapacityModal 
@@ -158,6 +181,23 @@ export function SeatingClient({
         updateUrl={updateUrl}
         initialEligibleGuests={initialEligibleGuests}
         handleAssignGuest={handleAssignGuest}
+      />
+
+      <AddTableModal 
+        isOpen={isAddTableOpen}
+        onClose={() => setIsAddTableOpen(false)}
+        onAdd={confirmAddTable}
+      />
+
+      <DeleteTableModal 
+        isOpen={!!tableToDelete}
+        onClose={() => setTableToDelete(null)}
+        table={tableToDelete}
+        onDelete={async (id) => {
+          const res = await deleteTable(id);
+          if (res.success) setSelectedTableId(null);
+          return res;
+        }}
       />
 
     </div>

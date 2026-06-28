@@ -255,3 +255,44 @@ export async function resetRsvp(invitation_id: string) {
     return { success: false, error: error.message };
   }
 }
+
+export async function bulkResetRsvps(invitation_ids: string[]) {
+  try {
+    const supabase = await createClient();
+
+    const { error: rsvpError } = await supabase
+      .from("rsvps")
+      .delete()
+      .in("invitation_id", invitation_ids);
+    if (rsvpError) throw rsvpError;
+
+    const { error: seatingError } = await supabase
+      .from("seating_assignments")
+      .delete()
+      .in("invitation_id", invitation_ids);
+    if (seatingError) throw seatingError;
+
+    revalidatePath("/admin/rsvp");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed bulk reset RSVPs:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function bulkDeleteRsvpInvitations(invitation_ids: string[]) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from("invitations")
+      .delete()
+      .in("id", invitation_ids);
+    if (error) throw error;
+
+    revalidatePath("/admin/rsvp");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed bulk delete invitations from rsvp:", error);
+    return { success: false, error: error.message };
+  }
+}

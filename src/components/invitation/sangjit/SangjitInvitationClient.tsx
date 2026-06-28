@@ -23,7 +23,17 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
   const contentRef = useRef<HTMLDivElement>(null);
 
   const config = settings?.config || {};
+  const sessions = settings?.sessions || {};
+  const deadlines = settings?.deadlines || {};
   const musicUrl = config.sangjit_music_url || config.music_url || "/audio/bgm.mp3";
+
+  const owner = invitation?.guest?.owner;
+  const giftBank = (owner === "Aziel" ? (config.gift_bank_aziel_sangjit ?? config.gift_bank_aziel) : (config.gift_bank_william_sangjit ?? config.gift_bank_william)) || invitation?.gift_bank_name;
+  const giftAccount = (owner === "Aziel" ? (config.gift_account_aziel_sangjit ?? config.gift_account_aziel) : (config.gift_account_william_sangjit ?? config.gift_account_william)) || invitation?.gift_account_number;
+  const giftName = (owner === "Aziel" ? (config.gift_name_aziel_sangjit ?? config.gift_name_aziel) : (config.gift_name_william_sangjit ?? config.gift_name_william)) || invitation?.gift_account_name;
+
+  const sangjitSession = sessions.sangjit || invitation?.event_type?.sessions?.find((s: any) => s.title?.toLowerCase().includes('sangjit')) || invitation?.event_type?.sessions?.[0];
+  const targetDateStr = config.sangjit_countdown_date || sangjitSession?.date || config.date || invitation?.date || "2026-10-17T00:00:00";
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -89,12 +99,12 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
           {/* Underlying Invitation Content Canvas */}
           <div ref={contentRef} className="w-full flex flex-col relative z-10 bg-[#761B33]">
             <SangjitHeroCountdownSection 
-              targetDateStr={settings?.config?.date || "2026-10-17T00:00:00"} 
+              targetDateStr={targetDateStr} 
             />
             <SangjitCoupleEnvelopeSection invitation={invitation} />
-            <SangjitScheduleSection invitation={invitation} />
-            <SangjitRSVPSection invitation={invitation} />
-            <SangjitGiftSection invitation={invitation} />
+            <SangjitScheduleSection session={sangjitSession} invitation={invitation} />
+            <SangjitRSVPSection invitation={invitation} deadline={deadlines.sangjit} />
+            <SangjitGiftSection bank={giftBank} account={giftAccount} name={giftName} invitation={invitation} />
             <SangjitThankYouSection invitation={invitation} />
           </div>
         </main>

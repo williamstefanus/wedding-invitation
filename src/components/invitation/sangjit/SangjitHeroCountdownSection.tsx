@@ -13,7 +13,7 @@ interface SangjitHeroCountdownSectionProps {
 export function SangjitHeroCountdownSection({
   targetDateStr = "2026-10-17T00:00:00",
 }: SangjitHeroCountdownSectionProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -84,7 +84,7 @@ export function SangjitHeroCountdownSection({
 
           <div className="flex flex-col items-center text-center text-[#761B33] mb-4 px-6">
             <span className="text-[24px] sm:text-[28px] font-serif tracking-wider mb-1">
-              The Sangjit of
+              {t('theSangjitOf')}
             </span>
             <span className="text-[52px] font-serif font-bold tracking-tight leading-none">
               Aziel &amp; William
@@ -117,7 +117,7 @@ export function SangjitHeroCountdownSection({
         >
           {/* Ceremony Date Heading */}
           <h3 className="text-[#FFFFFF] font-serif text-[36px] sm:text-[30px] tracking-wide text-center leading-tight">
-            Saturday, 17 October 2026
+            {new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(targetDateStr))}
           </h3>
 
           {/* Clean White Rounded Countdown Card with Top Cream Tab */}
@@ -188,11 +188,11 @@ export function SangjitHeroCountdownSection({
 
           {/* Bible Verse FooterTextBlock */}
           <div className="flex flex-col items-center text-center gap-2 mt-4 max-w-[380px] z-30">
-            <div className="text-white font-sans text-[16px] font-normal leading-relaxed">
-              And over all these virtues put on love,<br />which binds them all together in perfect unity.
+            <div className="text-white font-sans text-[16px] font-normal leading-relaxed whitespace-pre-line">
+              {t('sangjitVerseText')}
             </div>
             <b className="text-white font-sans text-[16px] font-bold">
-              Colossians 3:14
+              {t('sangjitVerseRef')}
             </b>
           </div>
         </motion.div>

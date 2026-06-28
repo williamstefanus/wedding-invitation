@@ -4,12 +4,14 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitCoupleEnvelopeSectionProps {
   invitation?: any;
 }
 
 export function SangjitCoupleEnvelopeSection({ invitation }: SangjitCoupleEnvelopeSectionProps) {
+  const { t } = useLanguage();
   const formatName = (raw?: string, fb?: string) => {
     const s = raw || fb || "";
     if (s.includes('\n')) return s;
@@ -18,9 +20,9 @@ export function SangjitCoupleEnvelopeSection({ invitation }: SangjitCoupleEnvelo
   };
 
   const brideName = formatName(invitation?.bride?.name, "Aziel Yorieza, B.A");
-  const brideParents = invitation?.bride?.parents || "Second daughter of\nMr. Yopie Kusnandar &\nMrs. Ina Rostiana Rahardja";
+  const brideParents = t('secondDaughterOf');
   const groomName = formatName(invitation?.groom?.name, "William Stefanus, S.Kom");
-  const groomParents = invitation?.groom?.parents || "First son of Mr. Hadi Stefanus\n& Mrs. Lanny Mariana";
+  const groomParents = t('firstSonOf');
 
   return (
     <section className="relative w-full bg-[#761B33] pt-8 pb-2 px-6 overflow-hidden flex flex-col items-center select-none z-20">
@@ -169,7 +171,7 @@ export function SangjitCoupleEnvelopeSection({ invitation }: SangjitCoupleEnvelo
 
               {/* Separator */}
               <div style={{ margin: '14px 0', fontFamily: 'Montserrat, sans-serif', fontSize: 13, color: '#761B33', opacity: 0.8 }}>
-                – and –
+                {t('and')}
               </div>
 
               {/* Groom Block */}

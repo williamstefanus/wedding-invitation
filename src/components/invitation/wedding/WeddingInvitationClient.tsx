@@ -120,24 +120,6 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
           >
             {/* Page 2: Transition & Couple Section */}
             <section className="w-full flex flex-col relative pt-[15vh]">
-              {/* The single grass foreground spanning the hero and countdown section to hide the separation */}
-              <div className="w-full h-[40vh] -mt-[32vh] relative z-30 pointer-events-none overflow-visible">
-                <motion.div
-                  className="w-full h-full"
-                  animate={{ scale: [1, 1.02, 1] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                >
-                  <Image
-                    src={WEDDING_INVITATION_ASSETS.heroGrassForeground}
-                    alt="Hero Grass"
-                    fill
-                    priority
-                    sizes="(max-width: 420px) 100vw, 420px"
-                    className="object-cover object-bottom"
-                  />
-                </motion.div>
-              </div>
-
               <CountdownSection targetDateStr={config.countdown_date || "2026-10-23T11:00:00"} />
 
               {/* Transition Verse */}

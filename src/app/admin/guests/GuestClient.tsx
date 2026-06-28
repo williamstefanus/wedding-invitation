@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useTransition, useCallback } from "react";
+import { useState, useTransition, useCallback, useEffect, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
 import { createGuest, updateGuest, deleteGuest, deleteInvitationAction, regenerateLink, updateMaxPax, getGuestById, toggleInvitationSent } from "@/lib/actions/guests";
 import type { GuestOwner, GuestCategory } from "@/types";
+import { GuestMetrics } from "@/components/admin/guests/GuestMetrics";
 
 // Import Extracted Components
 import { GuestFilters } from "@/components/admin/guests/GuestFilters";
@@ -17,6 +18,7 @@ import { RegenerateLinkModal } from "@/components/admin/guests/modals/Regenerate
 
 interface GuestClientProps {
   initialGuests: any[];
+  allInvitations?: any[];
   total: number;
   totalPages: number;
   currentPage: number;
@@ -31,6 +33,7 @@ interface GuestClientProps {
 
 export function GuestClient({
   initialGuests,
+  allInvitations = [],
   total,
   totalPages,
   currentPage,
@@ -56,6 +59,17 @@ export function GuestClient({
 
   const [selectedGuest, setSelectedGuest] = useState<any>(null);
   const [selectedInv, setSelectedInv] = useState<any>(null);
+
+  const [guests, setGuests] = useState(initialGuests);
+  useEffect(() => {
+    setGuests(initialGuests);
+  }, [initialGuests]);
+
+  const filteredOverviewInvitations = useMemo(() => {
+    if (!allInvitations) return [];
+    if (currentTab === "all") return allInvitations;
+    return allInvitations.filter(inv => inv.event_type?.slug === currentTab);
+  }, [allInvitations, currentTab]);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -124,7 +138,16 @@ export function GuestClient({
   };
 
   const handleToggleSent = async (invId: string, currentSentStatus: boolean) => {
-    await toggleInvitationSent(invId, !currentSentStatus);
+    setGuests(prevGuests => prevGuests.map(g => ({
+      ...g,
+      invitations: g.invitations?.map((inv: any) => 
+        inv.id === invId ? { ...inv, is_sent: !currentSentStatus } : inv
+      )
+    })));
+
+    startTransition(async () => {
+      await toggleInvitationSent(invId, !currentSentStatus);
+    });
   };
 
   const openAddModal = () => {
@@ -260,6 +283,10 @@ export function GuestClient({
         </button>
       </div>
 
+      {allInvitations && allInvitations.length > 0 && (
+        <GuestMetrics invitations={filteredOverviewInvitations} />
+      )}
+
       {/* Tabs */}
       <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
         <button
@@ -288,7 +315,7 @@ export function GuestClient({
       />
 
       <GuestTable 
-        initialGuests={initialGuests}
+        initialGuests={guests}
         currentTab={currentTab}
         eventTypes={eventTypes}
         totalPages={totalPages}

@@ -3,12 +3,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitThankYouSectionProps {
   invitation?: any;
 }
 
 export function SangjitThankYouSection({ invitation }: SangjitThankYouSectionProps) {
+  const { t } = useLanguage();
   const groomName = invitation?.groom?.nickname || invitation?.groom?.name || "William";
   const brideName = invitation?.bride?.nickname || invitation?.bride?.name || "Aziel";
   const year = new Date(invitation?.date || "2026-10-17").getFullYear() || "2026";
@@ -25,8 +27,8 @@ export function SangjitThankYouSection({ invitation }: SangjitThankYouSectionPro
         transition={{ duration: 0.8 }}
         className="w-full max-w-[420px] px-6 text-center relative z-10"
       >
-        <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word', lineHeight: '22px', paddingLeft: 24, paddingRight: 24 }}>
-          It would be our greatest joy to have your presence as we celebrate this special moment together.
+        <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word', lineHeight: '22px', paddingLeft: 24, paddingRight: 24 }} className="whitespace-pre-line">
+          {t('greatestJoy')}
         </div>
       </motion.div>
 
@@ -56,11 +58,11 @@ export function SangjitThankYouSection({ invitation }: SangjitThankYouSectionPro
         >
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
             <div style={{ textAlign: 'center', color: 'white', fontSize: 54.67, fontFamily: 'var(--font-egizio), EgizioEF Condensed, serif', fontWeight: 500, lineHeight: '51.39px', wordWrap: 'break-word' }}>
-              Thank You
+              {t('thankYou')}
             </div>
 
             <div style={{ textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word' }}>
-              for your love and blessings
+              {t('forYourLoveAndBlessings')}
             </div>
           </div>
 

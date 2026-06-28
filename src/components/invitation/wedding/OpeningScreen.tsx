@@ -47,15 +47,15 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.0, delay: 0.2 }}
-        className="absolute top-[13%] inset-x-0 flex justify-center z-10 pointer-events-none px-4"
+        className="absolute top-0 pt-[48px] [@media(max-width:389px)]:pt-[24px] [@media(max-height:719px)]:pt-[24px] inset-x-0 flex justify-center z-10 pointer-events-none px-4"
       >
         <Image 
           src={WEDDING_INVITATION_ASSETS.heroOpeningTitle}
           alt="William & Aziel"
-          width={320}
-          height={180}
+          width={280}
+          height={158}
           priority
-          className="w-full max-w-[320px] h-auto object-contain drop-shadow-md"
+          className="w-full max-w-[280px] [@media(max-width:389px)]:max-w-[240px] [@media(max-height:719px)]:max-w-[240px] h-auto object-contain drop-shadow-md"
         />
       </motion.div>
       

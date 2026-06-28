@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MetricCard } from "./components/MetricCard";
 import { ProgressBar } from "./components/ProgressBar";
+import { OverviewMetrics } from "@/components/admin/OverviewMetrics";
 import { Users, UserCheck } from "lucide-react";
 
 interface DashboardClientProps {
@@ -50,7 +51,7 @@ export function DashboardClient({ invitations, totalGuestsCount }: DashboardClie
     return sum;
   }, 0);
 
-  // Pax by Owner
+  // Pax & RSVP Breakdown by Owner
   const ownerStats = ["William", "Aziel"].map(owner => {
     const ownerInvs = filteredInvitations.filter(inv => inv.guest?.owner === owner);
     const invitedPax = ownerInvs.reduce((s, inv) => s + (inv.max_pax || 0), 0);
@@ -58,7 +59,21 @@ export function DashboardClient({ invitations, totalGuestsCount }: DashboardClie
       if (getAttendanceStatus(inv) === "attending") return s + getConfirmedPax(inv);
       return s;
     }, 0);
-    return { owner, invitedPax, attendingPax, invitations: ownerInvs.length };
+    const attendingInvs = ownerInvs.filter(inv => getAttendanceStatus(inv) === "attending").length;
+    const declinedInvs = ownerInvs.filter(inv => getAttendanceStatus(inv) === "declined").length;
+    const pendingInvs = ownerInvs.length - attendingInvs - declinedInvs;
+    const respondedInvs = attendingInvs + declinedInvs;
+
+    return { 
+      owner, 
+      invitedPax, 
+      attendingPax, 
+      invitations: ownerInvs.length,
+      attendingInvs,
+      declinedInvs,
+      pendingInvs,
+      respondedInvs
+    };
   });
 
   // Attending by Event Session (for wedding filter: Holy Matrimony vs Reception)
@@ -110,91 +125,32 @@ export function DashboardClient({ invitations, totalGuestsCount }: DashboardClie
         <MetricCard title="Pending RSVP" value={pendingRsvp} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        {/* RSVP Status Breakdown */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">RSVP Status Breakdown</h3>
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="bg-slate-50 rounded-lg p-4">
-              <p className="text-slate-500 text-sm font-medium mb-1">Attending</p>
-              <p className="text-2xl font-bold text-green-600">{attendingInvitations}</p>
-            </div>
-            <div className="bg-slate-50 rounded-lg p-4">
-              <p className="text-slate-500 text-sm font-medium mb-1">Declined</p>
-              <p className="text-2xl font-bold text-rose-500">{declinedInvitations}</p>
-            </div>
-          </div>
-          <ProgressBar 
-            label="RSVP Response Rate" 
-            value={rsvpConfirmed} 
-            total={totalInvitations} 
-            colorClass="bg-[#416130]"
-            format="percentage"
-          />
-        </div>
-
-        {/* Attendance Projection */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Attendance Projection (Pax)</h3>
-          
-          <div className="flex flex-col gap-8">
+      {/* Attendance Projection */}
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-8">
+        <h3 className="text-lg font-bold text-slate-800 mb-6">Attendance Projection (Pax)</h3>
+        <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="flex-1 w-full">
             <ProgressBar 
               label="Expected vs Total Invited" 
               value={expectedAttendance} 
               total={totalInvitedPax} 
               colorClass="bg-blue-500"
             />
-            
-            <div className="flex justify-between items-center pt-4 border-t border-slate-100">
-              <div className="flex flex-col">
-                <span className="text-slate-500 text-sm font-medium">Unconfirmed Pax</span>
-                <span className="text-slate-400 text-xs mt-1">Assuming pending RSVPs</span>
-              </div>
-              <span className="text-xl font-bold text-amber-500">
-                {totalInvitedPax - expectedAttendance}
-              </span>
+          </div>
+          <div className="flex justify-between md:flex-col justify-center items-end md:items-end w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-slate-100">
+            <div className="flex flex-col text-left md:text-right">
+              <span className="text-slate-500 text-sm font-medium">Unconfirmed Pax</span>
+              <span className="text-slate-400 text-xs mt-1">Assuming pending RSVPs</span>
             </div>
+            <span className="text-xl font-bold text-amber-500 mt-1">
+              {totalInvitedPax - expectedAttendance} pax
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Pax by Owner */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <Users className="w-5 h-5 text-blue-600" />
-          </div>
-          <h3 className="text-lg font-bold text-slate-800">Total Pax by Side</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {ownerStats.map(stat => (
-            <div key={stat.owner} className={`rounded-xl p-5 border ${stat.owner === "William" ? "bg-blue-50 border-blue-100" : "bg-pink-50 border-pink-100"}`}>
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <p className={`text-sm font-bold uppercase tracking-wider mb-1 ${stat.owner === "William" ? "text-blue-700" : "text-pink-700"}`}>
-                    {stat.owner}
-                  </p>
-                  <p className="text-xs text-slate-500">{stat.invitations} invitations</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-slate-800">{stat.invitedPax}</p>
-                  <p className="text-xs text-slate-500">invited pax</p>
-                </div>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-slate-600 font-medium">Expected attendance</span>
-                <span className={`font-bold ${stat.owner === "William" ? "text-blue-700" : "text-pink-700"}`}>{stat.attendingPax} pax</span>
-              </div>
-              <div className="mt-3 bg-white/60 rounded-lg overflow-hidden h-2">
-                <div 
-                  className={`h-full rounded-lg transition-all ${stat.owner === "William" ? "bg-blue-500" : "bg-pink-500"}`}
-                  style={{ width: stat.invitedPax > 0 ? `${Math.round((stat.attendingPax / stat.invitedPax) * 100)}%` : "0%" }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* William / Aziel Overview Breakdown */}
+      <OverviewMetrics invitations={filteredInvitations} />
 
       {/* Attending by Event Session */}
       {sessionBreakdown.length > 0 && (

@@ -33,6 +33,18 @@ export default async function GuestsPage({
 
   const supabase = await createClient();
   const { data: eventTypes } = await supabase.from("event_types").select("*");
+  
+  const { data: allInvitations } = await supabase
+    .from("invitations")
+    .select(`
+      id,
+      max_pax,
+      is_sent,
+      event_type:event_types!inner(slug, name),
+      guest:guests!inner(owner, category),
+      rsvp:rsvps(attendance_status, confirmed_pax)
+    `);
+
   const settingsRes = await getSettings();
   const config = settingsRes.success ? settingsRes.data?.config : {};
 
@@ -40,6 +52,7 @@ export default async function GuestsPage({
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
       <GuestClient 
         initialGuests={guests || []} 
+        allInvitations={allInvitations || []}
         total={total || 0}
         totalPages={totalPages || 0}
         currentPage={page}

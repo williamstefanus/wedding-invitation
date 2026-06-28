@@ -7,13 +7,16 @@ This is a comprehensive wedding invitation platform featuring dynamic public inv
 - **Dynamic Public Invitations**: Custom links for guests (`/invite/wedding/[code]`).
 - **Multi-Event RSVP System**: Guests can RSVP for the Wedding Celebration and Sangjit Ceremony. Deadlines restrict edits automatically.
 - **Admin Dashboard**: Manage guests, invitations, RSVPs, seating, and global settings from one interface.
-- **Seating Assignments**: Visual mapping and tabular assignments with over-capacity warnings.
+- **Event-Day Usher Portal (`/usher`)**: Touch-friendly, PIN-protected interface for reception staff to manage guest check-ins, view capped attendance headcount, highlight VIP guests, and inspect read-only floor maps.
+- **Interactive Seating Floor Plan**: Visual 2D table mapping (`FloorPlanView`) with occupancy tracking, unassignment tools, and over-capacity alerts.
+- **Bulk Data Management**: Multi-select checkboxes for bulk deleting or resetting guests and RSVPs.
 - **Import/Export Data**: Bulk import guests via CSV/Excel and export invitation data.
-- **Global Settings Management**: Update couple names, venues, maps URLs, RSVP deadlines, and gallery images without code changes.
+- **Global Settings Management**: Update couple names, venues, maps URLs, RSVP deadlines, gallery images, and Usher PIN codes without code changes.
 
 ## Architecture & Project Structure
 
 - **Modular UI Pattern**: The Admin dashboard UI uses a stateful orchestrator pattern (e.g. `GuestClient.tsx`) that acts as a container for smaller pure UI components located in `src/components/admin/[module]/`.
+- **Dedicated Usher Application**: The `/usher` portal operates independently with dedicated server actions (`src/lib/actions/usher.ts`) and touch-optimized components (`UsherClient.tsx`, `UsherGuestCard.tsx`).
 - **Centralized Constants**: All application constants and asset mapping references are grouped neatly inside `src/lib/constants/` (`index.ts`, `sangjitInvitationAssets.ts`, `sangjitScreenReferences.ts`).
 - **Utility Scripts**: Standalone maintenance and data inspection scripts live in `scripts/` (e.g. `testCheck.mjs`).
 - **Next.js 16 Proxy Layer**: Request interceptors are handled via Next.js 16 Proxy conventions (`src/proxy.ts` re-exporting from `src/lib/supabase/proxy.ts`), enforcing HTTP Basic Auth on `/admin` routes while refreshing Supabase session cookies.
@@ -99,6 +102,7 @@ npm run dev
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
 - Admin Dashboard: `http://localhost:3000/admin`
+- Usher Reception Portal: `http://localhost:3000/usher` (Default PIN: `123456`)
 
 ---
 
@@ -119,13 +123,11 @@ The application will be available at [http://localhost:3000](http://localhost:30
 ## Known Limitations and MVP Scope
 
 - **Basic Auth Guard**: The admin dashboard (`/admin`) currently relies on HTTP Basic Auth enforced via Next.js Proxy (`src/proxy.ts`). For multi-user role-based access, full integration with Supabase Auth session cookies can be adapted inside `src/lib/supabase/proxy.ts`.
-- **Local Media Storage constraints**: The gallery image uploader requires a pre-existing `gallery` public bucket. 
-- **Seating Map Constraints**: The seating UI visually groups guests but does not yet feature a drag-and-drop 2D visual floor plan mapping tool.
+- **Local Media Storage constraints**: The gallery image uploader requires a pre-existing `gallery` public bucket.
 
 ## Future Scope
 
 The following features are slated for future development:
 - **Add authentication**: Secure the admin dashboard with Supabase Auth.
-- **Add admin roles**: Differentiate permissions between the Bride/Groom and Wedding Organizers (WO).
 - **Add full RSVP history/audit log**: Track exactly when and how guests modified their RSVPs.
 - **Add final Sangjit visual design**: Update the Sangjit public invitation page once final assets and design files are provided.
