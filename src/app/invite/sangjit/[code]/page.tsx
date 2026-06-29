@@ -1,16 +1,53 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { getInvitationDetails } from "@/lib/actions/invitation";
 import { getSettings } from "@/lib/actions/settings";
 import { InviteNotFound } from "@/components/invitation/InviteNotFound";
 import { SangjitInvitationClient } from "@/components/invitation/sangjit/SangjitInvitationClient";
 
-export const metadata: Metadata = {
-  title: "Sangjit Invitation",
-  description: "You are invited to celebrate our Sangjit ceremony.",
-};
-
 interface SangjitInvitePageProps {
   params: Promise<{ code: string }>;
+}
+
+export async function generateMetadata(
+  { params }: SangjitInvitePageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { code } = await params;
+
+  // 1. Server-Side Fetching (No client side execution)
+  const { invitation, error } = await getInvitationDetails(code, "sangjit");
+
+  // 2. Graceful Fallbacks
+  const guestName = (invitation && !error && invitation.guest?.name) ? invitation.guest.name : "Our Special Guest";
+
+  // 3. Dynamic Text Generation
+  const title = "Sangjit Invitation - Aziel & William";
+  const description = `Dear ${guestName}, you are joyfully invited to the Sangjit ceremony of Aziel & William on October 17, 2026. Please open to see the details and RSVP.`;
+  const url = `https://wedding-william-aziel.vercel.app/invite/sangjit/${code}`;
+
+  // 4. Metadata Specification
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "Aziel & William Sangjit",
+      images: [
+        {
+          url: "/images/sangjit-thumbnail.png",
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+  };
 }
 
 export default async function SangjitInvitePage({
