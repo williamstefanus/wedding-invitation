@@ -15,14 +15,18 @@ interface SangjitRSVPSectionProps {
 export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
   const { t } = useLanguage();
   const [isPending, startTransition] = useTransition();
-  const [attending, setAttending] = useState<boolean | null>(null);
-  const [pax, setPax] = useState<number>(1);
-  const [wishes, setWishes] = useState("");
+  const existingRsvp = invitation?.rsvp?.[0];
+  const [attending, setAttending] = useState<boolean | null>(
+    existingRsvp ? existingRsvp.attendance_status === "attending" : null
+  );
+  const [pax, setPax] = useState<number>(existingRsvp?.confirmed_pax || 1);
+  const [wishes, setWishes] = useState(existingRsvp?.wish_message || "");
   const [errorMsg, setErrorMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
   const maxPax = invitation?.max_pax || 4;
   const paxOptions = Array.from({ length: Math.min(maxPax, 4) }, (_, i) => i + 1);
+  const sessionIds = (invitation?.event_type?.sessions || []).map((s: any) => s.id);
 
   const handleSubmit = () => {
     setErrorMsg("");
@@ -38,7 +42,7 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
           attendance_status: attending ? "attending" : "not_attending",
           confirmed_pax: attending ? pax : 0,
           wish_message: wishes,
-          selected_session_ids: attending ? ["sangjit_ceremony"] : [],
+          selected_session_ids: attending ? sessionIds : [],
           event_slug: invitation.event_type?.slug || "sangjit",
           code: invitation.invitation_code || ""
         });
