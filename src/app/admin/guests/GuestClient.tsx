@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { createGuest, updateGuest, deleteGuest, deleteInvitationAction, regenerateLink, updateMaxPax, getGuestById, toggleInvitationSent } from "@/lib/actions/guests";
 import type { GuestOwner, GuestCategory } from "@/types";
 import { GuestMetrics } from "@/components/admin/guests/GuestMetrics";
+import { formatWhatsAppPhone } from "@/lib/utils";
 
 // Import Extracted Components
 import { GuestFilters } from "@/components/admin/guests/GuestFilters";
@@ -121,9 +122,10 @@ export function GuestClient({
     return "Halo {nama}! 🎉 Kami mengundang kamu ke acara kami.\n\nLink undangan: {link}";
   };
 
-  const handleCopyLink = (inv: any, guestName?: string) => {
+  const handleCopyLink = (inv: any, guestName?: string, guestPhone?: string) => {
     const url = `${window.location.origin}/invite/${inv.event_type.slug}/${inv.invitation_code}`;
     const name = guestName || inv.guest?.name || "";
+    const phone = guestPhone || inv.guest?.phone || "";
     const template = getWaTemplate(inv.event_type.slug);
     const deadlineStr = inv.event_type?.rsvp_edit_deadline_at
       ? new Date(inv.event_type.rsvp_edit_deadline_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })
@@ -133,6 +135,13 @@ export function GuestClient({
       .replace(/{link}/g, url)
       .replace(/{deadline}/g, deadlineStr);
     navigator.clipboard.writeText(message);
+
+    const formattedPhone = formatWhatsAppPhone(phone);
+    const waUrl = formattedPhone
+      ? `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`
+      : `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, "_blank");
+
     setCopiedId(inv.id);
     setTimeout(() => setCopiedId(null), 2000);
   };

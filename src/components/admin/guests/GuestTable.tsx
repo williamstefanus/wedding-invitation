@@ -21,7 +21,7 @@ interface GuestTableProps {
   setIsEditPaxOpen: (isOpen: boolean) => void;
   setIsRegenerateOpen: (isOpen: boolean) => void;
   setIsDeleteInvOpen: (isOpen: boolean) => void;
-  handleCopyLink: (inv: any, guestName?: string) => void;
+  handleCopyLink: (inv: any, guestName?: string, guestPhone?: string) => void;
   handleToggleSent: (invId: string, currentSentStatus: boolean) => void;
   handlePageChange: (newPage: number) => void;
 }
@@ -271,7 +271,7 @@ export function GuestTable({
                             </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-1">
-                                <button onClick={() => handleCopyLink(inv, guest.name)} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition" title="Copy WhatsApp Message">
+                                <button onClick={() => handleCopyLink(inv, guest.name, guest.phone)} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition" title="Copy & Send WhatsApp Message">
                                   {copiedId === inv.id ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                                 </button>
                                 <button onClick={() => { setSelectedGuest(guest); setSelectedInv(inv); setEditMaxPax(inv.max_pax); setIsEditPaxOpen(true); }} className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition" title="Edit Max Pax">

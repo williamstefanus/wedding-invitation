@@ -4,6 +4,7 @@ import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Edit2, Copy, Check, CheckCheck, Send, Loader2 } from "lucide-react";
 import { getGuestById, updateGuest, toggleInvitationSent } from "@/lib/actions/guests";
+import { formatWhatsAppPhone } from "@/lib/utils";
 import { GuestFormModal } from "@/components/admin/guests/modals/GuestFormModal";
 import type { GuestOwner, GuestCategory } from "@/types";
 
@@ -58,10 +59,17 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
       ? new Date(inv.event_type.rsvp_edit_deadline_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })
       : "-";
     const message = template
-      .replace(/{nama}/g, guest.name)
+      .replace(/{nama}/g, currentGuest?.name || guest?.name || "")
       .replace(/{link}/g, url)
       .replace(/{deadline}/g, deadlineStr);
     navigator.clipboard.writeText(message);
+
+    const formattedPhone = formatWhatsAppPhone(currentGuest?.phone || guest?.phone);
+    const waUrl = formattedPhone
+      ? `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`
+      : `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, "_blank");
+
     setCopiedId(inv.id);
     setTimeout(() => setCopiedId(null), 2000);
   };
@@ -214,7 +222,7 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
                       }`}
                     >
                       {copiedId === inv.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copiedId === inv.id ? "Copied!" : "Copy WA Message"}
+                      {copiedId === inv.id ? "Opening WA..." : "Copy & Send WA"}
                     </button>
 
                     {/* Mark as Sent */}

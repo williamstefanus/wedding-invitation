@@ -151,3 +151,21 @@ export function exportToExcel(data: any[], filename: string) {
   // Generate Excel file and trigger download
   XLSX.writeFile(workbook, `${filename}.xlsx`);
 }
+
+/**
+ * Formats a phone number for WhatsApp API (e.g. 08123456789 -> 628123456789).
+ */
+export function formatWhatsAppPhone(phone?: string | null): string {
+  if (!phone) return "";
+  let cleaned = phone.replace(/\D/g, "");
+  if (!cleaned) return "";
+  if (cleaned.startsWith("00")) {
+    cleaned = cleaned.slice(2);
+  } else if (cleaned.startsWith("0")) {
+    cleaned = "62" + cleaned.slice(1);
+  } else if (cleaned.startsWith("8") && cleaned.length >= 8) {
+    cleaned = "62" + cleaned;
+  }
+  return cleaned;
+}
+
