@@ -139,7 +139,7 @@ export function SangjitHeroCountdownSection({
                 ))}
               </div>
               <span className="text-[#761B33] font-sans font-normal text-[14px] uppercase tracking-wider mt-1">
-                {language === "id" ? "HARI" : "DAYS"}
+                {t('days')}
               </span>
             </div>
 
@@ -160,7 +160,7 @@ export function SangjitHeroCountdownSection({
                 ))}
               </div>
               <span className="text-[#761B33] font-sans font-normal text-[14px] uppercase tracking-wider mt-1">
-                {language === "id" ? "JAM" : "HOURS"}
+                {t('hours')}
               </span>
             </div>
 
@@ -181,7 +181,7 @@ export function SangjitHeroCountdownSection({
                 ))}
               </div>
               <span className="text-[#761B33] font-sans font-normal text-[14px] uppercase tracking-wider mt-1">
-                {language === "id" ? "MENIT" : "MINS"}
+                {t('minutes')}
               </span>
             </div>
           </div>

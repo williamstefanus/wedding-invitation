@@ -1,5 +1,6 @@
 "use client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { translateSessionName } from "@/lib/translations";
 import { formatWhatsAppPhone } from "@/lib/utils";
 
 interface RSVPSubmittedCardProps {
@@ -17,31 +18,12 @@ export function RSVPSubmittedCard({
   owner,
   contactPhone
 }: RSVPSubmittedCardProps) {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   const isAttending = existingRsvp?.attendance_status === "attending";
   const selectedSessionIds = existingRsvp?.selected_sessions?.map((s: any) => s.event_session_id || s.id || (typeof s === 'string' ? s : null)).filter(Boolean) || [];
   const matchedSessions = sessions.filter(s => selectedSessionIds.includes(s.id));
   const activeSessions = matchedSessions.length > 0 ? matchedSessions : sessions;
-
-  const getSessionLabel = (name: string) => {
-    if (language === 'id') {
-      if (name.toLowerCase().includes("holy matrimony") || name.toLowerCase().includes("pemberkatan")) {
-        return "Pemberkatan";
-      }
-      if (name.toLowerCase().includes("reception") || name.toLowerCase().includes("resepsi")) {
-        return "Resepsi";
-      }
-    } else {
-      if (name.toLowerCase().includes("holy matrimony") || name.toLowerCase().includes("pemberkatan")) {
-        return "Holy Matrimony";
-      }
-      if (name.toLowerCase().includes("reception") || name.toLowerCase().includes("resepsi")) {
-        return "Reception Dinner";
-      }
-    }
-    return name;
-  };
 
   const handleWhatsAppContact = () => {
     const contactName = owner === "Aziel" ? "Aziel" : "William";
@@ -53,7 +35,7 @@ export function RSVPSubmittedCard({
     window.open(url, "_blank");
   };
 
-  const summaryEventsText = activeSessions.map(s => getSessionLabel(s.name)).join(" & ");
+  const summaryEventsText = activeSessions.map(s => translateSessionName(s.name, t)).join(" & ");
 
   return (
     <section className="w-full bg-[#faf9f0] flex flex-col items-center py-[48px] z-20 relative px-6 text-center animate-fade-in">

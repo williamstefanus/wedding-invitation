@@ -19,6 +19,7 @@ export const translations = {
     // Schedule
     holyMatrimony: "Holy Matrimony",
     reception: "Reception",
+    receptionDinner: "Reception Dinner",
     openGoogleMaps: "Open Google Maps",
 
     // Couple
@@ -98,6 +99,7 @@ export const translations = {
     // Schedule
     holyMatrimony: "Pemberkatan",
     reception: "Resepsi",
+    receptionDinner: "Resepsi",
     openGoogleMaps: "Buka di Google Maps",
 
     // Couple
@@ -159,3 +161,15 @@ export const translations = {
     editRSVP: "Ubah Respons RSVP",
   }
 };
+
+export function translateSessionName(name: string | undefined, t: (key: any) => string): string {
+  if (!name) return "";
+  const lower = name.toLowerCase();
+  if (lower.includes("holy matrimony") || lower.includes("pemberkatan")) {
+    return t("holyMatrimony");
+  }
+  if (lower.includes("reception") || lower.includes("resepsi")) {
+    return t("receptionDinner");
+  }
+  return name;
+}
