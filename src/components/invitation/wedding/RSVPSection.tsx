@@ -3,23 +3,26 @@
 import { useState, useTransition } from "react";
 import { submitRSVP } from "@/lib/actions/rsvp";
 
-import { RSVPSuccessMessage } from "@/components/invitation/wedding/rsvp/RSVPSuccessMessage";
 import { RSVPForm } from "@/components/invitation/wedding/rsvp/RSVPForm";
+import { RSVPSubmittedCard } from "@/components/invitation/wedding/rsvp/RSVPSubmittedCard";
 
 interface RSVPSectionProps {
   invitation?: any;
   deadline?: string;
+  contactPhone?: string;
 }
 
-export function RSVPSection({ invitation, deadline: settingsDeadline }: RSVPSectionProps) {
+export function RSVPSection({ invitation, deadline: settingsDeadline, contactPhone }: RSVPSectionProps) {
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState("");
   const [submitState, setSubmitState] = useState<"idle" | "success_attending" | "success_not_attending" | "success_updated">("idle");
 
   // Existing RSVP data if any
-  const existingRsvp = invitation?.rsvp?.[0];
+  const rsvpData = invitation?.rsvp;
+  const existingRsvp = Array.isArray(rsvpData) ? rsvpData[0] : rsvpData;
   const selectedSessionIds = existingRsvp?.selected_sessions?.map((s: any) => s.event_session_id) || [];
   const isUpdating = !!existingRsvp;
+  const [hasSubmitted, setHasSubmitted] = useState(isUpdating);
   
   const [attending, setAttending] = useState<boolean | null>(
     existingRsvp ? existingRsvp.attendance_status === "attending" : null
@@ -69,6 +72,7 @@ export function RSVPSection({ invitation, deadline: settingsDeadline }: RSVPSect
       });
 
       if (result.success) {
+        setHasSubmitted(true);
         if (isUpdating) {
           setSubmitState("success_updated");
         } else if (attending) {
@@ -77,7 +81,11 @@ export function RSVPSection({ invitation, deadline: settingsDeadline }: RSVPSect
           setSubmitState("success_not_attending");
         }
       } else {
-        setErrorMsg(result.error || "Failed to submit RSVP.");
+        if (result.error && result.error.toLowerCase().includes("already submitted")) {
+          setHasSubmitted(true);
+        } else {
+          setErrorMsg(result.error || "Failed to submit RSVP.");
+        }
       }
     });
   };
@@ -127,17 +135,20 @@ export function RSVPSection({ invitation, deadline: settingsDeadline }: RSVPSect
     }
   };
 
-  const resetForm = () => {
-    setSubmitState("idle");
-  };
 
-  if (submitState !== "idle") {
+  if (hasSubmitted) {
     return (
-      <RSVPSuccessMessage 
-        submitState={submitState}
-        attending={attending}
+      <RSVPSubmittedCard
+        existingRsvp={{
+          attendance_status: attending ? "attending" : "not_attending",
+          confirmed_pax: attending ? (pax || 1) : 0,
+          wish_message: wishes,
+          selected_sessions: events.map(id => ({ event_session_id: id }))
+        }}
+        sessions={sessions}
         handleAddToCalendar={handleAddToCalendar}
-        resetForm={resetForm}
+        owner={invitation?.guest?.owner}
+        contactPhone={contactPhone}
       />
     );
   }

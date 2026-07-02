@@ -7,6 +7,7 @@ import {
   assignGuestToTable, 
   removeGuestFromTable, 
   updateTableCapacity,
+  updateTableDetails,
   addTable,
   deleteTable
 } from "@/lib/actions/seating";
@@ -42,8 +43,9 @@ export function SeatingClient({
   const [isAddTableOpen, setIsAddTableOpen] = useState(false);
   const [tableToDelete, setTableToDelete] = useState<any>(null);
   
-  // Capacity Form
+  // Capacity & Name Form
   const [newCapacity, setNewCapacity] = useState(10);
+  const [editTableName, setEditTableName] = useState("");
 
   // Metrics calculation
   const totalTables = initialTables.length;
@@ -85,7 +87,7 @@ export function SeatingClient({
   const handleUpdateCapacity = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedTable) {
-      await updateTableCapacity(selectedTable.id, newCapacity);
+      await updateTableDetails(selectedTable.id, editTableName || selectedTable.table_name, newCapacity);
       setIsCapacityModalOpen(false);
     }
   };
@@ -156,6 +158,7 @@ export function SeatingClient({
         selectedTable={selectedTable}
         setSelectedTableId={setSelectedTableId}
         setNewCapacity={setNewCapacity}
+        setEditTableName={setEditTableName}
         setIsCapacityModalOpen={setIsCapacityModalOpen}
         setIsSearchModalOpen={setIsSearchModalOpen}
         handleRemoveGuest={handleRemoveGuest}
@@ -168,6 +171,8 @@ export function SeatingClient({
         selectedTable={selectedTable}
         newCapacity={newCapacity}
         setNewCapacity={setNewCapacity}
+        editTableName={editTableName}
+        setEditTableName={setEditTableName}
         handleUpdateCapacity={handleUpdateCapacity}
       />
 

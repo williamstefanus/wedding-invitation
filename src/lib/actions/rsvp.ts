@@ -28,8 +28,21 @@ export async function submitRSVP(data: SubmitRSVPData) {
       return { success: false, error: "Invalid invitation." };
     }
 
-    // 2. Check the deadline
-    // If rsvp_edit_deadline_at is set, check if current date is past the deadline
+    // 2. Check if an RSVP already exists for this invitation (restrict edits after submission)
+    const { data: existingRsvp } = await supabase
+      .from("rsvps")
+      .select("id")
+      .eq("invitation_id", data.invitation_id)
+      .maybeSingle();
+
+    if (existingRsvp) {
+      return {
+        success: false,
+        error: "You have already submitted your RSVP. Any changes must be confirmed manually by contacting William or Aziel via WhatsApp."
+      };
+    }
+
+    // 3. Check the deadline (strictly for accepting new RSVPs)
     const deadlineStr = (invitation.event_type as any)?.rsvp_edit_deadline_at;
     if (deadlineStr) {
       const deadline = new Date(deadlineStr).getTime();
@@ -39,15 +52,7 @@ export async function submitRSVP(data: SubmitRSVPData) {
       }
     }
 
-    // 3. Upsert the RSVP record
-    // We check if an RSVP already exists for this invitation
-    const { data: existingRsvp } = await supabase
-      .from("rsvps")
-      .select("id")
-      .eq("invitation_id", data.invitation_id)
-      .maybeSingle();
-
-    let rsvpId = existingRsvp?.id;
+    let rsvpId = null;
 
     if (rsvpId) {
       // Update existing

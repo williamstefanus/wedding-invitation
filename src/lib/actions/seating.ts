@@ -80,7 +80,52 @@ export async function getSeatingData(eventTypeSlug: string) {
 
     if (error) throw error;
 
-    return { success: true, data: data as any[] };
+    let tables = data ? [...(data as any[])] : [];
+
+    // Sort existing tables logically before assigning strictly sequential numbers 1..N
+    tables.sort((a, b) => {
+      const orderA = (a.sort_order != null && a.sort_order > 0) ? a.sort_order : 9999;
+      const orderB = (b.sort_order != null && b.sort_order > 0) ? b.sort_order : 9999;
+      if (orderA !== orderB) return orderA - orderB;
+      // Break tie: custom name (e.g. "Bride & Groom") comes before default ("Table X")
+      const isDefA = /^Table\s*\d+$/i.test(a.table_name || "");
+      const isDefB = /^Table\s*\d+$/i.test(b.table_name || "");
+      if (isDefA !== isDefB) return isDefA ? 1 : -1;
+      return (a.created_at || "").localeCompare(b.created_at || "");
+    });
+
+    const updatesToSave: any[] = [];
+
+    for (let i = 0; i < tables.length; i++) {
+      const targetNumber = i + 1;
+      let targetName = tables[i].table_name || `Table ${targetNumber}`;
+
+      // If existing name is just "Table X" (a default auto-generated name),
+      // sync it to "Table ${targetNumber}" so there is never a mismatch or duplicate.
+      if (/^Table\s*\d+$/i.test(targetName)) {
+        targetName = `Table ${targetNumber}`;
+      }
+
+      const needsUpdate = tables[i].sort_order !== targetNumber || tables[i].table_name !== targetName;
+
+      tables[i].sort_order = targetNumber;
+      tables[i].table_name = targetName;
+
+      if (needsUpdate) {
+        updatesToSave.push(
+          supabase
+            .from("seating_tables")
+            .update({ sort_order: targetNumber, table_name: targetName })
+            .eq("id", tables[i].id)
+        );
+      }
+    }
+
+    if (updatesToSave.length > 0) {
+      Promise.all(updatesToSave).catch(e => console.error("Self-heal numbering error:", e));
+    }
+
+    return { success: true, data: tables };
   } catch (error: any) {
     console.error("Failed to fetch seating data:", error);
     return { success: false, error: error.message, data: [] };
@@ -179,6 +224,25 @@ export async function removeGuestFromTable(assignment_id: string) {
   }
 }
 
+// Update Capacity & Name
+export async function updateTableDetails(table_id: string, table_name: string, new_capacity: number) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("seating_tables").update({ 
+      table_name: table_name.trim() || "Table",
+      capacity: new_capacity 
+    }).eq("id", table_id);
+
+    if (error) throw error;
+
+    revalidatePath("/admin/seating");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Failed to update table details:", error);
+    return { success: false, error: error.message };
+  }
+}
+
 // Update Capacity
 export async function updateTableCapacity(table_id: string, new_capacity: number) {
   try {
@@ -207,7 +271,7 @@ export async function addTable(eventTypeSlug: string, tableName?: string, capaci
     // Get max sort_order
     const { data: tables } = await supabase.from("seating_tables").select("sort_order").eq("event_type_id", eventTypes.id).order("sort_order", { ascending: false }).limit(1);
     const nextSortOrder = (tables?.[0]?.sort_order || 0) + 1;
-    const name = tableName || `Table ${nextSortOrder}`;
+    const name = (tableName && tableName.trim()) ? tableName.trim() : `Table ${nextSortOrder}`;
 
     const { error } = await supabase.from("seating_tables").insert({
       event_type_id: eventTypes.id,
@@ -247,7 +311,7 @@ export async function deleteTable(table_id: string) {
   }
 }
 
-// Update Table Map Slot Position (swaps if occupied)
+// Update Table Map Slot Position (swaps if occupied using position_x)
 export async function updateTableMapPosition(table_id: string, target_slot_id: number) {
   try {
     const supabase = await createClient();
@@ -255,20 +319,20 @@ export async function updateTableMapPosition(table_id: string, target_slot_id: n
     // 1. Get current table info
     const { data: currentTable, error: fetchErr } = await supabase
       .from("seating_tables")
-      .select("id, event_type_id, sort_order")
+      .select("id, event_type_id, position_x")
       .eq("id", table_id)
       .single();
 
     if (fetchErr || !currentTable) throw new Error("Table not found");
 
-    const oldSlot = currentTable.sort_order;
+    const oldSlot = currentTable.position_x;
 
     // 2. Check if another table occupies target_slot_id
     const { data: occupyingTable } = await supabase
       .from("seating_tables")
       .select("id")
       .eq("event_type_id", currentTable.event_type_id)
-      .eq("sort_order", target_slot_id)
+      .eq("position_x", target_slot_id)
       .neq("id", table_id)
       .maybeSingle();
 
@@ -276,14 +340,14 @@ export async function updateTableMapPosition(table_id: string, target_slot_id: n
       // Swap or unassign the occupying table
       await supabase
         .from("seating_tables")
-        .update({ sort_order: oldSlot && oldSlot <= 26 ? oldSlot : 0 })
+        .update({ position_x: oldSlot && oldSlot <= 26 ? oldSlot : null })
         .eq("id", occupyingTable.id);
     }
 
     // 3. Assign target table to new slot
     const { error: updateErr } = await supabase
       .from("seating_tables")
-      .update({ sort_order: target_slot_id })
+      .update({ position_x: target_slot_id })
       .eq("id", table_id);
 
     if (updateErr) throw updateErr;
@@ -302,7 +366,7 @@ export async function unassignTableMapPosition(table_id: string) {
     const supabase = await createClient();
     const { error } = await supabase
       .from("seating_tables")
-      .update({ sort_order: 0 })
+      .update({ position_x: null })
       .eq("id", table_id);
 
     if (error) throw error;

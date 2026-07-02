@@ -83,6 +83,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   const giftBank = owner === "Aziel" ? config.gift_bank_aziel : config.gift_bank_william;
   const giftAccount = owner === "Aziel" ? config.gift_account_aziel : config.gift_account_william;
   const giftName = owner === "Aziel" ? config.gift_name_aziel : config.gift_name_william;
+  const contactPhone = owner === "Aziel" ? config.phone_aziel : config.phone_william;
 
   return (
     <LanguageProvider>
@@ -129,7 +130,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
             </section>
 
             <ScheduleSection sessions={settings?.sessions ? [settings.sessions.holyMatrimony, settings.sessions.reception].filter(Boolean) : (invitation?.event_type?.sessions || [])} />
-            <RSVPSection invitation={invitation} deadline={settings?.deadlines?.wedding} />
+            <RSVPSection invitation={invitation} deadline={settings?.deadlines?.wedding} contactPhone={contactPhone} />
             <GallerySection images={config.gallery_images} />
             <GiftSection bank={giftBank} account={giftAccount} name={giftName} />
             <ThankYouSection names={config.couple_names} />

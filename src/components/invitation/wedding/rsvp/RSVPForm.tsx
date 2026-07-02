@@ -38,7 +38,20 @@ export function RSVPForm({
   handleAddToCalendar,
   existingRsvp
 }: RSVPFormProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const getSessionLabel = (name: string) => {
+    if (language === 'id') {
+      if (name.toLowerCase().includes("holy matrimony") || name.toLowerCase().includes("pemberkatan")) {
+        return "Pemberkatan";
+      }
+      if (name.toLowerCase().includes("reception") || name.toLowerCase().includes("resepsi")) {
+        return "Resepsi";
+      }
+    }
+    return name;
+  };
+
   return (
     <section className="w-full bg-[#faf9f0] flex flex-col items-center py-[48px] z-20 relative">
       <h2 className="text-[64px] text-[#4B4B4B] mb-6 leading-none" style={{ fontFamily: "var(--font-justwrite)" }}>
@@ -89,7 +102,7 @@ export function RSVPForm({
                   onClick={() => setEvents([sessions[0].id])}
                   className={`w-full flex items-center justify-center h-[36px] border rounded-xl transition ${events.length === 1 && events[0] === sessions[0].id ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                 >
-                  {sessions[0].name}
+                  {getSessionLabel(sessions[0].name)}
                 </button>
               ) : (
                 <>
@@ -99,14 +112,14 @@ export function RSVPForm({
                       onClick={() => setEvents([sessions[0].id])}
                       className={`flex-1 flex items-center justify-center h-[36px] border rounded-xl transition ${events.length === 1 && events[0] === sessions[0].id ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                     >
-                      {sessions[0].name}
+                      {getSessionLabel(sessions[0].name)}
                     </button>
                     <button 
                       disabled={isPastDeadline || isPending}
                       onClick={() => setEvents([sessions[1].id])}
                       className={`flex-1 flex items-center justify-center h-[36px] border rounded-xl transition ${events.length === 1 && events[0] === sessions[1].id ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                     >
-                      {sessions[1].name}
+                      {getSessionLabel(sessions[1].name)}
                     </button>
                   </div>
                   <button 
@@ -114,7 +127,7 @@ export function RSVPForm({
                     onClick={() => setEvents([sessions[0].id, sessions[1].id])}
                     className={`w-full flex items-center justify-center h-[36px] border rounded-xl transition ${events.length === 2 ? 'bg-[#4B4B4B] text-white border-[#4B4B4B]' : 'bg-white text-[#4B4B4B] border-[#E5E5E5] hover:bg-slate-50'} disabled:opacity-50`}
                   >
-                    {sessions[0].name} & {sessions[1].name}
+                    {getSessionLabel(sessions[0].name)} & {getSessionLabel(sessions[1].name)}
                   </button>
                 </>
               )}

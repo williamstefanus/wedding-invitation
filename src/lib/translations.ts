@@ -45,6 +45,12 @@ export const translations = {
     rsvpSuccessAttending: "Thank you for confirming your attendance. We look forward to celebrating this special day with you.",
     rsvpSuccessNotAttending: "Thank you for letting us know. Your prayers and blessings mean a lot to us.",
     backToInvitation: "Back To Invitation",
+    rsvpAlreadyReceived: "Thank you. We have already received your RSVP.",
+    forAnyChangesContact: "For any changes, please contact William or Aziel via WhatsApp.",
+    contactUs: "Contact Us",
+    attendingSummary: "Attending",
+    notAttendingSummary: "Not Attending",
+    paxLabel: "pax",
 
     // Gallery
     ourMoments: "Our Moments",
@@ -118,6 +124,12 @@ export const translations = {
     rsvpSuccessAttending: "Terima kasih telah mengonfirmasi kehadiran Anda. Sampai jumpa di hari bahagia kami.",
     rsvpSuccessNotAttending: "Terima kasih atas konfirmasinya. Doa dan restu Anda sangat berarti bagi kami.",
     backToInvitation: "Kembali ke Undangan",
+    rsvpAlreadyReceived: "Terima kasih. Kami telah menerima konfirmasi RSVP Anda.",
+    forAnyChangesContact: "Untuk perubahan apa pun, silakan hubungi William atau Aziel melalui WhatsApp.",
+    contactUs: "Hubungi Kami",
+    attendingSummary: "Hadir",
+    notAttendingSummary: "Tidak Hadir",
+    paxLabel: "orang",
 
     // Gallery
     ourMoments: "Momen Kami",

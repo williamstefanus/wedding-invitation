@@ -8,6 +8,7 @@ interface SeatingSidebarProps {
   selectedTable: any;
   setSelectedTableId: (id: string | null) => void;
   setNewCapacity: (cap: number) => void;
+  setEditTableName?: (name: string) => void;
   setIsCapacityModalOpen: (isOpen: boolean) => void;
   setIsSearchModalOpen: (isOpen: boolean) => void;
   handleRemoveGuest: (assignmentId: string) => void;
@@ -19,6 +20,7 @@ export function SeatingSidebar({
   selectedTable,
   setSelectedTableId,
   setNewCapacity,
+  setEditTableName,
   setIsCapacityModalOpen,
   setIsSearchModalOpen,
   handleRemoveGuest,
@@ -32,12 +34,15 @@ export function SeatingSidebar({
       {selectedTable && (
         <>
           {/* Sidebar Header */}
-          <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+          <div className="p-6 border-b border-slate-100 flex justify-between items-start bg-slate-50/50">
             <div>
+              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-amber-800 mb-1.5 inline-block">
+                Table #{selectedTable.sort_order || 1}
+              </span>
               <h2 className="text-2xl font-bold text-slate-800">{selectedTable.table_name}</h2>
               <p className="text-sm text-slate-500 font-medium flex items-center gap-2 mt-1">
                 Capacity: {selectedTable.capacity} 
-                <button onClick={() => { setNewCapacity(selectedTable.capacity); setIsCapacityModalOpen(true); }} className="text-amber-500 hover:text-amber-600"><Edit2 className="w-3 h-3" /></button>
+                <button onClick={() => { setNewCapacity(selectedTable.capacity); if (setEditTableName) setEditTableName(selectedTable.table_name); setIsCapacityModalOpen(true); }} className="text-amber-500 hover:text-amber-600"><Edit2 className="w-3.5 h-3.5" /></button>
               </p>
             </div>
             <button onClick={() => setSelectedTableId(null)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition">

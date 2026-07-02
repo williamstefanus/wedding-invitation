@@ -6,16 +6,20 @@ import { motion } from "framer-motion";
 import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 import { submitRSVP } from "@/lib/actions/rsvp";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { formatWhatsAppPhone } from "@/lib/utils";
 
 interface SangjitRSVPSectionProps {
   invitation?: any;
   deadline?: string;
+  contactPhone?: string;
 }
 
-export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
+export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, contactPhone }: SangjitRSVPSectionProps) {
   const { t } = useLanguage();
   const [isPending, startTransition] = useTransition();
-  const existingRsvp = invitation?.rsvp?.[0];
+  const rsvpData = invitation?.rsvp;
+  const existingRsvp = Array.isArray(rsvpData) ? rsvpData[0] : rsvpData;
+  const [hasSubmitted, setHasSubmitted] = useState(!!existingRsvp);
   const [attending, setAttending] = useState<boolean | null>(
     existingRsvp ? existingRsvp.attendance_status === "attending" : null
   );
@@ -23,6 +27,10 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
   const [wishes, setWishes] = useState(existingRsvp?.wish_message || "");
   const [errorMsg, setErrorMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const deadlineStr = settingsDeadline || invitation?.event_type?.rsvp_edit_deadline_at;
+  const deadlineTime = deadlineStr ? new Date(deadlineStr).getTime() : null;
+  const isPastDeadline = deadlineTime ? new Date().getTime() > deadlineTime : false;
 
   const maxPax = invitation?.max_pax || 4;
   const paxOptions = Array.from({ length: Math.min(maxPax, 4) }, (_, i) => i + 1);
@@ -47,12 +55,18 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
           code: invitation.invitation_code || ""
         });
         if (res.success) {
+          setHasSubmitted(true);
           setIsSuccess(true);
         } else {
-          setErrorMsg(res.error || "Failed to submit RSVP");
+          if (res.error && res.error.toLowerCase().includes("already submitted")) {
+            setHasSubmitted(true);
+          } else {
+            setErrorMsg(res.error || "Failed to submit RSVP");
+          }
         }
       });
     } else {
+      setHasSubmitted(true);
       setIsSuccess(true);
     }
   };
@@ -102,18 +116,55 @@ export function SangjitRSVPSection({ invitation }: SangjitRSVPSectionProps) {
           </motion.div>
         </div>
 
-        {isSuccess ? (
-          <div className="bg-white/95 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] rounded-xl p-8 text-center flex flex-col gap-3 my-4 outline outline-1 outline-[#E5E5E5]">
-            <h3 className="font-serif text-2xl font-bold text-[#761B33]">{t('thankYou')}!</h3>
-            <p className="font-sans text-sm text-[#761B33]/85">
-              {t('rsvpSuccessSangjit')}
+        {hasSubmitted ? (
+          <div className="bg-white/95 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] rounded-xl p-6 text-center flex flex-col items-center gap-4 my-4 outline outline-1 outline-[#E5E5E5]">
+            <p className="text-[#761B33] font-serif text-base">
+              {t('rsvpAlreadyReceived')}
             </p>
-            <button
-              onClick={() => setIsSuccess(false)}
-              className="mt-3 text-xs font-sans text-[#761B33] underline font-medium cursor-pointer"
-            >
-              {t('editRSVP')}
-            </button>
+
+            <p className="font-bold text-[#761B33] text-base my-1">
+              {attending ? (
+                <span>[ {t('attendingSummary')} | {pax} {t('paxLabel')} ]</span>
+              ) : (
+                <span>[ {t('notAttendingSummary')} ]</span>
+              )}
+            </p>
+
+            <p className="text-slate-600 text-xs leading-relaxed max-w-xs">
+              {t('forAnyChangesContact')}
+            </p>
+
+            <div className="flex flex-col gap-2 w-full pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const contactName = invitation?.guest?.owner === "Aziel" ? "Aziel" : "William";
+                  const formattedPhone = formatWhatsAppPhone(contactPhone);
+                  const message = `Hi ${contactName}, I would like to update my Sangjit RSVP submission.`;
+                  const url = formattedPhone 
+                    ? `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`
+                    : `https://wa.me/?text=${encodeURIComponent(message)}`;
+                  window.open(url, "_blank");
+                }}
+                className="w-full h-10 bg-[#761B33] text-white rounded-[10px] font-sans font-medium text-sm hover:bg-[#5e1528] transition shadow-sm flex items-center justify-center cursor-pointer"
+              >
+                {t('contactUs')}
+              </button>
+
+              {attending && (
+                <button
+                  type="button"
+                  onClick={handleAddToCalendar}
+                  className="w-full h-10 bg-white text-[#761B33] outline outline-1 outline-[#E5E5E5] rounded-[10px] font-sans font-medium text-sm hover:bg-slate-50 transition flex items-center justify-center cursor-pointer"
+                >
+                  {t('addToCalendar')}
+                </button>
+              )}
+            </div>
+          </div>
+        ) : isPastDeadline ? (
+          <div className="bg-amber-50 text-amber-900 p-4 rounded-xl border border-amber-200 text-center text-sm leading-relaxed my-4">
+            {t('rsvpClosed')}
           </div>
         ) : (
           /* Questions Stack */

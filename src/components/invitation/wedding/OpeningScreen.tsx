@@ -138,7 +138,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
             className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px] px-4"
           >
             <div className="bg-white rounded-xl shadow-2xl p-4 flex gap-4 pointer-events-auto">
-              <button onClick={() => setLanguage('en')} className="flex flex-col items-center gap-3 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition w-[110px]">
+              <button onClick={() => setLanguage('en')} className="flex flex-col items-center gap-3 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition min-w-[130px]">
                 <div className="w-16 h-16 rounded-full overflow-hidden shadow-sm flex-shrink-0 relative">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" className="w-full h-full object-cover">
                      <clipPath id="s">
@@ -156,16 +156,16 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
                       </g>
                   </svg>
                 </div>
-                <span className="text-gray-800 font-serif text-[15px]">English</span>
+                <span className="text-gray-800 font-serif text-[24px] font-medium tracking-tight leading-none">English</span>
               </button>
-              <button onClick={() => setLanguage('id')} className="flex flex-col items-center gap-3 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition w-[110px]">
+              <button onClick={() => setLanguage('id')} className="flex flex-col items-center gap-3 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition min-w-[130px]">
                 <div className="w-16 h-16 rounded-full overflow-hidden shadow-sm flex-shrink-0 border border-gray-100 relative">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" className="w-full h-full object-cover">
                     <rect width="60" height="30" fill="#ce1126"/>
                     <rect y="30" width="60" height="30" fill="#fff"/>
                   </svg>
                 </div>
-                <span className="text-gray-800 font-serif text-[15px]">Indonesian</span>
+                <span className="text-gray-800 font-serif text-[24px] font-medium tracking-tight leading-none">Indonesian</span>
               </button>
             </div>
           </motion.div>

@@ -183,24 +183,35 @@ export function SeatingVisualizer({
         ) : (
           /* ─── Grid View ─── */
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {initialTables.map((table: any) => {
+            {initialTables.map((table: any, idx: number) => {
               const currentOccupancy = table.assignments.reduce((sum: number, a: any) => sum + a.assigned_pax, 0);
               const isOverCapacity = currentOccupancy > table.capacity;
               const isFull = currentOccupancy === table.capacity;
               const isSelected = selectedTableId === table.id;
+              const tableNumber = table.sort_order || idx + 1;
+              const isDefaultName = new RegExp(`^Table\\s*${tableNumber}$`, "i").test(table.table_name || "");
 
               return (
                 <div
                   key={table.id}
                   onClick={() => setSelectedTableId(table.id)}
                   className={`
-                    relative group cursor-pointer overflow-hidden rounded-2xl p-4 transition-all duration-200 border-2
+                    relative group cursor-pointer overflow-hidden rounded-2xl p-4 transition-all duration-200 border-2 flex flex-col justify-between
                     ${isSelected ? "border-amber-500 shadow-md ring-4 ring-amber-500/10" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-slate-200"}
                   `}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <span className={`font-bold text-sm ${isSelected ? "text-amber-600" : "text-slate-700"}`}>{table.table_name}</span>
-                    {isOverCapacity && <AlertTriangle className="w-4 h-4 text-red-500" />}
+                  <div className="flex justify-between items-start mb-3 gap-2">
+                    <div>
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-amber-800 mb-1 inline-block">
+                        Table #{tableNumber}
+                      </span>
+                      {!isDefaultName && table.table_name && (
+                        <span className={`font-bold text-sm block leading-snug mt-0.5 ${isSelected ? "text-amber-600" : "text-slate-800"}`}>
+                          {table.table_name}
+                        </span>
+                      )}
+                    </div>
+                    {isOverCapacity && <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />}
                   </div>
 
                   <div className={`w-16 h-16 mx-auto rounded-full border-4 flex items-center justify-center mb-4 transition-colors

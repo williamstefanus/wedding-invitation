@@ -39,7 +39,7 @@ export function SangjitSettingsForm({
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-              RSVP Edit Deadline
+              RSVP Submission Deadline
             </label>
             <input
               type="datetime-local"
@@ -47,7 +47,7 @@ export function SangjitSettingsForm({
               onChange={e => setDeadlines({ ...deadlines, sangjit: e.target.value })}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
             />
-            <p className="text-xs text-slate-400 mt-2">After this date, guests will not be able to modify their RSVP status.</p>
+            <p className="text-xs text-slate-400 mt-2">After this date, new RSVP submissions will be closed. Guests cannot edit their RSVP once submitted.</p>
           </div>
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">

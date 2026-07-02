@@ -50,13 +50,18 @@ export function AddTableModal({ isOpen, onClose, onAdd }: AddTableModalProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-xs text-amber-800 flex items-center justify-between">
+            <span className="font-bold">Table Number</span>
+            <span className="font-semibold bg-amber-200/60 px-2 py-0.5 rounded text-[11px]">Auto-Generated (Sequential)</span>
+          </div>
+
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
               Table Name <span className="text-slate-400 font-normal">(Optional)</span>
             </label>
             <input 
               type="text" 
-              placeholder="e.g. VIP Family (leave blank for auto number)" 
+              placeholder="e.g. VIP Family, Bride Friends (Optional)" 
               value={tableName}
               onChange={e => setTableName(e.target.value)}
               disabled={loading}

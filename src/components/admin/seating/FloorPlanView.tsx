@@ -73,11 +73,11 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
   const [activeSlotModal, setActiveSlotModal] = useState<number | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Build slot_id (sort_order 1..26) -> table lookup
+  // Build slot_id (position_x 1..26) -> table lookup
   const bySlot = new Map<number, any>();
   tables.forEach(t => {
-    if (t.sort_order >= 1 && t.sort_order <= 26) {
-      bySlot.set(t.sort_order, t);
+    if (t.position_x != null && t.position_x >= 1 && t.position_x <= 26) {
+      bySlot.set(t.position_x, t);
     }
   });
 
@@ -294,7 +294,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
             return (
               <g pointerEvents="none" filter="url(#fp-shadow)">
                 <rect x={tx} y={ty} width={160} height={tipH} rx={6} fill="white" stroke="#cbd5e1" strokeWidth={1.5} />
-                <text x={tx + 12} y={ty + 18} fontSize="10" fontWeight="800" fill="#0f172a">{table.table_name} (Slot #{hoveredSlot.id})</text>
+                <text x={tx + 12} y={ty + 18} fontSize="10" fontWeight="800" fill="#0f172a">Table #{table.sort_order || 1}: {table.table_name} (Slot #{hoveredSlot.id})</text>
                 <text x={tx + 12} y={ty + 32} fontSize={8} fontWeight="600" fill="#64748b">{occ} / {table.capacity} pax assigned</text>
                 <line x1={tx + 12} y1={ty + 38} x2={tx + 148} y2={ty + 38} stroke="#f1f5f9" strokeWidth={1} />
                 {shown.map((g: any, i: number) => (
@@ -332,7 +332,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                 <div className="mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200 flex justify-between items-center">
                   <div>
                     <span className="text-xs font-bold text-amber-700 uppercase">Currently Assigned</span>
-                    <p className="text-base font-extrabold text-amber-900">{modalTable.table_name}</p>
+                    <p className="text-base font-extrabold text-amber-900">Table #{modalTable.sort_order || 1}: {modalTable.table_name}</p>
                     <p className="text-xs text-amber-600 mt-0.5">{modalTable.assignments.reduce((s: number, a: any) => s + a.assigned_pax, 0)} / {modalTable.capacity} pax assigned</p>
                   </div>
                   <button
@@ -353,10 +353,11 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
               <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Available Tables</h4>
               
               <div className="space-y-2">
-                {tables.map((t: any) => {
-                  const isCurrentSlot = t.sort_order === activeSlotModal;
-                  const isOtherSlot   = t.sort_order >= 1 && t.sort_order <= 26 && !isCurrentSlot;
+                {tables.map((t: any, idx: number) => {
+                  const isCurrentSlot = t.position_x === activeSlotModal;
+                  const isOtherSlot   = t.position_x != null && t.position_x >= 1 && t.position_x <= 26 && !isCurrentSlot;
                   const occ = t.assignments.reduce((s: number, a: any) => s + a.assigned_pax, 0);
+                  const tableNumber = t.sort_order || idx + 1;
 
                   return (
                     <button
@@ -371,9 +372,9 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-800 text-sm">{t.table_name}</span>
+                          <span className="font-bold text-slate-800 text-sm">Table #{tableNumber}: {t.table_name}</span>
                           {isCurrentSlot && <span className="px-2 py-0.5 bg-amber-200 text-amber-800 rounded text-[10px] font-bold">Here</span>}
-                          {isOtherSlot && <span className="px-2 py-0.5 bg-slate-200 text-slate-600 rounded text-[10px] font-medium">At Slot #{t.sort_order}</span>}
+                          {isOtherSlot && <span className="px-2 py-0.5 bg-slate-200 text-slate-600 rounded text-[10px] font-medium">At Slot #{t.position_x}</span>}
                         </div>
                         <span className="text-xs text-slate-500">{occ} / {t.capacity} pax assigned</span>
                       </div>

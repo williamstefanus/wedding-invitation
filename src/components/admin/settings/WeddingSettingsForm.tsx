@@ -73,14 +73,14 @@ export function WeddingSettingsForm({
             />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Clock className="w-3 h-3"/> RSVP Edit Deadline</label>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Clock className="w-3 h-3"/> RSVP Submission Deadline</label>
             <input 
               type="datetime-local" 
               value={deadlines.wedding ? new Date(deadlines.wedding).toISOString().slice(0, 16) : ""}
               onChange={e => setDeadlines({...deadlines, wedding: e.target.value})}
               className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
-            <p className="text-xs text-slate-400 mt-2">After this date, guests will not be able to modify their RSVP status.</p>
+            <p className="text-xs text-slate-400 mt-2">After this date, new RSVP submissions will be closed. Guests cannot edit their RSVP once submitted.</p>
           </div>
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">WO Access PIN Code</label>
@@ -92,6 +92,26 @@ export function WeddingSettingsForm({
               className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
             <p className="text-xs text-slate-400 mt-2">PIN code used by ushers and receptionists to unlock the /usher check-in portal.</p>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">William WhatsApp Phone</label>
+            <input 
+              type="text" 
+              placeholder="e.g. 628123456789"
+              value={config.phone_william || ""} 
+              onChange={e => setConfig({...config, phone_william: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Aziel WhatsApp Phone</label>
+            <input 
+              type="text" 
+              placeholder="e.g. 628123456789"
+              value={config.phone_aziel || ""} 
+              onChange={e => setConfig({...config, phone_aziel: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition text-sm"
+            />
           </div>
         </div>
       </div>
