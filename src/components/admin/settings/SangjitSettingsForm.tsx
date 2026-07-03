@@ -64,6 +64,43 @@ export function SangjitSettingsForm({
         </div>
       </div>
 
+      {/* Sangjit Bible Verse */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          📖 Sangjit Bible Verse
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
+            <textarea 
+              value={config.sangjit_bible_verse_text_en || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_text_en: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition min-h-[100px]"
+              placeholder="And over all these virtues put on love..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
+            <textarea 
+              value={config.sangjit_bible_verse_text_id || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_text_id: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition min-h-[100px]"
+              placeholder="Dan di atas semuanya itu: kenakanlah kasih..."
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference</label>
+            <input 
+              type="text" 
+              value={config.sangjit_bible_verse_reference || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_reference: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
+              placeholder="e.g. Colossians 3:14"
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Event Details */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
