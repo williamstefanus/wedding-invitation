@@ -44,14 +44,24 @@ export function WeddingSettingsForm({
           <Settings className="w-5 h-5 text-amber-600" /> General Configuration
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="md:col-span-2">
+          <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Countdown Date/Time</label>
             <input 
               type="datetime-local" 
               value={config.countdown_date ? new Date(config.countdown_date).toISOString().slice(0, 16) : ""}
               onChange={e => setConfig({...config, countdown_date: e.target.value})}
-              className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Clock className="w-3 h-3"/> RSVP Submission Deadline</label>
+            <input 
+              type="datetime-local" 
+              value={deadlines.wedding ? new Date(deadlines.wedding).toISOString().slice(0, 16) : ""}
+              onChange={e => setDeadlines({...deadlines, wedding: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+            />
+            <p className="text-[10px] text-slate-400 mt-1">After this date, new RSVP submissions will be closed.</p>
           </div>
           <div className="md:col-span-2">
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Music className="w-3 h-3"/> Background Music URL</label>
@@ -62,16 +72,6 @@ export function WeddingSettingsForm({
               onChange={e => setConfig({...config, music_url: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Clock className="w-3 h-3"/> RSVP Submission Deadline</label>
-            <input 
-              type="datetime-local" 
-              value={deadlines.wedding ? new Date(deadlines.wedding).toISOString().slice(0, 16) : ""}
-              onChange={e => setDeadlines({...deadlines, wedding: e.target.value})}
-              className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
-            />
-            <p className="text-xs text-slate-400 mt-2">After this date, new RSVP submissions will be closed. Guests cannot edit their RSVP once submitted.</p>
           </div>
         </div>
       </div>
