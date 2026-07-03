@@ -7,11 +7,6 @@ export function CoupleSection({ config = {} }: { config?: any }) {
   const { t, language } = useLanguage();
 
   const generateParentsText = (role: 'groom' | 'bride') => {
-    // Fallback if they haven't re-saved yet
-    if (config[`${role}_parents`] || config[`${role}_order_title`]) {
-      return config[`${role}_order_title`] ? `${config[`${role}_order_title`]}\n${config[`${role}_parents`]}` : t(role === 'groom' ? 'firstSonOf' : 'secondDaughterOf');
-    }
-
     const order = config[`${role}_birth_order`] || (role === 'groom' ? "1" : "2");
     const gender = config[`${role}_gender`] || (role === 'groom' ? "son" : "daughter");
     const father = config[`${role}_father_name`] || (role === 'groom' ? "Hadi Stefanus" : "Yopie Kusnandar");
@@ -25,9 +20,9 @@ export function CoupleSection({ config = {} }: { config?: any }) {
     const andStr = t('and');
 
     if (language === 'id') {
-      return `${genderStr} ${orderStr.toLowerCase()} ${ofStr}\n${mrStr} ${father} ${andStr} ${mrsStr} ${mother}`;
+      return `${genderStr} ${orderStr.toLowerCase()} ${ofStr}\n${mrStr} ${father} ${andStr}\n${mrsStr} ${mother}`;
     } else {
-      return `${orderStr} ${genderStr} ${ofStr}\n${mrStr} ${father} ${andStr} ${mrsStr} ${mother}`;
+      return `${orderStr} ${genderStr} ${ofStr}\n${mrStr} ${father} ${andStr}\n${mrsStr} ${mother}`;
     }
   };
 
