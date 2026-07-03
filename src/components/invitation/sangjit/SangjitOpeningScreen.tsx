@@ -74,7 +74,7 @@ export function SangjitOpeningScreen({
             {t('theSangjitOf')}
           </span>
           <span className="text-[52px] font-serif font-bold tracking-tight leading-none">
-            {config.bride_first_name || "Aziel"} &amp; {config.groom_first_name || "William"}
+            {config.brideFirstName || "Jane"} &amp; {config.groomFirstName || "John"}
           </span>
         </motion.div>
 

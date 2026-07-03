@@ -47,8 +47,8 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
   const [formError, setFormError] = useState("");
 
   const getWaTemplate = (eventSlug: string) => {
-    if (eventSlug === "wedding" && config?.wa_template_wedding) return config.wa_template_wedding;
-    if (eventSlug === "sangjit" && config?.wa_template_sangjit) return config.wa_template_sangjit;
+    if (eventSlug === "wedding" && config?.waTemplateWedding) return config.waTemplateWedding;
+    if (eventSlug === "sangjit" && config?.waTemplateSangjit) return config.waTemplateSangjit;
     return "Halo {nama}! 🎉 Kami mengundang kamu ke acara kami.\n\nLink undangan: {link}";
   };
 

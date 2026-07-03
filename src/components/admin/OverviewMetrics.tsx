@@ -19,12 +19,12 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
     return rsvp?.confirmed_pax || 0;
   };
 
-  const groomName = config.groom_first_name || "William";
-  const brideName = config.bride_first_name || "Aziel";
+  const groomName = config.groomFirstName || "John";
+  const brideName = config.brideFirstName || "Jane";
 
   const ownerStats = [
-    { key: "William", displayName: groomName },
-    { key: "Aziel", displayName: brideName }
+    { key: "groom", displayName: groomName },
+    { key: "bride", displayName: brideName }
   ].map(({ key, displayName }) => {
     const ownerInvs = invitations.filter(inv => inv.guest?.owner === key);
     const invitedPax = ownerInvs.reduce((s, inv) => s + (inv.max_pax || 0), 0);
@@ -53,7 +53,7 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 animate-fade-up">
       {ownerStats.map(stat => {
-        const isWilliam = stat.owner === "William";
+        const isWilliam = stat.owner === "groom";
         const headerBg = isWilliam ? "bg-blue-50 border-blue-100" : "bg-pink-50 border-pink-100";
         const titleColor = isWilliam ? "text-blue-700" : "text-pink-700";
         const barColor = isWilliam ? "bg-blue-500" : "bg-pink-500";

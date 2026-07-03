@@ -8,8 +8,8 @@ interface GuestMetricsProps {
 }
 
 export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProps) {
-  const groomName = config.groom_first_name || "William";
-  const brideName = config.bride_first_name || "Aziel";
+  const groomName = config.groomFirstName || "John";
+  const brideName = config.brideFirstName || "Jane";
   const totalInv = invitations.length;
   const totalPax = invitations.reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
@@ -26,11 +26,11 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const williamPax = invitations
-    .filter(inv => inv.guest?.owner === "William")
+    .filter(inv => inv.guest?.owner === "groom")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const azielPax = invitations
-    .filter(inv => inv.guest?.owner === "Aziel")
+    .filter(inv => inv.guest?.owner === "bride")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const sentInv = invitations.filter(inv => !!inv.is_sent).length;

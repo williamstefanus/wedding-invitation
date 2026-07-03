@@ -25,17 +25,17 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
   const config = settings?.config || {};
   const sessions = settings?.sessions || {};
   const deadlines = settings?.deadlines || {};
-  const musicUrl = config.sangjit_music_url || config.music_url || "/audio/bgm.mp3";
+  const musicUrl = config.sangjitMusicUrl || config.musicUrl || "/audio/bgm.mp3";
 
   const owner = invitation?.guest?.owner;
-  const isBride = owner === "Aziel";
-  const giftBank = isBride ? config.gift_bank_bride : config.gift_bank_groom;
-  const giftAccount = isBride ? config.gift_account_bride : config.gift_account_groom;
-  const giftName = isBride ? config.gift_name_bride : config.gift_name_groom;
-  const contactPhone = isBride ? config.phone_bride : config.phone_groom;
+  const isBride = owner === "bride";
+  const giftBank = isBride ? config.giftBankBride : config.giftBankGroom;
+  const giftAccount = isBride ? config.giftAccountBride : config.giftAccountGroom;
+  const giftName = isBride ? config.giftNameBride : config.giftNameGroom;
+  const contactPhone = isBride ? config.phoneBride : config.phoneGroom;
 
   const sangjitSession = sessions.sangjit || invitation?.event_type?.sessions?.find((s: any) => s.title?.toLowerCase().includes('sangjit')) || invitation?.event_type?.sessions?.[0];
-  const targetDateStr = config.sangjit_countdown_date || sangjitSession?.date || config.date || invitation?.date || "2026-10-17T00:00:00";
+  const targetDateStr = config.sangjitCountdownDate || sangjitSession?.date || config.date || invitation?.date || "2026-10-17T00:00:00";
 
   const handleOpen = () => {
     setIsOpen(true);

@@ -19,8 +19,8 @@ export function GuestFilters({
   updateUrl,
   config = {}
 }: GuestFiltersProps) {
-  const groomName = config.groom_first_name || "William";
-  const brideName = config.bride_first_name || "Aziel";
+  const groomName = config.groomFirstName || "John";
+  const brideName = config.brideFirstName || "Jane";
 
   return (
     <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6 flex flex-col md:flex-row gap-4 items-center">
@@ -41,8 +41,8 @@ export function GuestFilters({
           className="flex-1 md:w-40 px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
         >
           <option value="All">All Owners</option>
-          <option value="William">{groomName}</option>
-          <option value="Aziel">{brideName}</option>
+          <option value="groom">{groomName}</option>
+          <option value="bride">{brideName}</option>
         </select>
         <select 
           value={currentCategory} 

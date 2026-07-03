@@ -36,8 +36,8 @@ export function GuestFormModal({
   handleSave,
   config = {}
 }: GuestFormModalProps) {
-  const groomName = config.groom_first_name || "William";
-  const brideName = config.bride_first_name || "Aziel";
+  const groomName = config.groomFirstName || "John";
+  const brideName = config.brideFirstName || "Jane";
 
   if (!isModalOpen) return null;
 
@@ -80,8 +80,8 @@ export function GuestFormModal({
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Owner</label>
                 <select value={formData.owner} onChange={e => setFormData({...formData, owner: e.target.value as GuestOwner})} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
-                  <option value="William">{groomName}</option>
-                  <option value="Aziel">{brideName}</option>
+                  <option value="groom">{groomName}</option>
+                  <option value="bride">{brideName}</option>
                 </select>
               </div>
             </div>

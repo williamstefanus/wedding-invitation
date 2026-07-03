@@ -10,7 +10,7 @@ interface ThankYouSectionProps {
 
 export function ThankYouSection({ names }: ThankYouSectionProps) {
   const { t } = useLanguage();
-  const displayNames = names || "William & Aziel";
+  const displayNames = names || "John & Jane";
 
   return (
     <section 

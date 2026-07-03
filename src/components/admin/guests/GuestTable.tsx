@@ -51,8 +51,8 @@ export function GuestTable({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
-  const groomName = config.groom_first_name || "William";
-  const brideName = config.bride_first_name || "Aziel";
+  const groomName = config.groomFirstName || "John";
+  const brideName = config.brideFirstName || "Jane";
 
   useEffect(() => {
     setSelectedIds([]);
@@ -186,8 +186,8 @@ export function GuestTable({
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <span className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider font-bold ${guest.owner === 'William' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'}`}>
-                          {guest.owner === 'William' ? groomName : brideName}
+                        <span className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider font-bold ${guest.owner === "groom" ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'}`}>
+                          {guest.owner === "groom" ? groomName : brideName}
                         </span>
                         <span className="text-slate-600 text-xs">{guest.category}</span>
                       </div>

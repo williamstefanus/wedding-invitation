@@ -117,8 +117,8 @@ export function GuestClient({
 
   // Read WA template from config prop (database) or fall back to a default
   const getWaTemplate = (eventSlug: string) => {
-    if (eventSlug === "wedding" && config?.wa_template_wedding) return config.wa_template_wedding;
-    if (eventSlug === "sangjit" && config?.wa_template_sangjit) return config.wa_template_sangjit;
+    if (eventSlug === "wedding" && config?.waTemplateWedding) return config.waTemplateWedding;
+    if (eventSlug === "sangjit" && config?.waTemplateSangjit) return config.waTemplateSangjit;
     return "Halo {nama}! 🎉 Kami mengundang kamu ke acara kami.\n\nLink undangan: {link}";
   };
 
@@ -161,7 +161,7 @@ export function GuestClient({
 
   const openAddModal = () => {
     setSelectedGuest(null);
-    setFormData({ name: "", phone: "", owner: "William", category: "Friends", notes: "" });
+    setFormData({ name: "", phone: "", owner: "groom", category: "Friends", notes: "" });
     setFormError("");
     
     const initInvs: any = {};
@@ -183,7 +183,7 @@ export function GuestClient({
     setFormData({
       name: guestData.name,
       phone: guestData.phone || "",
-      owner: guestData.owner || "William",
+      owner: guestData.owner || "John",
       category: guestData.category || "Friends",
       notes: guestData.notes || ""
     });

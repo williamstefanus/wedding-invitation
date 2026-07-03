@@ -7,10 +7,10 @@ export function CoupleSection({ config = {} }: { config?: any }) {
   const { t, language } = useLanguage();
 
   const generateParentsText = (role: 'groom' | 'bride') => {
-    const order = config[`${role}_birth_order`] || (role === 'groom' ? "1" : "2");
-    const gender = config[`${role}_gender`] || (role === 'groom' ? "son" : "daughter");
-    const father = config[`${role}_father_name`] || (role === 'groom' ? "Hadi Stefanus" : "Yopie Kusnandar");
-    const mother = config[`${role}_mother_name`] || (role === 'groom' ? "Lanny Mariana" : "Ina Rostiana Rahardja");
+    const order = config[`${role}BirthOrder`] || (role === 'groom' ? "1" : "2");
+    const gender = config[`${role}Gender`] || (role === 'groom' ? "son" : "daughter");
+    const father = config[`${role}FatherName`] || (role === 'groom' ? "Hadi Doe" : "Yopie Doe");
+    const mother = config[`${role}MotherName`] || (role === 'groom' ? "Lanny Doe" : "Ina Doe");
 
     const orderStr = t(`order_${order}` as any) || order;
     const genderStr = t(gender as any);
@@ -110,8 +110,8 @@ export function CoupleSection({ config = {} }: { config?: any }) {
               {/* Text */}
               <div className="flex flex-col items-center justify-center w-[50%] gap-1">
                 <div className="text-center text-[#4B4B4B] text-[2.2rem] leading-[0.9]" style={{ fontFamily: "var(--font-justwrite)" }}>
-                  {config.groom_first_name || "William"}<br/>{config.groom_last_name || "Stefanus"},
-                  {config.groom_title && <div className="text-[1.8rem] mt-1">{config.groom_title}</div>}
+                  {config.groomFirstName || "John"}<br/>{config.groomLastName || "Stefanus"},
+                  {config.groomTitle && <div className="text-[1.8rem] mt-1">{config.groomTitle}</div>}
                 </div>
                 <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {generateParentsText('groom')}
@@ -139,8 +139,8 @@ export function CoupleSection({ config = {} }: { config?: any }) {
               {/* Text */}
               <div className="flex flex-col items-center justify-center w-[50%] gap-1">
                 <div className="text-center text-[#4B4B4B] text-[2.2rem] leading-[0.9]" style={{ fontFamily: "var(--font-justwrite)" }}>
-                  {config.bride_first_name || "Aziel"}<br/>{config.bride_last_name || "Yorieza"},
-                  {config.bride_title && <div className="text-[1.8rem] mt-1">{config.bride_title}</div>}
+                  {config.brideFirstName || "Jane"}<br/>{config.brideLastName || "Yorieza"},
+                  {config.brideTitle && <div className="text-[1.8rem] mt-1">{config.brideTitle}</div>}
                 </div>
                 <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
                   {generateParentsText('bride')}

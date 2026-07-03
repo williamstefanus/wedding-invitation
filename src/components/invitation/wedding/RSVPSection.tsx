@@ -93,8 +93,8 @@ export function RSVPSection({ invitation, deadline: settingsDeadline, contactPho
 
   const handleAddToCalendar = () => {
     try {
-      const groomName = config.groom_first_name || "William";
-      const brideName = config.bride_first_name || "Aziel";
+      const groomName = config.groomFirstName || "John";
+      const brideName = config.brideFirstName || "Jane";
       const title = encodeURIComponent(`${groomName} & ${brideName} Wedding`);
       const details = encodeURIComponent(`We are excited to celebrate our special day with you! Please check the digital invitation for full details.`);
       
@@ -133,8 +133,8 @@ export function RSVPSection({ invitation, deadline: settingsDeadline, contactPho
       
       window.open(url, "_blank");
     } catch (err) {
-      const groomName = config.groom_first_name || "William";
-      const brideName = config.bride_first_name || "Aziel";
+      const groomName = config.groomFirstName || "John";
+      const brideName = config.brideFirstName || "Jane";
       window.open(`https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(`${groomName} & ${brideName} Wedding`)}`, "_blank");
     }
   };

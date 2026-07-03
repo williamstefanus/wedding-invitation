@@ -93,7 +93,7 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
 
   const validateAndSetData = (rawData: any[]) => {
     const processed: ParsedRow[] = [];
-    const validOwners = ["William", "Aziel"];
+    const validOwners = ["groom", "bride"];
     const validCategories = ["Relatives", "Friends", "Church"];
 
     rawData.forEach((row, idx) => {

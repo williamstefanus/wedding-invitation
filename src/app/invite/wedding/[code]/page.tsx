@@ -25,8 +25,8 @@ export async function generateMetadata(
   // Fetch config for dynamic names
   const settingsRes = await getSettings();
   const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
-  const groomName = config?.groom_first_name || "William";
-  const brideName = config?.bride_first_name || "Aziel";
+  const groomName = config?.groomFirstName || "John";
+  const brideName = config?.brideFirstName || "Jane";
 
   // 3. Dynamic Text Generation
   const title = `Wedding Invitation - ${groomName} & ${brideName}`;

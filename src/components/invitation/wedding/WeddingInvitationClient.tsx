@@ -78,14 +78,14 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   }, [isOpen]);
 
   const config = settings?.config || {};
-  const musicUrl = config.music_url || "/audio/bgm.mp3";
+  const musicUrl = config.musicUrl || "/audio/bgm.mp3";
 
   const owner = invitation?.guest?.owner;
-  const isBride = owner === "Aziel";
-  const giftBank = isBride ? config.gift_bank_bride : config.gift_bank_groom;
-  const giftAccount = isBride ? config.gift_account_bride : config.gift_account_groom;
-  const giftName = isBride ? config.gift_name_bride : config.gift_name_groom;
-  const contactPhone = isBride ? config.phone_bride : config.phone_groom;
+  const isBride = owner === "bride";
+  const giftBank = isBride ? config.giftBankBride : config.giftBankGroom;
+  const giftAccount = isBride ? config.giftAccountBride : config.giftAccountGroom;
+  const giftName = isBride ? config.giftNameBride : config.giftNameGroom;
+  const contactPhone = isBride ? config.phoneBride : config.phoneGroom;
 
   return (
     <LanguageProvider>
@@ -124,7 +124,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
           >
             {/* Page 2: Transition & Couple Section */}
             <section className="w-full flex flex-col relative pt-[15vh]">
-              <CountdownSection targetDateStr={config.countdown_date || "2026-10-23T11:00:00"} />
+              <CountdownSection targetDateStr={config.countdownDate || "2026-10-23T11:00:00"} />
 
               {/* Transition Verse */}
               <TransitionVerse config={config} />
@@ -134,9 +134,9 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
 
             <ScheduleSection sessions={settings?.sessions ? [settings.sessions.holyMatrimony, settings.sessions.reception].filter(Boolean) : (invitation?.event_type?.sessions || [])} />
             <RSVPSection invitation={invitation} deadline={settings?.deadlines?.wedding} contactPhone={contactPhone} config={config} />
-            <GallerySection images={config.gallery_images} />
+            <GallerySection images={config.galleryImages} />
             <GiftSection bank={giftBank} account={giftAccount} name={giftName} />
-            <ThankYouSection names={`${config.groom_first_name || "William"} & ${config.bride_first_name || "Aziel"}`} />
+            <ThankYouSection names={`${config.groomFirstName || "John"} & ${config.brideFirstName || "Jane"}`} />
           </div>
         </main>
       </div>
@@ -152,8 +152,8 @@ function TransitionVerse({ config }: { config: any }) {
         className="text-center text-[#4B4B4B] text-[16px] leading-relaxed whitespace-pre-line"
         style={{ fontFamily: "var(--font-alegreya)" }}
       >
-        {language === 'id' ? (config.bible_verse_text_id || t('verseText')) : (config.bible_verse_text_en || t('verseText'))}
-        <span className="font-bold block mt-3">{language === 'id' ? (config.bible_verse_reference_id || t('verseReference')) : (config.bible_verse_reference_en || t('verseReference'))}</span>
+        {language === 'id' ? (config.bibleVerseTextId || t('verseText')) : (config.bibleVerseTextEn || t('verseText'))}
+        <span className="font-bold block mt-3">{language === 'id' ? (config.bibleVerseReferenceId || t('verseReference')) : (config.bibleVerseReferenceEn || t('verseReference'))}</span>
       </p>
     </section>
   );

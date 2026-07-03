@@ -28,9 +28,9 @@ export function RSVPSubmittedCard({
   const activeSessions = matchedSessions.length > 0 ? matchedSessions : sessions;
 
   const handleWhatsAppContact = () => {
-    const isBride = owner === "Aziel";
-    const groomName = config.groom_first_name || "William";
-    const brideName = config.bride_first_name || "Aziel";
+    const isBride = owner === "bride";
+    const groomName = config.groomFirstName || "John";
+    const brideName = config.brideFirstName || "Jane";
     const contactName = isBride ? brideName : groomName;
     const formattedPhone = formatWhatsAppPhone(contactPhone);
     const message = `Hi ${contactName}, I would like to update my RSVP submission.`;

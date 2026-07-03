@@ -58,8 +58,8 @@ export function AssignGuestModal({
             className="w-full sm:w-32 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-amber-500"
           >
             <option value="All">All Owners</option>
-            <option value="William">William</option>
-            <option value="Aziel">Aziel</option>
+            <option value="groom">William</option>
+            <option value="bride">Aziel</option>
           </select>
           <select 
             value={currentCategory} 

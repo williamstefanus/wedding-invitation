@@ -142,7 +142,7 @@ export const translations = {
     updateRSVP: "Perbarui RSVP",
     confirmRSVP: "Konfirmasi RSVP",
     addToCalendar: "Tambahkan ke Google Calendar",
-    rsvpClosed: "Batas waktu RSVP telah ditutup.\nSilakan hubungi William / Aziel untuk perubahan.",
+    rsvpClosed: "Batas waktu RSVP telah ditutup.\nSilakan hubungi John / Jane untuk perubahan.",
     submitting: "Mengirim...",
     rsvpSuccessUpdated: "RSVP Anda telah berhasil diperbarui.",
     rsvpSuccessAttending: "Terima kasih telah mengonfirmasi kehadiran Anda. Sampai jumpa di hari bahagia kami.",

@@ -19,7 +19,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
 
   const displayBank = bank || "Bank Central Asia (BCA)";
   const displayAccount = account || "1234567890";
-  const displayName = name || "William Stefanus";
+  const displayName = name || "John Doe";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(displayAccount);

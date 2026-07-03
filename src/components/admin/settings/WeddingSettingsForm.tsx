@@ -26,10 +26,10 @@ export function WeddingSettingsForm({
   removeImage
 }: WeddingSettingsFormProps) {
   const moveImage = (index: number, direction: 'left' | 'right') => {
-    if (!config.gallery_images) return;
+    if (!config.galleryImages) return;
     const newIdx = direction === 'left' ? index - 1 : index + 1;
-    if (newIdx < 0 || newIdx >= config.gallery_images.length) return;
-    const updated = [...config.gallery_images];
+    if (newIdx < 0 || newIdx >= config.galleryImages.length) return;
+    const updated = [...config.galleryImages];
     const temp = updated[index];
     updated[index] = updated[newIdx];
     updated[newIdx] = temp;
@@ -48,7 +48,7 @@ export function WeddingSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Countdown Date/Time</label>
             <input 
               type="datetime-local" 
-              value={config.countdown_date ? new Date(config.countdown_date).toISOString().slice(0, 16) : ""}
+              value={config.countdownDate ? new Date(config.countdownDate).toISOString().slice(0, 16) : ""}
               onChange={e => setConfig({...config, countdown_date: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
@@ -68,7 +68,7 @@ export function WeddingSettingsForm({
             <input 
               type="text" 
               placeholder="e.g. /audio/bgm.mp3 or https://example.com/song.mp3"
-              value={config.music_url || ""} 
+              value={config.musicUrl || ""} 
               onChange={e => setConfig({...config, music_url: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
@@ -162,7 +162,7 @@ export function WeddingSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
             <textarea 
-              value={config.bible_verse_text_en || ""} 
+              value={config.bibleVerseTextEn || ""} 
               onChange={e => setConfig({...config, bible_verse_text_en: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
               placeholder="Every good and perfect gift is from above..."
@@ -171,7 +171,7 @@ export function WeddingSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
             <textarea 
-              value={config.bible_verse_text_id || ""} 
+              value={config.bibleVerseTextId || ""} 
               onChange={e => setConfig({...config, bible_verse_text_id: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
               placeholder="Semua yang baik datang dari Allah..."
@@ -181,7 +181,7 @@ export function WeddingSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference (EN)</label>
             <input 
               type="text" 
-              value={config.bible_verse_reference_en || ""} 
+              value={config.bibleVerseReferenceEn || ""} 
               onChange={e => setConfig({...config, bible_verse_reference_en: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
               placeholder="e.g. James 1:17"
@@ -191,7 +191,7 @@ export function WeddingSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference (ID)</label>
             <input 
               type="text" 
-              value={config.bible_verse_reference_id || ""} 
+              value={config.bibleVerseReferenceId || ""} 
               onChange={e => setConfig({...config, bible_verse_reference_id: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
               placeholder="e.g. Yakobus 1:17"
@@ -223,13 +223,13 @@ export function WeddingSettingsForm({
             <h3 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <span>🌟 Top Featured Hero Image (Web Cover)</span>
             </h3>
-            {(!config.gallery_images || config.gallery_images.length === 0) ? (
+            {(!config.galleryImages || config.galleryImages.length === 0) ? (
               <p className="text-xs text-slate-400 italic">No images uploaded yet.</p>
             ) : (
               <div className="relative aspect-[16/9] max-w-md rounded-lg overflow-hidden border border-amber-300 group shadow-sm bg-white">
-                <img src={config.gallery_images[0]} alt="Hero preview" className="object-cover w-full h-full" />
+                <img src={config.galleryImages[0]} alt="Hero preview" className="object-cover w-full h-full" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                  <button type="button" onClick={() => moveImage(0, 'right')} disabled={config.gallery_images.length <= 1} className="p-2 bg-white/90 hover:bg-white text-slate-800 rounded-lg text-xs font-bold shadow disabled:opacity-30">
+                  <button type="button" onClick={() => moveImage(0, 'right')} disabled={config.galleryImages.length <= 1} className="p-2 bg-white/90 hover:bg-white text-slate-800 rounded-lg text-xs font-bold shadow disabled:opacity-30">
                     Move Next ▶
                   </button>
                   <button type="button" onClick={() => removeImage(0)} className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-bold shadow">
@@ -242,13 +242,13 @@ export function WeddingSettingsForm({
           </div>
 
           {/* Section 2: Bento Block 1 (Next 5 images) */}
-          {config.gallery_images && config.gallery_images.length > 1 && (
+          {config.galleryImages && config.galleryImages.length > 1 && (
             <div className="border border-slate-200 bg-slate-50/50 rounded-xl p-4">
               <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
                 🍱 Bento Grid Block 1 (Positions #2 to #6 on Web)
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                {config.gallery_images.slice(1, 6).map((url: string, subIdx: number) => {
+                {config.galleryImages.slice(1, 6).map((url: string, subIdx: number) => {
                   const actualIdx = subIdx + 1;
                   return (
                     <div key={actualIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-300 group bg-white shadow-sm">
@@ -256,7 +256,7 @@ export function WeddingSettingsForm({
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1">
                         <div className="flex gap-1">
                           <button type="button" onClick={() => moveImage(actualIdx, 'left')} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow">◀</button>
-                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.gallery_images.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
+                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
                         </div>
                         <button type="button" onClick={() => removeImage(actualIdx)} className="p-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs">
                           <Trash2 className="w-3.5 h-3.5" />
@@ -271,13 +271,13 @@ export function WeddingSettingsForm({
           )}
 
           {/* Section 3: Bento Block 2 / Remaining Grid */}
-          {config.gallery_images && config.gallery_images.length > 6 && (
+          {config.galleryImages && config.galleryImages.length > 6 && (
             <div className="border border-slate-200 bg-slate-50/50 rounded-xl p-4">
               <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
                 📱 Additional Gallery Photos (Positions #7+ on Web)
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                {config.gallery_images.slice(6).map((url: string, subIdx: number) => {
+                {config.galleryImages.slice(6).map((url: string, subIdx: number) => {
                   const actualIdx = subIdx + 6;
                   return (
                     <div key={actualIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-300 group bg-white shadow-sm">
@@ -285,7 +285,7 @@ export function WeddingSettingsForm({
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1">
                         <div className="flex gap-1">
                           <button type="button" onClick={() => moveImage(actualIdx, 'left')} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow">◀</button>
-                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.gallery_images.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
+                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
                         </div>
                         <button type="button" onClick={() => removeImage(actualIdx)} className="p-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs">
                           <Trash2 className="w-3.5 h-3.5" />
@@ -314,7 +314,7 @@ export function WeddingSettingsForm({
         </p>
         <textarea
           rows={5}
-          value={config.wa_template_wedding || ""}
+          value={config.waTemplateWedding || ""}
           onChange={e => setConfig({ ...config, wa_template_wedding: e.target.value })}
           className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm font-mono focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
           placeholder="Halo {nama}! ..."

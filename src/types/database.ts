@@ -426,7 +426,7 @@ export interface Database {
     Enums: {
       attendance_status: "attending" | "not_attending"
       guest_category: "Relatives" | "Friends" | "Church"
-      guest_owner: "William" | "Aziel"
+      guest_owner: "groom" | "bride"
     }
     CompositeTypes: {
       [_ in never]: never

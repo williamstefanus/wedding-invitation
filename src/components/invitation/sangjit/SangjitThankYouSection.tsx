@@ -12,8 +12,8 @@ interface SangjitThankYouSectionProps {
 
 export function SangjitThankYouSection({ invitation, config = {} }: SangjitThankYouSectionProps) {
   const { t } = useLanguage();
-  const groomName = config.groom_first_name || "William";
-  const brideName = config.bride_first_name || "Aziel";
+  const groomName = config.groomFirstName || "John";
+  const brideName = config.brideFirstName || "Jane";
   const year = new Date(invitation?.date || "2026-10-17").getFullYear() || "2026";
   const footerText = `${groomName} & ${brideName} - ${year}`;
 

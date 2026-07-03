@@ -56,8 +56,8 @@ export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails, con
             </div>
 
             <div className="flex items-center gap-2 text-xs font-bold">
-              <span className={`px-2 py-0.5 rounded-md ${guest.owner === "William" ? "bg-blue-100 text-blue-800" : "bg-pink-100 text-pink-800"}`}>
-                {guest.owner === "William" ? (config.groom_first_name || "William") : (config.bride_first_name || "Aziel")}
+              <span className={`px-2 py-0.5 rounded-md ${guest.owner === "groom" ? "bg-blue-100 text-blue-800" : "bg-pink-100 text-pink-800"}`}>
+                {guest.owner === "groom" ? (config.groomFirstName || "John") : (config.brideFirstName || "Jane")}
               </span>
               <span className="text-slate-400">•</span>
               <span className="text-slate-600 font-semibold">{guest.category}</span>

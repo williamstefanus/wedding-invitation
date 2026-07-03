@@ -17,7 +17,7 @@ export function InviteNotFound({ config = {} }: { config?: any }) {
         <p style={{ color: "var(--text-ivory-muted)" }} className="text-sm">
           We are sorry, this invitation link is invalid or no longer available.
           <br />
-          Please check the link again or contact {config.groom_first_name || "William"} / {config.bride_first_name || "Aziel"} for assistance.
+          Please check the link again or contact {config.groomFirstName || "John"} / {config.brideFirstName || "Jane"} for assistance.
         </p>
       </div>
     </main>

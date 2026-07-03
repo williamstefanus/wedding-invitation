@@ -52,7 +52,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
       >
         <Image 
           src={WEDDING_INVITATION_ASSETS.heroOpeningTitle}
-          alt={`${config.groom_first_name || "William"} & ${config.bride_first_name || "Aziel"}`}
+          alt={`${config.groomFirstName || "John"} & ${config.brideFirstName || "Jane"}`}
           width={280}
           height={158}
           priority

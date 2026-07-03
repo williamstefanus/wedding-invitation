@@ -112,7 +112,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   };
 
   const removeImage = (index: number) => {
-    const newImages = [...(config.gallery_images || [])];
+    const newImages = [...(config.galleryImages || [])];
     newImages.splice(index, 1);
     setConfig({ ...config, gallery_images: newImages });
   };

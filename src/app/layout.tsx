@@ -53,11 +53,11 @@ const egizio = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Wedding Invitation — William & Aziel",
-    template: "%s | William & Aziel",
+    default: "Wedding Invitation — John & Jane",
+    template: "%s | John & Jane",
   },
   description:
-    "A private digital wedding invitation and guest management platform for William & Aziel's celebration.",
+    "A private digital wedding invitation and guest management platform for John & Jane's celebration.",
   robots: { index: false, follow: false },
 };
 

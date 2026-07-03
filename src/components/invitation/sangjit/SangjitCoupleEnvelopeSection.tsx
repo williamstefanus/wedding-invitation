@@ -15,10 +15,10 @@ export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: Sangji
   const { t, language } = useLanguage();
   
   const generateParentsText = (role: 'groom' | 'bride') => {
-    const order = config[`${role}_birth_order`] || (role === 'groom' ? "1" : "2");
-    const gender = config[`${role}_gender`] || (role === 'groom' ? "son" : "daughter");
-    const father = config[`${role}_father_name`] || (role === 'groom' ? "Hadi Stefanus" : "Yopie Kusnandar");
-    const mother = config[`${role}_mother_name`] || (role === 'groom' ? "Lanny Mariana" : "Ina Rostiana Rahardja");
+    const order = config[`${role}BirthOrder`] || (role === 'groom' ? "1" : "2");
+    const gender = config[`${role}Gender`] || (role === 'groom' ? "son" : "daughter");
+    const father = config[`${role}FatherName`] || (role === 'groom' ? "Hadi Doe" : "Yopie Doe");
+    const mother = config[`${role}MotherName`] || (role === 'groom' ? "Lanny Doe" : "Ina Doe");
 
     const orderStr = t(`order_${order}` as any) || order;
     const genderStr = t(gender as any);
@@ -42,9 +42,9 @@ export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: Sangji
     return idx !== -1 ? `${s.slice(0, idx)}\n${s.slice(idx + 1)}` : s;
   };
 
-  const brideName = formatName(config.bride_first_name, config.bride_last_name, config.bride_title, "Aziel\nYorieza, B.A");
+  const brideName = formatName(config.brideFirstName, config.brideLastName, config.brideTitle, "Aziel\nYorieza, B.A");
   const brideParents = generateParentsText('bride');
-  const groomName = formatName(config.groom_first_name, config.groom_last_name, config.groom_title, "William\nStefanus, S.Kom");
+  const groomName = formatName(config.groomFirstName, config.groomLastName, config.groomTitle, "William\nStefanus, S.Kom");
   const groomParents = generateParentsText('groom');
 
   return (

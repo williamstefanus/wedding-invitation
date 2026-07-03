@@ -20,7 +20,7 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
 
   const displayBank = bank || invitation?.gift_bank_name || "Bank Central Asia (BCA)";
   const displayAccount = account || invitation?.gift_account_number || "1234567890";
-  const displayName = name || invitation?.gift_account_holder || "William Stefanus";
+  const displayName = name || invitation?.gift_account_holder || "John Doe";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(displayAccount);

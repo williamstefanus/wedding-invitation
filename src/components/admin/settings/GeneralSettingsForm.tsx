@@ -23,7 +23,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">First Name</label>
             <input 
               type="text" 
-              value={config.groom_first_name || ""} 
+              value={config.groomFirstName || ""} 
               onChange={e => setConfig({...config, groom_first_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
               placeholder="e.g. John"
@@ -33,7 +33,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Last Name</label>
             <input 
               type="text" 
-              value={config.groom_last_name || ""} 
+              value={config.groomLastName || ""} 
               onChange={e => setConfig({...config, groom_last_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
               placeholder="e.g. Doe"
@@ -43,7 +43,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Title / Gelar</label>
             <input 
               type="text" 
-              value={config.groom_title || ""} 
+              value={config.groomTitle || ""} 
               onChange={e => setConfig({...config, groom_title: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
               placeholder="e.g. S.Kom"
@@ -52,7 +52,7 @@ export function GeneralSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Birth Order</label>
             <select 
-              value={config.groom_birth_order || "1"} 
+              value={config.groomBirthOrder || "1"} 
               onChange={e => setConfig({...config, groom_birth_order: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
             >
@@ -67,7 +67,7 @@ export function GeneralSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gender</label>
             <select 
-              value={config.groom_gender || "son"} 
+              value={config.groomGender || "son"} 
               onChange={e => setConfig({...config, groom_gender: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
             >
@@ -79,7 +79,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Father's Name (Without Mr/Bapak)</label>
             <input 
               type="text" 
-              value={config.groom_father_name || ""} 
+              value={config.groomFatherName || ""} 
               onChange={e => setConfig({...config, groom_father_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
               placeholder="e.g. Robert Doe"
@@ -89,7 +89,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mother's Name (Without Mrs/Ibu)</label>
             <input 
               type="text" 
-              value={config.groom_mother_name || ""} 
+              value={config.groomMotherName || ""} 
               onChange={e => setConfig({...config, groom_mother_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
               placeholder="e.g. Alice Doe"
@@ -101,7 +101,7 @@ export function GeneralSettingsForm({
             </label>
             <input 
               type="text" 
-              value={config.phone_groom || ""} 
+              value={config.phoneGroom || ""} 
               onChange={e => setConfig({...config, phone_groom: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition text-sm"
               placeholder="e.g. +628123456789"
@@ -115,15 +115,15 @@ export function GeneralSettingsForm({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Bank Name</label>
-            <input type="text" value={config.gift_bank_groom || ""} onChange={e => setConfig({...config, gift_bank_groom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
+            <input type="text" value={config.giftBankGroom || ""} onChange={e => setConfig({...config, gift_bank_groom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Account Number</label>
-            <input type="text" value={config.gift_account_groom || ""} onChange={e => setConfig({...config, gift_account_groom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
+            <input type="text" value={config.giftAccountGroom || ""} onChange={e => setConfig({...config, gift_account_groom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Account Holder Name</label>
-            <input type="text" value={config.gift_name_groom || ""} onChange={e => setConfig({...config, gift_name_groom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. John Doe"/>
+            <input type="text" value={config.giftNameGroom || ""} onChange={e => setConfig({...config, gift_name_groom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. John Doe"/>
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">First Name</label>
             <input 
               type="text" 
-              value={config.bride_first_name || ""} 
+              value={config.brideFirstName || ""} 
               onChange={e => setConfig({...config, bride_first_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
               placeholder="e.g. Jane"
@@ -148,7 +148,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Last Name</label>
             <input 
               type="text" 
-              value={config.bride_last_name || ""} 
+              value={config.brideLastName || ""} 
               onChange={e => setConfig({...config, bride_last_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
               placeholder="e.g. Smith"
@@ -158,7 +158,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Title / Gelar</label>
             <input 
               type="text" 
-              value={config.bride_title || ""} 
+              value={config.brideTitle || ""} 
               onChange={e => setConfig({...config, bride_title: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
               placeholder="e.g. B.A"
@@ -167,7 +167,7 @@ export function GeneralSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Birth Order</label>
             <select 
-              value={config.bride_birth_order || "2"} 
+              value={config.brideBirthOrder || "2"} 
               onChange={e => setConfig({...config, bride_birth_order: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
             >
@@ -182,7 +182,7 @@ export function GeneralSettingsForm({
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gender</label>
             <select 
-              value={config.bride_gender || "daughter"} 
+              value={config.brideGender || "daughter"} 
               onChange={e => setConfig({...config, bride_gender: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
             >
@@ -194,7 +194,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Father's Name (Without Mr/Bapak)</label>
             <input 
               type="text" 
-              value={config.bride_father_name || ""} 
+              value={config.brideFatherName || ""} 
               onChange={e => setConfig({...config, bride_father_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
               placeholder="e.g. Michael Smith"
@@ -204,7 +204,7 @@ export function GeneralSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mother's Name (Without Mrs/Ibu)</label>
             <input 
               type="text" 
-              value={config.bride_mother_name || ""} 
+              value={config.brideMotherName || ""} 
               onChange={e => setConfig({...config, bride_mother_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
               placeholder="e.g. Sarah Smith"
@@ -216,7 +216,7 @@ export function GeneralSettingsForm({
             </label>
             <input 
               type="text" 
-              value={config.phone_bride || ""} 
+              value={config.phoneBride || ""} 
               onChange={e => setConfig({...config, phone_bride: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition text-sm"
               placeholder="e.g. +628123456789"
@@ -230,15 +230,15 @@ export function GeneralSettingsForm({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Bank Name</label>
-            <input type="text" value={config.gift_bank_bride || ""} onChange={e => setConfig({...config, gift_bank_bride: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition" placeholder="e.g. BCA"/>
+            <input type="text" value={config.giftBankBride || ""} onChange={e => setConfig({...config, gift_bank_bride: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition" placeholder="e.g. BCA"/>
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Account Number</label>
-            <input type="text" value={config.gift_account_bride || ""} onChange={e => setConfig({...config, gift_account_bride: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition" placeholder="e.g. 0987654321"/>
+            <input type="text" value={config.giftAccountBride || ""} onChange={e => setConfig({...config, gift_account_bride: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition" placeholder="e.g. 0987654321"/>
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Account Holder Name</label>
-            <input type="text" value={config.gift_name_bride || ""} onChange={e => setConfig({...config, gift_name_bride: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition" placeholder="e.g. Jane Smith"/>
+            <input type="text" value={config.giftNameBride || ""} onChange={e => setConfig({...config, gift_name_bride: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition" placeholder="e.g. Jane Smith"/>
           </div>
         </div>
       </div>
@@ -255,7 +255,7 @@ export function GeneralSettingsForm({
             </label>
             <input 
               type="text" 
-              value={config.wo_pin_code || "123456"} 
+              value={config.woPinCode || "123456"} 
               onChange={e => setConfig({...config, wo_pin_code: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-mono tracking-widest focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition"
               placeholder="e.g. 123456"

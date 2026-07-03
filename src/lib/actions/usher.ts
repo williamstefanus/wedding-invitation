@@ -13,7 +13,7 @@ export async function verifyWoPin(pin: string) {
       .maybeSingle();
 
     const config = settingsRow?.value ? (typeof settingsRow.value === "string" ? JSON.parse(settingsRow.value) : settingsRow.value) : {};
-    const validPin = config.wo_pin || "123456"; // default PIN if not set in admin
+    const validPin = config.woPin || "123456"; // default PIN if not set in admin
 
     if (pin.trim() === validPin) {
       return { success: true };

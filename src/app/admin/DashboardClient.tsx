@@ -53,7 +53,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
   }, 0);
 
   // Pax & RSVP Breakdown by Owner
-  const ownerStats = ["William", "Aziel"].map(owner => {
+  const ownerStats = ["groom", "bride"].map(owner => {
     const ownerInvs = filteredInvitations.filter(inv => inv.guest?.owner === owner);
     const invitedPax = ownerInvs.reduce((s, inv) => s + (inv.max_pax || 0), 0);
     const attendingPax = ownerInvs.reduce((s, inv) => {
@@ -150,7 +150,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
         </div>
       </div>
 
-      {/* William / Aziel Overview Breakdown */}
+      {/* John / Jane Overview Breakdown */}
       <OverviewMetrics 
         invitations={filteredInvitations} 
         config={config}
