@@ -44,22 +44,13 @@ export function WeddingSettingsForm({
           <Settings className="w-5 h-5 text-amber-600" /> General Configuration
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Couple Names</label>
-            <input 
-              type="text" 
-              value={config.couple_names || ""} 
-              onChange={e => setConfig({...config, couple_names: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
-            />
-          </div>
-          <div>
+          <div className="md:col-span-2">
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Countdown Date/Time</label>
             <input 
               type="datetime-local" 
               value={config.countdown_date ? new Date(config.countdown_date).toISOString().slice(0, 16) : ""}
               onChange={e => setConfig({...config, countdown_date: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+              className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
           </div>
           <div className="md:col-span-2">
@@ -81,37 +72,6 @@ export function WeddingSettingsForm({
               className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
             <p className="text-xs text-slate-400 mt-2">After this date, new RSVP submissions will be closed. Guests cannot edit their RSVP once submitted.</p>
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">WO Access PIN Code</label>
-            <input 
-              type="text" 
-              placeholder="e.g. 123456 (default)"
-              value={config.wo_pin || ""} 
-              onChange={e => setConfig({...config, wo_pin: e.target.value})}
-              className="w-full md:w-1/2 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
-            />
-            <p className="text-xs text-slate-400 mt-2">PIN code used by ushers and receptionists to unlock the /usher check-in portal.</p>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">William WhatsApp Phone</label>
-            <input 
-              type="text" 
-              placeholder="e.g. 628123456789"
-              value={config.phone_william || ""} 
-              onChange={e => setConfig({...config, phone_william: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Aziel WhatsApp Phone</label>
-            <input 
-              type="text" 
-              placeholder="e.g. 628123456789"
-              value={config.phone_aziel || ""} 
-              onChange={e => setConfig({...config, phone_aziel: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition text-sm"
-            />
           </div>
         </div>
       </div>
@@ -191,48 +151,6 @@ export function WeddingSettingsForm({
             </div>
           </div>
         )}
-      </div>
-
-      {/* William's Gift Info */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <Gift className="w-5 h-5 text-amber-600" /> William's Gift Information
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bank Name</label>
-            <input type="text" value={config.gift_bank_william || ""} onChange={e => setConfig({...config, gift_bank_william: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Account Number</label>
-            <input type="text" value={config.gift_account_william || ""} onChange={e => setConfig({...config, gift_account_william: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Recipient Name</label>
-            <input type="text" value={config.gift_name_william || ""} onChange={e => setConfig({...config, gift_name_william: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. William Stefanus"/>
-          </div>
-        </div>
-      </div>
-
-      {/* Aziel's Gift Info */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <Gift className="w-5 h-5 text-amber-600" /> Aziel's Gift Information
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bank Name</label>
-            <input type="text" value={config.gift_bank_aziel || ""} onChange={e => setConfig({...config, gift_bank_aziel: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. BCA"/>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Account Number</label>
-            <input type="text" value={config.gift_account_aziel || ""} onChange={e => setConfig({...config, gift_account_aziel: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. 1234567890"/>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Recipient Name</label>
-            <input type="text" value={config.gift_name_aziel || ""} onChange={e => setConfig({...config, gift_name_aziel: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm" placeholder="e.g. Aziel"/>
-          </div>
-        </div>
       </div>
 
       {/* Gallery */}

@@ -4,9 +4,12 @@ import { Mail, Users, UserCheck } from "lucide-react";
 
 interface GuestMetricsProps {
   invitations: any[];
+  config?: any;
 }
 
-export function GuestMetrics({ invitations = [] }: GuestMetricsProps) {
+export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProps) {
+  const groomName = config.groom_first_name || "William";
+  const brideName = config.bride_first_name || "Aziel";
   const totalInv = invitations.length;
   const totalPax = invitations.reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
@@ -63,24 +66,24 @@ export function GuestMetrics({ invitations = [] }: GuestMetricsProps) {
         </div>
       </div>
 
-      {/* William's Pax */}
+      {/* Groom's Pax */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-100/60 flex items-center gap-4 bg-gradient-to-br from-blue-50/30 to-white">
         <div className="p-3 bg-blue-100/70 text-blue-700 rounded-lg font-black text-sm">
-          W
+          {groomName.charAt(0)}
         </div>
         <div>
-          <p className="text-xs text-blue-600 font-bold uppercase tracking-wider">William&apos;s Pax</p>
+          <p className="text-xs text-blue-600 font-bold uppercase tracking-wider">{groomName}&apos;s Pax</p>
           <p className="text-2xl font-extrabold text-blue-900">{williamPax}</p>
         </div>
       </div>
 
-      {/* Aziel's Pax */}
+      {/* Bride's Pax */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-pink-100/60 flex items-center gap-4 bg-gradient-to-br from-pink-50/30 to-white">
         <div className="p-3 bg-pink-100/70 text-pink-700 rounded-lg font-black text-sm">
-          A
+          {brideName.charAt(0)}
         </div>
         <div>
-          <p className="text-xs text-pink-600 font-bold uppercase tracking-wider">Aziel&apos;s Pax</p>
+          <p className="text-xs text-pink-600 font-bold uppercase tracking-wider">{brideName}&apos;s Pax</p>
           <p className="text-2xl font-extrabold text-pink-900">{azielPax}</p>
         </div>
       </div>

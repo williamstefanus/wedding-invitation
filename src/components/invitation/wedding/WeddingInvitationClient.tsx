@@ -80,10 +80,11 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   const musicUrl = config.music_url || "/audio/bgm.mp3";
 
   const owner = invitation?.guest?.owner;
-  const giftBank = owner === "Aziel" ? config.gift_bank_aziel : config.gift_bank_william;
-  const giftAccount = owner === "Aziel" ? config.gift_account_aziel : config.gift_account_william;
-  const giftName = owner === "Aziel" ? config.gift_name_aziel : config.gift_name_william;
-  const contactPhone = owner === "Aziel" ? config.phone_aziel : config.phone_william;
+  const isBride = owner === "Aziel";
+  const giftBank = isBride ? config.gift_bank_bride : config.gift_bank_groom;
+  const giftAccount = isBride ? config.gift_account_bride : config.gift_account_groom;
+  const giftName = isBride ? config.gift_name_bride : config.gift_name_groom;
+  const contactPhone = isBride ? config.phone_bride : config.phone_groom;
 
   return (
     <LanguageProvider>
@@ -96,6 +97,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
             guestName={invitation?.guest?.name || null}
             isOpen={isOpen}
             onOpen={handleOpen}
+            config={config}
           />
 
           {/* Floating Music Toggle Button */}
@@ -126,14 +128,14 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
               {/* Transition Verse */}
               <TransitionVerse />
 
-              <CoupleSection />
+              <CoupleSection config={config} />
             </section>
 
             <ScheduleSection sessions={settings?.sessions ? [settings.sessions.holyMatrimony, settings.sessions.reception].filter(Boolean) : (invitation?.event_type?.sessions || [])} />
-            <RSVPSection invitation={invitation} deadline={settings?.deadlines?.wedding} contactPhone={contactPhone} />
+            <RSVPSection invitation={invitation} deadline={settings?.deadlines?.wedding} contactPhone={contactPhone} config={config} />
             <GallerySection images={config.gallery_images} />
             <GiftSection bank={giftBank} account={giftAccount} name={giftName} />
-            <ThankYouSection names={config.couple_names} />
+            <ThankYouSection names={`${config.groom_first_name || "William"} & ${config.bride_first_name || "Aziel"}`} />
           </div>
         </main>
       </div>

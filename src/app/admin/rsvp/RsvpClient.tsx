@@ -27,7 +27,8 @@ export function RsvpClient({
   currentOwner,
   currentCategory,
   currentStatus,
-  currentSort
+  currentSort,
+  config = {}
 }: any) {
   const router = useRouter();
   const pathname = usePathname();
@@ -185,7 +186,7 @@ export function RsvpClient({
       )}
 
       {allInvitations && allInvitations.length > 0 && (
-        <RsvpMetrics invitations={filteredOverviewInvitations} />
+        <RsvpMetrics invitations={filteredOverviewInvitations} config={config} />
       )}
 
       {/* Tabs */}
@@ -222,6 +223,7 @@ export function RsvpClient({
         currentStatus={currentStatus}
         currentSort={currentSort}
         updateUrl={updateUrl}
+        config={config}
       />
 
       <RsvpTable 

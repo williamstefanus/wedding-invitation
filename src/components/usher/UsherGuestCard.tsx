@@ -7,9 +7,10 @@ interface UsherGuestCardProps {
   invitation: any;
   onToggleCheckIn: (invId: string, actualPax: number, isCheckingIn: boolean) => Promise<void>;
   onOpenDetails: (inv: any) => void;
+  config?: any;
 }
 
-export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails }: UsherGuestCardProps) {
+export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails, config = {} }: UsherGuestCardProps) {
   const guest = invitation.guest || {};
   const rsvp = Array.isArray(invitation.rsvp) ? invitation.rsvp[0] : invitation.rsvp;
   const assignment = Array.isArray(invitation.seating_assignment) ? invitation.seating_assignment[0] : invitation.seating_assignment;
@@ -56,7 +57,7 @@ export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails }: U
 
             <div className="flex items-center gap-2 text-xs font-bold">
               <span className={`px-2 py-0.5 rounded-md ${guest.owner === "William" ? "bg-blue-100 text-blue-800" : "bg-pink-100 text-pink-800"}`}>
-                {guest.owner}
+                {guest.owner === "William" ? (config.groom_first_name || "William") : (config.bride_first_name || "Aziel")}
               </span>
               <span className="text-slate-400">•</span>
               <span className="text-slate-600 font-semibold">{guest.category}</span>

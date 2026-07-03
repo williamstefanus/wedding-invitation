@@ -10,12 +10,14 @@ interface SangjitOpeningScreenProps {
   guestName?: string | null;
   isOpen?: boolean;
   onOpen?: () => void;
+  config?: any;
 }
 
 export function SangjitOpeningScreen({
   guestName,
   isOpen = false,
   onOpen,
+  config = {}
 }: SangjitOpeningScreenProps) {
   const { language, setLanguage, t } = useLanguage();
 
@@ -72,7 +74,7 @@ export function SangjitOpeningScreen({
             {t('theSangjitOf')}
           </span>
           <span className="text-[52px] font-serif font-bold tracking-tight leading-none">
-            Aziel &amp; William
+            {config.bride_first_name || "Aziel"} &amp; {config.groom_first_name || "William"}
           </span>
         </motion.div>
 

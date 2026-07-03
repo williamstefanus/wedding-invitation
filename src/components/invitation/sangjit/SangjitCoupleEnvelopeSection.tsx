@@ -8,21 +8,23 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitCoupleEnvelopeSectionProps {
   invitation?: any;
+  config?: any;
 }
 
-export function SangjitCoupleEnvelopeSection({ invitation }: SangjitCoupleEnvelopeSectionProps) {
+export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: SangjitCoupleEnvelopeSectionProps) {
   const { t } = useLanguage();
-  const formatName = (raw?: string, fb?: string) => {
-    const s = raw || fb || "";
-    if (s.includes('\n')) return s;
+  const formatName = (first?: string, last?: string, title?: string, fb?: string) => {
+    if (!first && !last) return fb;
+    let s = `${first || ""} ${last || ""}`.trim();
+    if (title) s += `, ${title}`;
     const idx = s.indexOf(' ');
     return idx !== -1 ? `${s.slice(0, idx)}\n${s.slice(idx + 1)}` : s;
   };
 
-  const brideName = formatName(invitation?.bride?.name, "Aziel Yorieza, B.A");
-  const brideParents = t('secondDaughterOf');
-  const groomName = formatName(invitation?.groom?.name, "William Stefanus, S.Kom");
-  const groomParents = t('firstSonOf');
+  const brideName = formatName(config.bride_first_name, config.bride_last_name, config.bride_title, "Aziel\nYorieza, B.A");
+  const brideParents = config.bride_order_title ? `${config.bride_order_title}\n${config.bride_parents}` : t('secondDaughterOf');
+  const groomName = formatName(config.groom_first_name, config.groom_last_name, config.groom_title, "William\nStefanus, S.Kom");
+  const groomParents = config.groom_order_title ? `${config.groom_order_title}\n${config.groom_parents}` : t('firstSonOf');
 
   return (
     <section className="relative w-full bg-[#761B33] pt-8 pb-2 px-6 overflow-hidden flex flex-col items-center select-none z-20">

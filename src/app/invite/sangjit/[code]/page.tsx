@@ -20,9 +20,15 @@ export async function generateMetadata(
   // 2. Graceful Fallbacks
   const guestName = (invitation && !error && invitation.guest?.name) ? invitation.guest.name : "Our Special Guest";
 
+  // Fetch config for dynamic names
+  const settingsRes = await getSettings();
+  const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
+  const groomName = config?.groom_first_name || "William";
+  const brideName = config?.bride_first_name || "Aziel";
+
   // 3. Dynamic Text Generation
-  const title = "Sangjit Invitation - Aziel & William";
-  const description = `Dear ${guestName}, you are joyfully invited to the Sangjit ceremony of Aziel & William on October 17, 2026. Please open to see the details and RSVP.`;
+  const title = `Sangjit Invitation - ${brideName} & ${groomName}`;
+  const description = `Dear ${guestName}, you are joyfully invited to the Sangjit ceremony of ${brideName} & ${groomName} on October 17, 2026. Please open to see the details and RSVP.`;
   const url = `https://wedding-william-aziel.vercel.app/invite/sangjit/${code}`;
 
   // 4. Metadata Specification
@@ -33,7 +39,7 @@ export async function generateMetadata(
       title,
       description,
       url,
-      siteName: "Aziel & William Sangjit",
+      siteName: `${brideName} & ${groomName} Sangjit`,
       images: [
         {
           url: "/images/sangjit-thumbnail.png",
@@ -58,9 +64,10 @@ export default async function SangjitInvitePage({
   // Fetch invitation strictly bound to the 'sangjit' event type slug
   const { invitation, error } = await getInvitationDetails(code, "sangjit");
   const settingsRes = await getSettings();
+  const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
 
   if (error || !invitation) {
-    return <InviteNotFound />;
+    return <InviteNotFound config={config} />;
   }
 
   return (

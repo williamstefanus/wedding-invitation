@@ -293,7 +293,7 @@ export function GuestClient({
       </div>
 
       {allInvitations && allInvitations.length > 0 && (
-        <GuestMetrics invitations={filteredOverviewInvitations} />
+        <GuestMetrics invitations={filteredOverviewInvitations} config={config} />
       )}
 
       {/* Tabs */}
@@ -321,6 +321,7 @@ export function GuestClient({
         currentCategory={currentCategory}
         currentSort={currentSort}
         updateUrl={updateUrl}
+        config={config}
       />
 
       <GuestTable 
@@ -342,6 +343,7 @@ export function GuestClient({
         handleCopyLink={handleCopyLink}
         handleToggleSent={handleToggleSent}
         handlePageChange={handlePageChange}
+        config={config}
       />
 
       <GuestFormModal 
@@ -355,6 +357,7 @@ export function GuestClient({
         setInvitationsForm={setInvitationsForm}
         formError={formError}
         handleSave={handleSave}
+        config={config}
       />
 
       <DeleteGuestModal 

@@ -1,4 +1,5 @@
 import { getAdminRsvps } from "@/lib/actions/adminRsvp";
+import { getSettings } from "@/lib/actions/settings";
 import { createClient } from "@/lib/supabase/server";
 import { RsvpClient } from "./RsvpClient";
 
@@ -58,6 +59,9 @@ export default async function RsvpPage({
       rsvp:rsvps(attendance_status, confirmed_pax)
     `);
 
+  const settingsRes = await getSettings();
+  const config = settingsRes.success ? settingsRes.data?.config : {};
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
       <RsvpClient 
@@ -74,6 +78,7 @@ export default async function RsvpPage({
         currentCategory={category}
         currentStatus={status}
         currentSort={sort}
+        config={config}
       />
     </div>
   );

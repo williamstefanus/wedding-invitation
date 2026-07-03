@@ -22,8 +22,9 @@ interface GuestTableProps {
   setIsRegenerateOpen: (isOpen: boolean) => void;
   setIsDeleteInvOpen: (isOpen: boolean) => void;
   handleCopyLink: (inv: any, guestName?: string, guestPhone?: string) => void;
-  handleToggleSent: (invId: string, currentSentStatus: boolean) => void;
+  handleToggleSent: (invId: string, currentStatus: boolean, ownerName: string) => void;
   handlePageChange: (newPage: number) => void;
+  config?: any;
 }
 
 export function GuestTable({
@@ -44,10 +45,14 @@ export function GuestTable({
   setIsDeleteInvOpen,
   handleCopyLink,
   handleToggleSent,
-  handlePageChange
+  handlePageChange,
+  config = {}
 }: GuestTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+
+  const groomName = config.groom_first_name || "William";
+  const brideName = config.bride_first_name || "Aziel";
 
   useEffect(() => {
     setSelectedIds([]);
@@ -182,7 +187,7 @@ export function GuestTable({
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <span className={`px-2 py-1 rounded text-[10px] uppercase tracking-wider font-bold ${guest.owner === 'William' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'}`}>
-                          {guest.owner}
+                          {guest.owner === 'William' ? groomName : brideName}
                         </span>
                         <span className="text-slate-600 text-xs">{guest.category}</span>
                       </div>
@@ -257,16 +262,11 @@ export function GuestTable({
                             {/* Mark as Sent */}
                             <td className="px-6 py-4 text-center">
                               <button
-                                onClick={() => handleToggleSent(inv.id, !!inv.is_sent)}
-                                title={inv.is_sent ? "Mark as Not Sent" : "Mark as Sent"}
-                                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
-                                  inv.is_sent
-                                    ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-                                    : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
-                                }`}
+                                onClick={() => handleToggleSent(inv.id, !!inv.is_sent, guest.name)}
+                                title={inv.is_sent ? "Mark as unsent" : "Mark as sent"}
+                                className={`p-2 rounded-lg transition-colors border ${inv.is_sent ? "bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100" : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100"}`}
                               >
-                                {inv.is_sent ? <CheckCheck className="w-3.5 h-3.5" /> : <Send className="w-3.5 h-3.5" />}
-                                {inv.is_sent ? "Sent" : "Not Sent"}
+                                {inv.is_sent ? <CheckCheck className="w-4 h-4" /> : <Send className="w-4 h-4" />}
                               </button>
                             </td>
                             <td className="px-6 py-4 text-right">

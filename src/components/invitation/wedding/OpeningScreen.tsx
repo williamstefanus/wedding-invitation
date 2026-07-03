@@ -9,9 +9,10 @@ interface OpeningScreenProps {
   guestName: string | null;
   isOpen: boolean;
   onOpen: () => void;
+  config?: any;
 }
 
-export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps) {
+export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: OpeningScreenProps) {
   const { language, setLanguage, t } = useLanguage();
 
   return (
@@ -51,7 +52,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen }: OpeningScreenProps)
       >
         <Image 
           src={WEDDING_INVITATION_ASSETS.heroOpeningTitle}
-          alt="William & Aziel"
+          alt={`${config.groom_first_name || "William"} & ${config.bride_first_name || "Aziel"}`}
           width={280}
           height={158}
           priority

@@ -9,6 +9,7 @@ interface RSVPSubmittedCardProps {
   handleAddToCalendar: () => void;
   owner?: string;
   contactPhone?: string;
+  config?: any;
 }
 
 export function RSVPSubmittedCard({
@@ -16,7 +17,8 @@ export function RSVPSubmittedCard({
   sessions = [],
   handleAddToCalendar,
   owner,
-  contactPhone
+  contactPhone,
+  config = {}
 }: RSVPSubmittedCardProps) {
   const { t } = useLanguage();
 
@@ -26,7 +28,10 @@ export function RSVPSubmittedCard({
   const activeSessions = matchedSessions.length > 0 ? matchedSessions : sessions;
 
   const handleWhatsAppContact = () => {
-    const contactName = owner === "Aziel" ? "Aziel" : "William";
+    const isBride = owner === "Aziel";
+    const groomName = config.groom_first_name || "William";
+    const brideName = config.bride_first_name || "Aziel";
+    const contactName = isBride ? brideName : groomName;
     const formattedPhone = formatWhatsAppPhone(contactPhone);
     const message = `Hi ${contactName}, I would like to update my RSVP submission.`;
     const url = formattedPhone 

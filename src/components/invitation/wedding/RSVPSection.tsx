@@ -10,9 +10,10 @@ interface RSVPSectionProps {
   invitation?: any;
   deadline?: string;
   contactPhone?: string;
+  config?: any;
 }
 
-export function RSVPSection({ invitation, deadline: settingsDeadline, contactPhone }: RSVPSectionProps) {
+export function RSVPSection({ invitation, deadline: settingsDeadline, contactPhone, config = {} }: RSVPSectionProps) {
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState("");
   const [submitState, setSubmitState] = useState<"idle" | "success_attending" | "success_not_attending" | "success_updated">("idle");
@@ -92,9 +93,10 @@ export function RSVPSection({ invitation, deadline: settingsDeadline, contactPho
 
   const handleAddToCalendar = () => {
     try {
-      const sessions = invitation?.event_type?.sessions || [];
-      const title = encodeURIComponent("William & Aziel Wedding");
-      const details = encodeURIComponent("We joyfully invite you to celebrate our wedding! Please check the digital invitation for full details.");
+      const groomName = config.groom_first_name || "William";
+      const brideName = config.bride_first_name || "Aziel";
+      const title = encodeURIComponent(`${groomName} & ${brideName} Wedding`);
+      const details = encodeURIComponent(`We are excited to celebrate our special day with you! Please check the digital invitation for full details.`);
       
       let location = "";
       let startStr = "";
@@ -131,7 +133,9 @@ export function RSVPSection({ invitation, deadline: settingsDeadline, contactPho
       
       window.open(url, "_blank");
     } catch (err) {
-      window.open("https://calendar.google.com/calendar/r/eventedit?text=William+%26+Aziel+Wedding", "_blank");
+      const groomName = config.groom_first_name || "William";
+      const brideName = config.bride_first_name || "Aziel";
+      window.open(`https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(`${groomName} & ${brideName} Wedding`)}`, "_blank");
     }
   };
 
@@ -149,6 +153,7 @@ export function RSVPSection({ invitation, deadline: settingsDeadline, contactPho
         handleAddToCalendar={handleAddToCalendar}
         owner={invitation?.guest?.owner}
         contactPhone={contactPhone}
+        config={config}
       />
     );
   }

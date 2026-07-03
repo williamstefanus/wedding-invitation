@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 
 import { WeddingSettingsForm } from "@/components/admin/settings/WeddingSettingsForm";
 import { SangjitSettingsForm } from "@/components/admin/settings/SangjitSettingsForm";
+import { GeneralSettingsForm } from "@/components/admin/settings/GeneralSettingsForm";
 
 interface SettingsClientProps {
   initialData: any;
@@ -17,18 +18,35 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<"wedding" | "sangjit">("wedding");
+  const [activeTab, setActiveTab] = useState<"general" | "wedding" | "sangjit">("general");
   
   // State
   const [deadlines, setDeadlines] = useState(initialData.deadlines || { wedding: "", sangjit: "" });
   const [sessions, setSessions] = useState(initialData.sessions || { holyMatrimony: null, reception: null, sangjit: null });
   const [config, setConfig] = useState(initialData.config || {
-    couple_names: "William & Aziel",
+    groom_first_name: "William",
+    groom_last_name: "Stefanus",
+    groom_title: "S.Kom",
+    groom_parents: "Mr. Hadi Stefanus & Mrs. Lanny Mariana",
+    groom_order_title: "First son of",
+    phone_groom: "",
+    gift_bank_groom: "",
+    gift_account_groom: "",
+    gift_name_groom: "",
+    
+    bride_first_name: "Aziel",
+    bride_last_name: "Yorieza",
+    bride_title: "B.A",
+    bride_parents: "Mr. Yopie Kusnandar & Mrs. Ina Rostiana Rahardja",
+    bride_order_title: "Second daughter of",
+    phone_bride: "",
+    gift_bank_bride: "",
+    gift_account_bride: "",
+    gift_name_bride: "",
+    
+    wo_pin: "123456",
     music_url: "",
     countdown_date: "",
-    gift_bank: "",
-    gift_account: "",
-    gift_name: "",
     gallery_images: []
   });
 
@@ -129,7 +147,13 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1 bg-slate-200/50 rounded-xl mb-8 w-fit">
+      <div className="flex flex-wrap gap-2 p-1 bg-slate-200/50 rounded-xl mb-8 w-fit">
+        <button 
+          onClick={() => setActiveTab("general")}
+          className={`px-6 py-2 rounded-lg font-bold text-sm transition ${activeTab === 'general' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+        >
+          General
+        </button>
         <button 
           onClick={() => setActiveTab("wedding")}
           className={`px-6 py-2 rounded-lg font-bold text-sm transition ${activeTab === 'wedding' ? 'bg-white text-amber-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -143,6 +167,13 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
           Sangjit Ceremony
         </button>
       </div>
+
+      {activeTab === "general" && (
+        <GeneralSettingsForm 
+          config={config}
+          setConfig={setConfig}
+        />
+      )}
 
       {activeTab === "wedding" && (
         <WeddingSettingsForm 

@@ -163,13 +163,5 @@ export const translations = {
 };
 
 export function translateSessionName(name: string | undefined, t: (key: any) => string): string {
-  if (!name) return "";
-  const lower = name.toLowerCase();
-  if (lower.includes("holy matrimony") || lower.includes("pemberkatan")) {
-    return t("holyMatrimony");
-  }
-  if (lower.includes("reception") || lower.includes("resepsi")) {
-    return t("receptionDinner");
-  }
-  return name;
+  return name || "";
 }

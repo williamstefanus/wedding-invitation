@@ -4,9 +4,10 @@ import { UserCheck, Users, CheckCircle, XCircle, Clock } from "lucide-react";
 
 interface RsvpMetricsProps {
   invitations: any[];
+  config?: any;
 }
 
-export function RsvpMetrics({ invitations = [] }: RsvpMetricsProps) {
+export function RsvpMetrics({ invitations = [], config = {} }: RsvpMetricsProps) {
   const getAttendanceStatus = (inv: any) => {
     const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
     return rsvp?.attendance_status || null;

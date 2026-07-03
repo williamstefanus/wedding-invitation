@@ -7,12 +7,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitThankYouSectionProps {
   invitation?: any;
+  config?: any;
 }
 
-export function SangjitThankYouSection({ invitation }: SangjitThankYouSectionProps) {
+export function SangjitThankYouSection({ invitation, config = {} }: SangjitThankYouSectionProps) {
   const { t } = useLanguage();
-  const groomName = invitation?.groom?.nickname || invitation?.groom?.name || "William";
-  const brideName = invitation?.bride?.nickname || invitation?.bride?.name || "Aziel";
+  const groomName = config.groom_first_name || "William";
+  const brideName = config.bride_first_name || "Aziel";
   const year = new Date(invitation?.date || "2026-10-17").getFullYear() || "2026";
   const footerText = `${groomName} & ${brideName} - ${year}`;
 

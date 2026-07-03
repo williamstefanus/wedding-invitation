@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { WEDDING_INVITATION_ASSETS as ASSET } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-export function CoupleSection() {
+export function CoupleSection({ config = {} }: { config?: any }) {
   const { t } = useLanguage();
 
   return (
@@ -90,11 +90,11 @@ export function CoupleSection() {
               {/* Text */}
               <div className="flex flex-col items-center justify-center w-[50%] gap-1">
                 <div className="text-center text-[#4B4B4B] text-[2.2rem] leading-[0.9]" style={{ fontFamily: "var(--font-justwrite)" }}>
-                  William<br/>Stefanus,
-                  <div className="text-[1.8rem] mt-1">S.Kom</div>
+                  {config.groom_first_name || "William"}<br/>{config.groom_last_name || "Stefanus"},
+                  {config.groom_title && <div className="text-[1.8rem] mt-1">{config.groom_title}</div>}
                 </div>
                 <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  {t('firstSonOf')}
+                  {config.groom_order_title ? `${config.groom_order_title}\n${config.groom_parents}` : t('firstSonOf')}
                 </div>
               </div>
             </div>
@@ -119,11 +119,11 @@ export function CoupleSection() {
               {/* Text */}
               <div className="flex flex-col items-center justify-center w-[50%] gap-1">
                 <div className="text-center text-[#4B4B4B] text-[2.2rem] leading-[0.9]" style={{ fontFamily: "var(--font-justwrite)" }}>
-                  Aziel<br/>Yorieza,
-                  <div className="text-[1.8rem] mt-1">B.A</div>
+                  {config.bride_first_name || "Aziel"}<br/>{config.bride_last_name || "Yorieza"},
+                  {config.bride_title && <div className="text-[1.8rem] mt-1">{config.bride_title}</div>}
                 </div>
                 <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  {t('secondDaughterOf')}
+                  {config.bride_order_title ? `${config.bride_order_title}\n${config.bride_parents}` : t('secondDaughterOf')}
                 </div>
               </div>
             </div>

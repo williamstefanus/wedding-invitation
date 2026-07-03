@@ -12,9 +12,10 @@ interface SangjitRSVPSectionProps {
   invitation?: any;
   deadline?: string;
   contactPhone?: string;
+  config?: any;
 }
 
-export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, contactPhone }: SangjitRSVPSectionProps) {
+export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, contactPhone, config = {} }: SangjitRSVPSectionProps) {
   const { t } = useLanguage();
   const [isPending, startTransition] = useTransition();
   const rsvpData = invitation?.rsvp;
@@ -72,7 +73,7 @@ export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, con
   };
 
   const handleAddToCalendar = () => {
-    const title = encodeURIComponent("William & Aziel Sangjit Ceremony");
+    const title = encodeURIComponent(`${config.groom_first_name || "William"} & ${config.bride_first_name || "Aziel"} Sangjit Ceremony`);
     const details = encodeURIComponent("Join us in celebrating our Sangjit ceremony!");
     const location = encodeURIComponent("Sentosa Seafood, Jl. Aruna No. 30");
     const dates = "20261017T040000Z/20261017T060000Z";
@@ -138,7 +139,9 @@ export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, con
               <button
                 type="button"
                 onClick={() => {
-                  const contactName = invitation?.guest?.owner === "Aziel" ? "Aziel" : "William";
+                  const groomName = config.groom_first_name || "William";
+                  const brideName = config.bride_first_name || "Aziel";
+                  const contactName = invitation?.guest?.owner === "Aziel" ? brideName : groomName;
                   const formattedPhone = formatWhatsAppPhone(contactPhone);
                   const message = `Hi ${contactName}, I would like to update my Sangjit RSVP submission.`;
                   const url = formattedPhone 

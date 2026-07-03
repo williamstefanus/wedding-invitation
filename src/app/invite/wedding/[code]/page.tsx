@@ -22,9 +22,15 @@ export async function generateMetadata(
   // 2. Graceful Fallbacks
   const guestName = (invitation && !error && invitation.guest?.name) ? invitation.guest.name : "Our Special Guest";
 
+  // Fetch config for dynamic names
+  const settingsRes = await getSettings();
+  const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
+  const groomName = config?.groom_first_name || "William";
+  const brideName = config?.bride_first_name || "Aziel";
+
   // 3. Dynamic Text Generation
-  const title = "Wedding Invitation - William & Aziel";
-  const description = `Dear ${guestName}, you are joyfully invited to the wedding of William & Aziel on October 23, 2026. Please open to see the details and RSVP.`;
+  const title = `Wedding Invitation - ${groomName} & ${brideName}`;
+  const description = `Dear ${guestName}, you are joyfully invited to the wedding of ${groomName} & ${brideName} on October 23, 2026. Please open to see the details and RSVP.`;
   const url = `https://wedding-william-aziel.vercel.app/invite/wedding/${code}`;
 
   // 4. Metadata Specification
@@ -35,7 +41,7 @@ export async function generateMetadata(
       title,
       description,
       url,
-      siteName: "William & Aziel Wedding",
+      siteName: `${groomName} & ${brideName} Wedding`,
       images: [
         {
           url: "/og-image.jpg",
@@ -60,9 +66,10 @@ export default async function WeddingInvitePage({
   // Fetch invitation strictly bound to the 'wedding' event type slug
   const { invitation, error } = await getInvitationDetails(code, "wedding");
   const settingsRes = await getSettings();
+  const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
 
   if (error || !invitation) {
-    return <InviteNotFound />;
+    return <InviteNotFound config={config} />;
   }
 
   // We have a valid invitation now

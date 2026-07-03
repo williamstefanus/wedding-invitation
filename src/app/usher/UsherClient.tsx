@@ -13,13 +13,15 @@ interface UsherClientProps {
   initialSangjitRoster: any[];
   initialWeddingTables?: any[];
   initialSangjitTables?: any[];
+  config?: any;
 }
 
 export function UsherClient({ 
   initialWeddingRoster, 
   initialSangjitRoster,
   initialWeddingTables = [],
-  initialSangjitTables = []
+  initialSangjitTables = [],
+  config = {}
 }: UsherClientProps) {
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [authChecked, setAuthChecked] = useState<boolean>(false);
@@ -351,6 +353,7 @@ export function UsherClient({
                       invitation={inv}
                       onToggleCheckIn={handleToggleCheckIn}
                       onOpenDetails={setDetailsModalInv}
+                      config={config}
                     />
                   ))}
                 </div>

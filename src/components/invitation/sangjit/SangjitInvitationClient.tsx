@@ -28,10 +28,11 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
   const musicUrl = config.sangjit_music_url || config.music_url || "/audio/bgm.mp3";
 
   const owner = invitation?.guest?.owner;
-  const giftBank = (owner === "Aziel" ? (config.gift_bank_aziel_sangjit ?? config.gift_bank_aziel) : (config.gift_bank_william_sangjit ?? config.gift_bank_william)) || invitation?.gift_bank_name;
-  const giftAccount = (owner === "Aziel" ? (config.gift_account_aziel_sangjit ?? config.gift_account_aziel) : (config.gift_account_william_sangjit ?? config.gift_account_william)) || invitation?.gift_account_number;
-  const giftName = (owner === "Aziel" ? (config.gift_name_aziel_sangjit ?? config.gift_name_aziel) : (config.gift_name_william_sangjit ?? config.gift_name_william)) || invitation?.gift_account_name;
-  const contactPhone = owner === "Aziel" ? config.phone_aziel : config.phone_william;
+  const isBride = owner === "Aziel";
+  const giftBank = isBride ? config.gift_bank_bride : config.gift_bank_groom;
+  const giftAccount = isBride ? config.gift_account_bride : config.gift_account_groom;
+  const giftName = isBride ? config.gift_name_bride : config.gift_name_groom;
+  const contactPhone = isBride ? config.phone_bride : config.phone_groom;
 
   const sangjitSession = sessions.sangjit || invitation?.event_type?.sessions?.find((s: any) => s.title?.toLowerCase().includes('sangjit')) || invitation?.event_type?.sessions?.[0];
   const targetDateStr = config.sangjit_countdown_date || sangjitSession?.date || config.date || invitation?.date || "2026-10-17T00:00:00";
@@ -90,11 +91,11 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
             </button>
           )}
 
-          {/* Screen 1 Cover Overlay (Fades out gracefully in place) */}
           <SangjitOpeningScreen 
             guestName={invitation?.guest?.name || null}
             isOpen={isOpen}
             onOpen={handleOpen}
+            config={config}
           />
 
           {/* Underlying Invitation Content Canvas */}
@@ -102,11 +103,11 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
             <SangjitHeroCountdownSection 
               targetDateStr={targetDateStr} 
             />
-            <SangjitCoupleEnvelopeSection invitation={invitation} />
+            <SangjitCoupleEnvelopeSection invitation={invitation} config={config} />
             <SangjitScheduleSection session={sangjitSession} invitation={invitation} />
-            <SangjitRSVPSection invitation={invitation} deadline={deadlines.sangjit} contactPhone={contactPhone} />
+            <SangjitRSVPSection invitation={invitation} deadline={deadlines.sangjit} contactPhone={contactPhone} config={config} />
             <SangjitGiftSection bank={giftBank} account={giftAccount} name={giftName} invitation={invitation} />
-            <SangjitThankYouSection invitation={invitation} />
+            <SangjitThankYouSection invitation={invitation} config={config} />
           </div>
         </main>
       </div>

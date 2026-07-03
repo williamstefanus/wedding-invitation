@@ -1,10 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSettings } from "@/lib/actions/settings";
 import { DashboardClient } from "./DashboardClient";
 
 export const revalidate = 0;
 
 export default async function AdminPage() {
   const supabase = await createClient();
+
+  const settingsRes = await getSettings();
+  const config = settingsRes.success ? settingsRes.data?.config : {};
 
   // Fetch invitations with guest owner, confirmed pax, and selected sessions for breakdown
   const { data: invitations } = await supabase
@@ -34,6 +38,7 @@ export default async function AdminPage() {
       <DashboardClient 
         invitations={invitations || []} 
         totalGuestsCount={totalGuestsCount || 0} 
+        config={config || {}}
       />
     </div>
   );

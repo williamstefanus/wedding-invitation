@@ -5,9 +5,10 @@ import { ProgressBar } from "@/app/admin/components/ProgressBar";
 
 interface OverviewMetricsProps {
   invitations: any[];
+  config?: any;
 }
 
-export function OverviewMetrics({ invitations = [] }: OverviewMetricsProps) {
+export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetricsProps) {
   const getAttendanceStatus = (inv: any) => {
     const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
     return rsvp?.attendance_status || null;
@@ -18,8 +19,14 @@ export function OverviewMetrics({ invitations = [] }: OverviewMetricsProps) {
     return rsvp?.confirmed_pax || 0;
   };
 
-  const ownerStats = ["William", "Aziel"].map(owner => {
-    const ownerInvs = invitations.filter(inv => inv.guest?.owner === owner);
+  const groomName = config.groom_first_name || "William";
+  const brideName = config.bride_first_name || "Aziel";
+
+  const ownerStats = [
+    { key: "William", displayName: groomName },
+    { key: "Aziel", displayName: brideName }
+  ].map(({ key, displayName }) => {
+    const ownerInvs = invitations.filter(inv => inv.guest?.owner === key);
     const invitedPax = ownerInvs.reduce((s, inv) => s + (inv.max_pax || 0), 0);
     const attendingPax = ownerInvs.reduce((s, inv) => {
       if (getAttendanceStatus(inv) === "attending") return s + getConfirmedPax(inv);
@@ -31,7 +38,8 @@ export function OverviewMetrics({ invitations = [] }: OverviewMetricsProps) {
     const respondedInvs = attendingInvs + declinedInvs;
 
     return { 
-      owner, 
+      owner: key, 
+      displayName,
       invitedPax, 
       attendingPax, 
       invitations: ownerInvs.length,
@@ -56,7 +64,7 @@ export function OverviewMetrics({ invitations = [] }: OverviewMetricsProps) {
             <div className={`p-6 border-b ${headerBg} flex justify-between items-center`}>
               <div>
                 <h3 className={`text-xl font-black tracking-wider uppercase ${titleColor}`}>
-                  {stat.owner}
+                  {stat.displayName}
                 </h3>
                 <p className="text-xs text-slate-500 font-medium mt-0.5">{stat.invitations} Total Invitations</p>
               </div>

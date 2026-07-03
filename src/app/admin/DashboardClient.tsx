@@ -9,11 +9,12 @@ import { Users, UserCheck } from "lucide-react";
 interface DashboardClientProps {
   invitations: any[];
   totalGuestsCount: number;
+  config?: any;
 }
 
 type FilterOption = "all" | "wedding" | "sangjit";
 
-export function DashboardClient({ invitations, totalGuestsCount }: DashboardClientProps) {
+export function DashboardClient({ invitations, totalGuestsCount, config = {} }: DashboardClientProps) {
   const [filter, setFilter] = useState<FilterOption>("all");
 
   // Filter invitations based on the active tab
@@ -150,7 +151,10 @@ export function DashboardClient({ invitations, totalGuestsCount }: DashboardClie
       </div>
 
       {/* William / Aziel Overview Breakdown */}
-      <OverviewMetrics invitations={filteredInvitations} />
+      <OverviewMetrics 
+        invitations={filteredInvitations} 
+        config={config}
+      />
 
       {/* Attending by Event Session */}
       {sessionBreakdown.length > 0 && (
