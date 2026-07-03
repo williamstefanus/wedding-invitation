@@ -50,23 +50,49 @@ export function GeneralSettingsForm({
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Birth Order Title</label>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Birth Order</label>
+            <select 
+              value={config.groom_birth_order || "1"} 
+              onChange={e => setConfig({...config, groom_birth_order: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
+            >
+              <option value="1">First (1st)</option>
+              <option value="2">Second (2nd)</option>
+              <option value="3">Third (3rd)</option>
+              <option value="4">Fourth (4th)</option>
+              <option value="5">Fifth (5th)</option>
+              <option value="youngest">Youngest</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gender</label>
+            <select 
+              value={config.groom_gender || "son"} 
+              onChange={e => setConfig({...config, groom_gender: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
+            >
+              <option value="son">Son (Putra)</option>
+              <option value="daughter">Daughter (Putri)</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Father's Name (Without Mr/Bapak)</label>
             <input 
               type="text" 
-              value={config.groom_order_title || ""} 
-              onChange={e => setConfig({...config, groom_order_title: e.target.value})}
+              value={config.groom_father_name || ""} 
+              onChange={e => setConfig({...config, groom_father_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
-              placeholder="e.g. First son of / Putra pertama dari"
+              placeholder="e.g. Robert Doe"
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Parents' Names</label>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mother's Name (Without Mrs/Ibu)</label>
             <input 
               type="text" 
-              value={config.groom_parents || ""} 
-              onChange={e => setConfig({...config, groom_parents: e.target.value})}
+              value={config.groom_mother_name || ""} 
+              onChange={e => setConfig({...config, groom_mother_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
-              placeholder="e.g. Mr. Robert Doe & Mrs. Alice Doe"
+              placeholder="e.g. Alice Doe"
             />
           </div>
           <div>
@@ -139,23 +165,49 @@ export function GeneralSettingsForm({
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Birth Order Title</label>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Birth Order</label>
+            <select 
+              value={config.bride_birth_order || "2"} 
+              onChange={e => setConfig({...config, bride_birth_order: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
+            >
+              <option value="1">First (1st)</option>
+              <option value="2">Second (2nd)</option>
+              <option value="3">Third (3rd)</option>
+              <option value="4">Fourth (4th)</option>
+              <option value="5">Fifth (5th)</option>
+              <option value="youngest">Youngest</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gender</label>
+            <select 
+              value={config.bride_gender || "daughter"} 
+              onChange={e => setConfig({...config, bride_gender: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
+            >
+              <option value="son">Son (Putra)</option>
+              <option value="daughter">Daughter (Putri)</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Father's Name (Without Mr/Bapak)</label>
             <input 
               type="text" 
-              value={config.bride_order_title || ""} 
-              onChange={e => setConfig({...config, bride_order_title: e.target.value})}
+              value={config.bride_father_name || ""} 
+              onChange={e => setConfig({...config, bride_father_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
-              placeholder="e.g. Second daughter of / Putri kedua dari"
+              placeholder="e.g. Michael Smith"
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Parents' Names</label>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mother's Name (Without Mrs/Ibu)</label>
             <input 
               type="text" 
-              value={config.bride_parents || ""} 
-              onChange={e => setConfig({...config, bride_parents: e.target.value})}
+              value={config.bride_mother_name || ""} 
+              onChange={e => setConfig({...config, bride_mother_name: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-pink-400 focus:ring-1 focus:ring-pink-400 transition"
-              placeholder="e.g. Mr. Michael Smith & Mrs. Sarah Smith"
+              placeholder="e.g. Sarah Smith"
             />
           </div>
           <div>
@@ -198,15 +250,93 @@ export function GeneralSettingsForm({
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">WO Access PIN Code</label>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+              <Lock className="w-3 h-3 inline mr-1" /> Access PIN Code
+            </label>
             <input 
               type="text" 
+              value={config.wo_pin_code || "123456"} 
+              onChange={e => setConfig({...config, wo_pin_code: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-mono tracking-widest focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition"
               placeholder="e.g. 123456"
-              value={config.wo_pin || ""} 
-              onChange={e => setConfig({...config, wo_pin: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition"
             />
-            <p className="text-xs text-slate-400 mt-2">PIN code used by ushers and receptionists to unlock the /usher check-in portal.</p>
+            <p className="text-[10px] text-slate-400 mt-1.5">
+              PIN code used by Wedding Organizers and Ushers to access the reception check-in portal.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Wedding Bible Verse */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          📖 Wedding Bible Verse
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
+            <textarea 
+              value={config.bible_verse_text_en || ""} 
+              onChange={e => setConfig({...config, bible_verse_text_en: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
+              placeholder="Every good and perfect gift is from above..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
+            <textarea 
+              value={config.bible_verse_text_id || ""} 
+              onChange={e => setConfig({...config, bible_verse_text_id: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
+              placeholder="Semua yang baik datang dari Allah..."
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference</label>
+            <input 
+              type="text" 
+              value={config.bible_verse_reference || ""} 
+              onChange={e => setConfig({...config, bible_verse_reference: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+              placeholder="e.g. James 1:17"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Sangjit Bible Verse */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          📖 Sangjit Bible Verse
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
+            <textarea 
+              value={config.sangjit_bible_verse_text_en || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_text_en: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
+              placeholder="And over all these virtues put on love..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
+            <textarea 
+              value={config.sangjit_bible_verse_text_id || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_text_id: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
+              placeholder="Dan di atas semuanya itu: kenakanlah kasih..."
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference</label>
+            <input 
+              type="text" 
+              value={config.sangjit_bible_verse_reference || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_reference: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+              placeholder="e.g. Colossians 3:14"
+            />
           </div>
         </div>
       </div>

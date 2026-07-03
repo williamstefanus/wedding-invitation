@@ -23,6 +23,7 @@ interface WeddingInvitationClientProps {
 }
 
 export function WeddingInvitationClient({ invitation, code, settings }: WeddingInvitationClientProps) {
+  const { t, language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -126,7 +127,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
               <CountdownSection targetDateStr={config.countdown_date || "2026-10-23T11:00:00"} />
 
               {/* Transition Verse */}
-              <TransitionVerse />
+              <TransitionVerse config={config} />
 
               <CoupleSection config={config} />
             </section>
@@ -143,16 +144,16 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   );
 }
 
-function TransitionVerse() {
-  const { t } = useLanguage();
+function TransitionVerse({ config }: { config: any }) {
+  const { t, language } = useLanguage();
   return (
     <section className="relative w-full flex flex-col items-center px-6 pt-10 pb-6 z-30">
       <p
         className="text-center text-[#4B4B4B] text-[16px] leading-relaxed whitespace-pre-line"
         style={{ fontFamily: "var(--font-alegreya)" }}
       >
-        {t('verseText')}
-        <span className="font-bold block mt-3">{t('verseReference')}</span>
+        {language === 'id' ? (config.bible_verse_text_id || t('verseText')) : (config.bible_verse_text_en || t('verseText'))}
+        <span className="font-bold block mt-3">{config.bible_verse_reference || t('verseReference')}</span>
       </p>
     </section>
   );

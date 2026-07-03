@@ -12,7 +12,33 @@ interface SangjitCoupleEnvelopeSectionProps {
 }
 
 export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: SangjitCoupleEnvelopeSectionProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  
+  const generateParentsText = (role: 'groom' | 'bride') => {
+    // Fallback if they haven't re-saved yet
+    if (config[`${role}_parents`] || config[`${role}_order_title`]) {
+      return config[`${role}_order_title`] ? `${config[`${role}_order_title`]}\n${config[`${role}_parents`]}` : t(role === 'groom' ? 'firstSonOf' : 'secondDaughterOf');
+    }
+
+    const order = config[`${role}_birth_order`] || (role === 'groom' ? "1" : "2");
+    const gender = config[`${role}_gender`] || (role === 'groom' ? "son" : "daughter");
+    const father = config[`${role}_father_name`] || (role === 'groom' ? "Hadi Stefanus" : "Yopie Kusnandar");
+    const mother = config[`${role}_mother_name`] || (role === 'groom' ? "Lanny Mariana" : "Ina Rostiana Rahardja");
+
+    const orderStr = t(`order_${order}` as any) || order;
+    const genderStr = t(gender as any);
+    const ofStr = t('of');
+    const mrStr = t('mr');
+    const mrsStr = t('mrs');
+    const andStr = t('and');
+
+    if (language === 'id') {
+      return `${genderStr} ${orderStr.toLowerCase()} ${ofStr}\n${mrStr} ${father} ${andStr} ${mrsStr} ${mother}`;
+    } else {
+      return `${orderStr} ${genderStr} ${ofStr}\n${mrStr} ${father} ${andStr} ${mrsStr} ${mother}`;
+    }
+  };
+
   const formatName = (first?: string, last?: string, title?: string, fb?: string) => {
     if (!first && !last) return fb;
     let s = `${first || ""} ${last || ""}`.trim();
@@ -22,9 +48,9 @@ export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: Sangji
   };
 
   const brideName = formatName(config.bride_first_name, config.bride_last_name, config.bride_title, "Aziel\nYorieza, B.A");
-  const brideParents = config.bride_order_title ? `${config.bride_order_title}\n${config.bride_parents}` : t('secondDaughterOf');
+  const brideParents = generateParentsText('bride');
   const groomName = formatName(config.groom_first_name, config.groom_last_name, config.groom_title, "William\nStefanus, S.Kom");
-  const groomParents = config.groom_order_title ? `${config.groom_order_title}\n${config.groom_parents}` : t('firstSonOf');
+  const groomParents = generateParentsText('groom');
 
   return (
     <section className="relative w-full bg-[#761B33] pt-8 pb-2 px-6 overflow-hidden flex flex-col items-center select-none z-20">

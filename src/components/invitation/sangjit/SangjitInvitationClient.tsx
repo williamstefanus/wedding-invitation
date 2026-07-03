@@ -102,6 +102,7 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
           <div ref={contentRef} className="w-full flex flex-col relative z-10 bg-[#761B33]">
             <SangjitHeroCountdownSection 
               targetDateStr={targetDateStr} 
+              config={config}
             />
             <SangjitCoupleEnvelopeSection invitation={invitation} config={config} />
             <SangjitScheduleSection session={sangjitSession} invitation={invitation} />

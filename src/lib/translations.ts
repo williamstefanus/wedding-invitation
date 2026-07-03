@@ -24,8 +24,19 @@ export const translations = {
 
     // Couple
     firstSonOf: "First son of Mr. Hadi Stefanus \n& Mrs. Lanny Mariana",
-    and: "– and –",
+    and: "&",
     secondDaughterOf: "Second daughter of\nMr. Yopie Kusnandar & \nMrs. Ina Rostiana Rahardja",
+    mr: "Mr.",
+    mrs: "Mrs.",
+    son: "son",
+    daughter: "daughter",
+    of: "of",
+    order_1: "First",
+    order_2: "Second",
+    order_3: "Third",
+    order_4: "Fourth",
+    order_5: "Fifth",
+    order_youngest: "Youngest",
 
     // RSVP
     rsvpTitle: "RSVP",
@@ -104,8 +115,19 @@ export const translations = {
 
     // Couple
     firstSonOf: "Putra pertama dari Bapak Hadi Stefanus \n& Ibu Lanny Mariana",
-    and: "– dan –",
+    and: "&",
     secondDaughterOf: "Putri kedua dari\nBapak Yopie Kusnandar & \nIbu Ina Rostiana Rahardja",
+    mr: "Bapak",
+    mrs: "Ibu",
+    son: "Putra",
+    daughter: "Putri",
+    of: "dari",
+    order_1: "pertama",
+    order_2: "kedua",
+    order_3: "ketiga",
+    order_4: "keempat",
+    order_5: "kelima",
+    order_youngest: "bungsu",
 
     // RSVP
     rsvpTitle: "RSVP",

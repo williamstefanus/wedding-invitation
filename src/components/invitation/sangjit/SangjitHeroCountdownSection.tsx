@@ -8,10 +8,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SangjitHeroCountdownSectionProps {
   targetDateStr?: string;
+  config?: any;
 }
 
 export function SangjitHeroCountdownSection({
   targetDateStr = "2026-10-17T00:00:00",
+  config = {}
 }: SangjitHeroCountdownSectionProps) {
   const { language, t } = useLanguage();
   const [timeLeft, setTimeLeft] = useState({
@@ -189,10 +191,10 @@ export function SangjitHeroCountdownSection({
           {/* Bible Verse FooterTextBlock */}
           <div className="flex flex-col items-center text-center gap-2 mt-4 max-w-[380px] z-30">
             <div className="text-white font-sans text-[16px] font-normal leading-relaxed whitespace-pre-line">
-              {t('sangjitVerseText')}
+              {language === 'id' ? (config.bible_verse_text_id || t('sangjitVerseText')) : (config.bible_verse_text_en || t('sangjitVerseText'))}
             </div>
             <b className="text-white font-sans text-[16px] font-bold">
-              {t('sangjitVerseRef')}
+              {config.bible_verse_reference || t('sangjitVerseRef')}
             </b>
           </div>
         </motion.div>

@@ -4,7 +4,32 @@ import { WEDDING_INVITATION_ASSETS as ASSET } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export function CoupleSection({ config = {} }: { config?: any }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const generateParentsText = (role: 'groom' | 'bride') => {
+    // Fallback if they haven't re-saved yet
+    if (config[`${role}_parents`] || config[`${role}_order_title`]) {
+      return config[`${role}_order_title`] ? `${config[`${role}_order_title`]}\n${config[`${role}_parents`]}` : t(role === 'groom' ? 'firstSonOf' : 'secondDaughterOf');
+    }
+
+    const order = config[`${role}_birth_order`] || (role === 'groom' ? "1" : "2");
+    const gender = config[`${role}_gender`] || (role === 'groom' ? "son" : "daughter");
+    const father = config[`${role}_father_name`] || (role === 'groom' ? "Hadi Stefanus" : "Yopie Kusnandar");
+    const mother = config[`${role}_mother_name`] || (role === 'groom' ? "Lanny Mariana" : "Ina Rostiana Rahardja");
+
+    const orderStr = t(`order_${order}` as any) || order;
+    const genderStr = t(gender as any);
+    const ofStr = t('of');
+    const mrStr = t('mr');
+    const mrsStr = t('mrs');
+    const andStr = t('and');
+
+    if (language === 'id') {
+      return `${genderStr} ${orderStr.toLowerCase()} ${ofStr}\n${mrStr} ${father} ${andStr} ${mrsStr} ${mother}`;
+    } else {
+      return `${orderStr} ${genderStr} ${ofStr}\n${mrStr} ${father} ${andStr} ${mrsStr} ${mother}`;
+    }
+  };
 
   return (
     <section className="relative w-full flex flex-col items-center bg-[#faf9f0] overflow-hidden pb-[48px]">
@@ -94,7 +119,7 @@ export function CoupleSection({ config = {} }: { config?: any }) {
                   {config.groom_title && <div className="text-[1.8rem] mt-1">{config.groom_title}</div>}
                 </div>
                 <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  {config.groom_order_title ? `${config.groom_order_title}\n${config.groom_parents}` : t('firstSonOf')}
+                  {generateParentsText('groom')}
                 </div>
               </div>
             </div>
@@ -123,7 +148,7 @@ export function CoupleSection({ config = {} }: { config?: any }) {
                   {config.bride_title && <div className="text-[1.8rem] mt-1">{config.bride_title}</div>}
                 </div>
                 <div className="text-center text-[#4B4B4B] text-[0.7rem] leading-snug mt-2 whitespace-pre-line" style={{ fontFamily: "var(--font-alegreya)" }}>
-                  {config.bride_order_title ? `${config.bride_order_title}\n${config.bride_parents}` : t('secondDaughterOf')}
+                  {generateParentsText('bride')}
                 </div>
               </div>
             </div>
