@@ -153,7 +153,7 @@ function TransitionVerse({ config }: { config: any }) {
         style={{ fontFamily: "var(--font-alegreya)" }}
       >
         {language === 'id' ? (config.bible_verse_text_id || t('verseText')) : (config.bible_verse_text_en || t('verseText'))}
-        <span className="font-bold block mt-3">{config.bible_verse_reference || t('verseReference')}</span>
+        <span className="font-bold block mt-3">{language === 'id' ? (config.bible_verse_reference_id || t('verseReference')) : (config.bible_verse_reference_en || t('verseReference'))}</span>
       </p>
     </section>
   );

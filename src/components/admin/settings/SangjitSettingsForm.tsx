@@ -88,14 +88,24 @@ export function SangjitSettingsForm({
               placeholder="Dan di atas semuanya itu: kenakanlah kasih..."
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference</label>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference (EN)</label>
             <input 
               type="text" 
-              value={config.sangjit_bible_verse_reference || ""} 
-              onChange={e => setConfig({...config, sangjit_bible_verse_reference: e.target.value})}
+              value={config.sangjit_bible_verse_reference_en || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_reference_en: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
               placeholder="e.g. Colossians 3:14"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference (ID)</label>
+            <input 
+              type="text" 
+              value={config.sangjit_bible_verse_reference_id || ""} 
+              onChange={e => setConfig({...config, sangjit_bible_verse_reference_id: e.target.value})}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
+              placeholder="e.g. Kolose 3:14"
             />
           </div>
         </div>

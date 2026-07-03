@@ -191,10 +191,10 @@ export function SangjitHeroCountdownSection({
           {/* Bible Verse FooterTextBlock */}
           <div className="flex flex-col items-center text-center gap-2 mt-4 max-w-[380px] z-30">
             <div className="text-white font-sans text-[16px] font-normal leading-relaxed whitespace-pre-line">
-              {language === 'id' ? (config.bible_verse_text_id || t('sangjitVerseText')) : (config.bible_verse_text_en || t('sangjitVerseText'))}
+              {language === 'id' ? (config.sangjit_bible_verse_text_id || t('sangjitVerseText')) : (config.sangjit_bible_verse_text_en || t('sangjitVerseText'))}
             </div>
             <b className="text-white font-sans text-[16px] font-bold">
-              {config.bible_verse_reference || t('sangjitVerseRef')}
+              {language === 'id' ? (config.sangjit_bible_verse_reference_id || t('sangjitVerseRef')) : (config.sangjit_bible_verse_reference_en || t('sangjitVerseRef'))}
             </b>
           </div>
         </motion.div>
