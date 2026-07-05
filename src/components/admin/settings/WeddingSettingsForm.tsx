@@ -33,7 +33,7 @@ export function WeddingSettingsForm({
     const temp = updated[index];
     updated[index] = updated[newIdx];
     updated[newIdx] = temp;
-    setConfig({ ...config, gallery_images: updated });
+    setConfig({ ...config, galleryImages: updated });
   };
 
   return (
@@ -49,7 +49,7 @@ export function WeddingSettingsForm({
             <input 
               type="datetime-local" 
               value={config.countdownDate ? new Date(config.countdownDate).toISOString().slice(0, 16) : ""}
-              onChange={e => setConfig({...config, countdown_date: e.target.value})}
+              onChange={e => setConfig({...config, countdownDate: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
           </div>
@@ -69,7 +69,7 @@ export function WeddingSettingsForm({
               type="text" 
               placeholder="e.g. /audio/bgm.mp3 or https://example.com/song.mp3"
               value={config.musicUrl || ""} 
-              onChange={e => setConfig({...config, music_url: e.target.value})}
+              onChange={e => setConfig({...config, musicUrl: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
           </div>
@@ -163,7 +163,7 @@ export function WeddingSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
             <textarea 
               value={config.bibleVerseTextEn || ""} 
-              onChange={e => setConfig({...config, bible_verse_text_en: e.target.value})}
+              onChange={e => setConfig({...config, bibleVerseTextEn: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
               placeholder="Every good and perfect gift is from above..."
             />
@@ -172,7 +172,7 @@ export function WeddingSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
             <textarea 
               value={config.bibleVerseTextId || ""} 
-              onChange={e => setConfig({...config, bible_verse_text_id: e.target.value})}
+              onChange={e => setConfig({...config, bibleVerseTextId: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
               placeholder="Semua yang baik datang dari Allah..."
             />
@@ -182,7 +182,7 @@ export function WeddingSettingsForm({
             <input 
               type="text" 
               value={config.bibleVerseReferenceEn || ""} 
-              onChange={e => setConfig({...config, bible_verse_reference_en: e.target.value})}
+              onChange={e => setConfig({...config, bibleVerseReferenceEn: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
               placeholder="e.g. James 1:17"
             />
@@ -192,7 +192,7 @@ export function WeddingSettingsForm({
             <input 
               type="text" 
               value={config.bibleVerseReferenceId || ""} 
-              onChange={e => setConfig({...config, bible_verse_reference_id: e.target.value})}
+              onChange={e => setConfig({...config, bibleVerseReferenceId: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
               placeholder="e.g. Yakobus 1:17"
             />
@@ -315,7 +315,7 @@ export function WeddingSettingsForm({
         <textarea
           rows={5}
           value={config.waTemplateWedding || ""}
-          onChange={e => setConfig({ ...config, wa_template_wedding: e.target.value })}
+          onChange={e => setConfig({ ...config, waTemplateWedding: e.target.value })}
           className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm font-mono focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
           placeholder="Halo {nama}! ..."
         />

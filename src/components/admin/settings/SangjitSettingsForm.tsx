@@ -33,7 +33,7 @@ export function SangjitSettingsForm({
             <input
               type="datetime-local"
               value={config.sangjitCountdownDate ? new Date(config.sangjitCountdownDate).toISOString().slice(0, 16) : ""}
-              onChange={e => setConfig({ ...config, sangjit_countdown_date: e.target.value })}
+              onChange={e => setConfig({ ...config, sangjitCountdownDate: e.target.value })}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
             />
           </div>
@@ -57,7 +57,7 @@ export function SangjitSettingsForm({
               type="text"
               placeholder="e.g. /audio/sangjit-bgm.mp3 or https://example.com/song.mp3"
               value={config.sangjitMusicUrl || ""}
-              onChange={e => setConfig({ ...config, sangjit_music_url: e.target.value })}
+              onChange={e => setConfig({ ...config, sangjitMusicUrl: e.target.value })}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
             />
           </div>
@@ -74,7 +74,7 @@ export function SangjitSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
             <textarea 
               value={config.sangjitBibleVerseTextEn || ""} 
-              onChange={e => setConfig({...config, sangjit_bible_verse_text_en: e.target.value})}
+              onChange={e => setConfig({...config, sangjitBibleVerseTextEn: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition min-h-[100px]"
               placeholder="And over all these virtues put on love..."
             />
@@ -83,7 +83,7 @@ export function SangjitSettingsForm({
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
             <textarea 
               value={config.sangjitBibleVerseTextId || ""} 
-              onChange={e => setConfig({...config, sangjit_bible_verse_text_id: e.target.value})}
+              onChange={e => setConfig({...config, sangjitBibleVerseTextId: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition min-h-[100px]"
               placeholder="Dan di atas semuanya itu: kenakanlah kasih..."
             />
@@ -93,7 +93,7 @@ export function SangjitSettingsForm({
             <input 
               type="text" 
               value={config.sangjitBibleVerseReferenceEn || ""} 
-              onChange={e => setConfig({...config, sangjit_bible_verse_reference_en: e.target.value})}
+              onChange={e => setConfig({...config, sangjitBibleVerseReferenceEn: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
               placeholder="e.g. Colossians 3:14"
             />
@@ -103,7 +103,7 @@ export function SangjitSettingsForm({
             <input 
               type="text" 
               value={config.sangjitBibleVerseReferenceId || ""} 
-              onChange={e => setConfig({...config, sangjit_bible_verse_reference_id: e.target.value})}
+              onChange={e => setConfig({...config, sangjitBibleVerseReferenceId: e.target.value})}
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
               placeholder="e.g. Kolose 3:14"
             />
@@ -160,7 +160,7 @@ export function SangjitSettingsForm({
         <textarea
           rows={5}
           value={config.waTemplateSangjit || ""}
-          onChange={e => setConfig({ ...config, wa_template_sangjit: e.target.value })}
+          onChange={e => setConfig({ ...config, waTemplateSangjit: e.target.value })}
           className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm font-mono focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400 transition"
           placeholder="Halo {nama}! ..."
         />

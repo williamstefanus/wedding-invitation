@@ -24,30 +24,30 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   const [deadlines, setDeadlines] = useState(initialData.deadlines || { wedding: "", sangjit: "" });
   const [sessions, setSessions] = useState(initialData.sessions || { holyMatrimony: null, reception: null, sangjit: null });
   const [config, setConfig] = useState(initialData.config || {
-    groom_first_name: "William",
-    groom_last_name: "Stefanus",
-    groom_title: "S.Kom",
-    groom_parents: "Mr. Hadi Stefanus & Mrs. Lanny Mariana",
-    groom_order_title: "First son of",
-    phone_groom: "",
-    gift_bank_groom: "",
-    gift_account_groom: "",
-    gift_name_groom: "",
+    groomFirstName: "William",
+    groomLastName: "Stefanus",
+    groomTitle: "S.Kom",
+    groomParents: "Mr. Hadi Stefanus & Mrs. Lanny Mariana",
+    groomOrderTitle: "First son of",
+    phoneGroom: "",
+    giftBankGroom: "",
+    giftAccountGroom: "",
+    giftNameGroom: "",
     
-    bride_first_name: "Aziel",
-    bride_last_name: "Yorieza",
-    bride_title: "B.A",
-    bride_parents: "Mr. Yopie Kusnandar & Mrs. Ina Rostiana Rahardja",
-    bride_order_title: "Second daughter of",
-    phone_bride: "",
-    gift_bank_bride: "",
-    gift_account_bride: "",
-    gift_name_bride: "",
+    brideFirstName: "Aziel",
+    brideLastName: "Yorieza",
+    brideTitle: "B.A",
+    brideParents: "Mr. Yopie Kusnandar & Mrs. Ina Rostiana Rahardja",
+    brideOrderTitle: "Second daughter of",
+    phoneBride: "",
+    giftBankBride: "",
+    giftAccountBride: "",
+    giftNameBride: "",
     
-    wo_pin: "123456",
-    music_url: "",
-    countdown_date: "",
-    gallery_images: []
+    woPin: "123456",
+    musicUrl: "",
+    countdownDate: "",
+    galleryImages: []
   });
 
   const [uploading, setUploading] = useState(false);
@@ -101,7 +101,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
 
       setConfig((prev: any) => ({
         ...prev,
-        gallery_images: [...(prev.gallery_images || []), publicUrlData.publicUrl]
+        galleryImages: [...(prev.galleryImages || []), publicUrlData.publicUrl]
       }));
 
     } catch (err: any) {
@@ -114,7 +114,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   const removeImage = (index: number) => {
     const newImages = [...(config.galleryImages || [])];
     newImages.splice(index, 1);
-    setConfig({ ...config, gallery_images: newImages });
+    setConfig({ ...config, galleryImages: newImages });
   };
 
   return (
