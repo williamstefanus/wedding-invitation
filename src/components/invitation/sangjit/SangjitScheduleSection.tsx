@@ -118,11 +118,11 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
               </div>
 
               {/* Venue & Address */}
-              <div style={{ width: '100%', textAlign: 'center' }}>
-                <span style={{ color: '#761B33', fontSize: 16, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, wordWrap: 'break-word' }}>
-                  {venueStr}<br />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <span style={{ color: '#761B33', fontSize: 16, fontFamily: 'Montserrat, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                  {venueStr}
                 </span>
-                <span style={{ color: '#761B33', fontSize: 16, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word' }}>
+                <span style={{ color: '#761B33', fontSize: 16, fontFamily: 'Montserrat, sans-serif', fontWeight: 400, wordWrap: 'break-word', maxWidth: 130, textAlign: 'center' }}>
                   {addressStr}
                 </span>
               </div>
