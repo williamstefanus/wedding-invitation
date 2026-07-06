@@ -1,7 +1,8 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
-import type { InvitationWithDetails, Settings } from "@/types";
+import type { InvitationWithDetails } from "@/types";
 
-export async function getInvitationDetails(
+export const getInvitationDetails = cache(async function getInvitationDetails(
   code: string,
   eventTypeSlug: string
 ): Promise<{ invitation: InvitationWithDetails | null; settings: Record<string, any> | null; error: string | null }> {
@@ -44,28 +45,16 @@ export async function getInvitationDetails(
       return { invitation: null, settings: null, error: "Invitation not found" };
     }
 
-    // Fetch global settings
-    const { data: settingsData, error: settingsError } = await supabase
-      .from("settings")
-      .select("*");
-
-    let settingsPayload: Record<string, any> = {};
-    if (!settingsError && settingsData) {
-      settingsData.forEach((s) => {
-        settingsPayload[s.key] = s.value;
-      });
-    }
-
     // Type casting to InvitationWithDetails since the Supabase generated types 
     // are wide and nested queries return arrays for 1:N relations, 
     // but the `maybeSingle` and nested structures match our domain types conceptually.
     return {
       invitation: invitation as unknown as InvitationWithDetails,
-      settings: settingsPayload,
+      settings: null,
       error: null,
     };
   } catch (err) {
     console.error("Unexpected error fetching invitation:", err);
     return { invitation: null, settings: null, error: "Unexpected error" };
   }
-}
+});

@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { LanguageProvider } from "@/contexts/LanguageContext";
 import { OpeningScreen } from "./OpeningScreen";
 import { CountdownSection } from "./CountdownSection";
 import { CoupleSection } from "./CoupleSection";
@@ -14,7 +10,6 @@ import { RSVPSection } from "./RSVPSection";
 import { GallerySection } from "./GallerySection";
 import { GiftSection } from "./GiftSection";
 import { ThankYouSection } from "./ThankYouSection";
-import { SpeakerWaveIcon, SpeakerXMarkIcon } from "@heroicons/react/24/solid";
 
 interface WeddingInvitationClientProps {
   invitation: any;
@@ -23,7 +18,6 @@ interface WeddingInvitationClientProps {
 }
 
 export function WeddingInvitationClient({ invitation, code, settings }: WeddingInvitationClientProps) {
-  const { t, language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -88,47 +82,40 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
   const contactPhone = isBride ? config.phoneBride : config.phoneGroom;
 
   return (
-    <LanguageProvider>
-      <div className="min-h-[100dvh] w-full bg-neutral-100 flex justify-center">
-        <main className={`relative h-[100dvh] scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
-          {/* Background Audio */}
-          <audio ref={audioRef} src={musicUrl} loop />
+    <div className="min-h-[100dvh] w-full bg-neutral-100 flex justify-center">
+      <main className={`relative h-[100dvh] scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+        <audio ref={audioRef} src={musicUrl} loop preload="none" />
 
-          <OpeningScreen
-            guestName={invitation?.guest?.name || null}
-            isOpen={isOpen}
-            onOpen={handleOpen}
-            config={config}
-          />
+        <OpeningScreen
+          guestName={invitation?.guest?.name || null}
+          isOpen={isOpen}
+          onOpen={handleOpen}
+          config={config}
+        />
 
-          {/* Floating Music Toggle Button */}
-          {isOpen && (
-            <button
-              onClick={toggleMusic}
-              className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#3A592F] text-[#F7E392] shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 ${isPlaying ? "animate-pulse" : "opacity-80"
-                }`}
-              aria-label="Toggle music"
-            >
-              {isPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-music"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" x2="17" y1="9" y2="15" /><line x1="17" x2="23" y1="9" y2="15" /></svg>
-              )}
-            </button>
-          )}
+        {isOpen && (
+          <button
+            onClick={toggleMusic}
+            className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#3A592F] text-[#F7E392] shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 ${isPlaying ? "animate-pulse" : "opacity-80"
+              }`}
+            aria-label="Toggle music"
+          >
+            {isPlaying ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-music"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" x2="17" y1="9" y2="15" /><line x1="17" x2="23" y1="9" y2="15" /></svg>
+            )}
+          </button>
+        )}
 
-          {/* The main content that shows underneath */}
+        {isOpen && (
           <div
             ref={contentRef}
             className="w-full flex flex-col relative z-20 bg-[#faf9f0]"
           >
-            {/* Page 2: Transition & Couple Section */}
             <section className="w-full flex flex-col relative pt-[15vh]">
               <CountdownSection targetDateStr={config.countdownDate || "2026-10-23T11:00:00"} />
-
-              {/* Transition Verse */}
               <TransitionVerse config={config} />
-
               <CoupleSection config={config} />
             </section>
 
@@ -138,9 +125,9 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
             <GiftSection bank={giftBank} account={giftAccount} name={giftName} />
             <ThankYouSection names={`${config.groomFirstName || "John"} & ${config.brideFirstName || "Jane"}`} />
           </div>
-        </main>
-      </div>
-    </LanguageProvider>
+        )}
+      </main>
+    </div>
   );
 }
 

@@ -61,7 +61,8 @@ export function SangjitHeroCountdownSection({
             src={SANGJIT_INVITATION_ASSETS.sangjitWatercolorBackground}
             alt="Texture"
             fill
-            priority
+            loading="eager"
+            sizes="(max-width: 480px) 100vw, 480px"
             className="object-cover object-top"
           />
         </div>
@@ -79,7 +80,8 @@ export function SangjitHeroCountdownSection({
               src={SANGJIT_INVITATION_ASSETS.sangjitOpeningEmblem}
               alt="Emblem"
               fill
-              priority
+              loading="eager"
+              sizes="240px"
               className="object-contain"
             />
           </div>
@@ -101,8 +103,7 @@ export function SangjitHeroCountdownSection({
             alt="Floral Wave"
             width={600}
             height={260}
-            priority
-            unoptimized
+            loading="eager"
             className="w-full h-auto block object-cover object-bottom"
           />
         </div>

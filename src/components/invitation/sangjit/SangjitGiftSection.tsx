@@ -37,13 +37,14 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
           src={SANGJIT_INVITATION_ASSETS.sangjitGiftBackground}
           alt="Gift Texture"
           fill
-          priority
+          sizes="480px"
           className="object-cover"
         />
       </div>
 
       {/* Top Wave (responsive maxWidth 480px) */}
       <img
+        loading="lazy"
         style={{ width: '100%', maxWidth: 480, height: 'auto', maxHeight: 128, objectFit: 'cover', objectPosition: 'top', position: 'relative', zIndex: 10 }}
         src={SANGJIT_INVITATION_ASSETS.sangjitGiftTopWave}
         alt="Top Wave"
@@ -67,6 +68,7 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
           style={{ width: '43%', maxWidth: 187, flexShrink: 0, pointerEvents: 'none' }}
         >
           <img
+            loading="lazy"
             style={{ width: '100%', height: 'auto', display: 'block' }}
             src={SANGJIT_INVITATION_ASSETS.sangjitGiftLeftFloral}
             alt="Left Floral"

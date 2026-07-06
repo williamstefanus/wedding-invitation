@@ -34,7 +34,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
               src={WEDDING_INVITATION_ASSETS.heroBackground}
               alt="Hero Background" 
               fill
-              priority
+              preload
               sizes="(max-width: 420px) 100vw, 420px"
               className="object-cover object-top"
             />
@@ -55,7 +55,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
           alt={`${config.groomFirstName || "John"} & ${config.brideFirstName || "Jane"}`}
           width={280}
           height={158}
-          priority
+          loading="eager"
           className="w-full max-w-[280px] [@media(max-width:389px)]:max-w-[240px] [@media(max-height:719px)]:max-w-[240px] h-auto object-contain drop-shadow-md"
         />
       </motion.div>
@@ -69,7 +69,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
             src={WEDDING_INVITATION_ASSETS.heroCouplePhoto}
             alt="Hero Couple" 
             fill
-            priority
+            loading="eager"
             sizes="(max-width: 420px) 100vw, 420px"
             className="object-contain object-bottom"
           />
@@ -81,7 +81,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
             src={WEDDING_INVITATION_ASSETS.heroGrassForeground}
             alt="Hero Grass" 
             fill
-            priority
+            loading="eager"
             sizes="(max-width: 420px) 100vw, 420px"
             className="object-cover object-bottom"
           />

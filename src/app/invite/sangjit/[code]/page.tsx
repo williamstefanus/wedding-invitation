@@ -1,37 +1,41 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
+import { cache } from "react";
 import { getInvitationDetails } from "@/lib/actions/invitation";
 import { getSettings } from "@/lib/actions/settings";
 import { InviteNotFound } from "@/components/invitation/InviteNotFound";
 import { SangjitInvitationClient } from "@/components/invitation/sangjit/SangjitInvitationClient";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 interface SangjitInvitePageProps {
   params: Promise<{ code: string }>;
 }
 
+const getSangjitInvitePageData = cache(async (code: string) => {
+  const [invitationRes, settingsRes] = await Promise.all([
+    getInvitationDetails(code, "sangjit"),
+    getSettings(),
+  ]);
+
+  return { ...invitationRes, settingsRes };
+});
+
 export async function generateMetadata(
-  { params }: SangjitInvitePageProps,
-  parent: ResolvingMetadata
+  { params }: SangjitInvitePageProps
 ): Promise<Metadata> {
   const { code } = await params;
 
-  // 1. Server-Side Fetching (No client side execution)
-  const { invitation, error } = await getInvitationDetails(code, "sangjit");
+  const { invitation, error, settingsRes } = await getSangjitInvitePageData(code);
 
-  // 2. Graceful Fallbacks
   const guestName = (invitation && !error && invitation.guest?.name) ? invitation.guest.name : "Our Special Guest";
 
-  // Fetch config for dynamic names
-  const settingsRes = await getSettings();
   const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
   const groomName = config?.groomFirstName || "John";
   const brideName = config?.brideFirstName || "Jane";
 
-  // 3. Dynamic Text Generation
   const title = `Sangjit Invitation - ${brideName} & ${groomName}`;
   const description = `Dear ${guestName}, you are joyfully invited to the Sangjit ceremony of ${brideName} & ${groomName} on October 17, 2026. Please open to see the details and RSVP.`;
   const url = `https://wedding-william-aziel.vercel.app/invite/sangjit/${code}`;
 
-  // 4. Metadata Specification
   return {
     title,
     description,
@@ -61,9 +65,7 @@ export default async function SangjitInvitePage({
 }: SangjitInvitePageProps) {
   const { code } = await params;
 
-  // Fetch invitation strictly bound to the 'sangjit' event type slug
-  const { invitation, error } = await getInvitationDetails(code, "sangjit");
-  const settingsRes = await getSettings();
+  const { invitation, error, settingsRes } = await getSangjitInvitePageData(code);
   const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
 
   if (error || !invitation) {
@@ -71,10 +73,12 @@ export default async function SangjitInvitePage({
   }
 
   return (
-    <SangjitInvitationClient
-      invitation={invitation}
-      code={code}
-      settings={settingsRes.data}
-    />
+    <LanguageProvider>
+      <SangjitInvitationClient
+        invitation={invitation}
+        code={code}
+        settings={settingsRes.data}
+      />
+    </LanguageProvider>
   );
 }

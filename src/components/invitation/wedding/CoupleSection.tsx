@@ -31,7 +31,7 @@ export function CoupleSection({ config = {} }: { config?: any }) {
       
       {/* 1. Background Sky/Grass - Bleeds to fill screen width without side gaps */}
       <div className="absolute top-0 inset-x-0 w-full pointer-events-none opacity-90 z-0 flex justify-center scale-[1.2] origin-top">
-        <Image src="/images/envelope-green-hill-transition.png" alt="Sky Decor" width={800} height={600} priority className="w-full h-auto object-cover" />
+        <Image src={ASSET.envelopeGreenHillTransition} alt="Sky Decor" width={800} height={600} className="w-full h-auto object-cover" />
       </div>
 
       {/* Container matching Figma's 390px canvas width */}

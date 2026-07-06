@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
 
 interface ThankYouSectionProps {
   names?: string;
@@ -19,13 +20,13 @@ export function ThankYouSection({ names }: ThankYouSectionProps) {
       
       {/* Tall Grass background filling the top section */}
       <div className="absolute top-0 left-0 w-full pointer-events-none opacity-100 z-0">
-        <Image src="/images/tall-grass-divider.png" alt="Tall Grass" width={750} height={579} className="w-full h-auto object-contain object-top" />
+        <Image src={WEDDING_INVITATION_ASSETS.tallGrassDivider} alt="Tall Grass" width={750} height={579} className="w-full h-auto object-contain object-top" />
       </div>
 
       {/* Meadow Hills - Normal Document Flow to dictate height naturally */}
       <div className="relative w-full z-10 pointer-events-none mt-[25dvh]">
         <Image 
-          src="/images/footer-meadow-hills.png"
+          src="/images/footer-meadow-hills.webp"
           alt="Meadow Hills"
           width={390}
           height={300}

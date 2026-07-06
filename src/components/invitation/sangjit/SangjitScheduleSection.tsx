@@ -57,7 +57,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
           src={SANGJIT_INVITATION_ASSETS.sangjitMaroonWaveDivider}
           alt="Wave Divider"
           fill
-          unoptimized
+          sizes="480px"
           className="object-cover object-center"
         />
       </div>
@@ -68,7 +68,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
           src={SANGJIT_INVITATION_ASSETS.sangjitScheduleBackground}
           alt="Schedule Texture"
           fill
-          priority
+          sizes="480px"
           className="object-cover"
         />
       </div>
@@ -96,6 +96,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
             }}
           >
             <img
+              loading="lazy"
               style={{ width: '100%', height: 'auto', display: 'block', maxWidth: 'none' }}
               src={SANGJIT_INVITATION_ASSETS.sangjitPhoenixIllustration}
               alt="Phoenix Illustration"

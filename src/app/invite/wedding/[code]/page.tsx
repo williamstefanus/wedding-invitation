@@ -1,5 +1,5 @@
-import type { Metadata, ResolvingMetadata } from "next";
-import { Heart } from "lucide-react";
+import type { Metadata } from "next";
+import { cache } from "react";
 import { getInvitationDetails } from "@/lib/actions/invitation";
 import { getSettings } from "@/lib/actions/settings";
 import { InviteNotFound } from "@/components/invitation/InviteNotFound";
@@ -10,30 +10,32 @@ interface WeddingInvitePageProps {
   params: Promise<{ code: string }>;
 }
 
+const getWeddingInvitePageData = cache(async (code: string) => {
+  const [invitationRes, settingsRes] = await Promise.all([
+    getInvitationDetails(code, "wedding"),
+    getSettings(),
+  ]);
+
+  return { ...invitationRes, settingsRes };
+});
+
 export async function generateMetadata(
-  { params }: WeddingInvitePageProps,
-  parent: ResolvingMetadata
+  { params }: WeddingInvitePageProps
 ): Promise<Metadata> {
   const { code } = await params;
 
-  // 1. Server-Side Fetching (No client side execution)
-  const { invitation, error } = await getInvitationDetails(code, "wedding");
+  const { invitation, error, settingsRes } = await getWeddingInvitePageData(code);
 
-  // 2. Graceful Fallbacks
   const guestName = (invitation && !error && invitation.guest?.name) ? invitation.guest.name : "Our Special Guest";
 
-  // Fetch config for dynamic names
-  const settingsRes = await getSettings();
   const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
   const groomName = config?.groomFirstName || "John";
   const brideName = config?.brideFirstName || "Jane";
 
-  // 3. Dynamic Text Generation
   const title = `Wedding Invitation - ${groomName} & ${brideName}`;
   const description = `Dear ${guestName}, you are joyfully invited to the wedding of ${groomName} & ${brideName} on October 23, 2026. Please open to see the details and RSVP.`;
   const url = `https://wedding-william-aziel.vercel.app/invite/wedding/${code}`;
 
-  // 4. Metadata Specification
   return {
     title,
     description,
@@ -63,17 +65,12 @@ export default async function WeddingInvitePage({
 }: WeddingInvitePageProps) {
   const { code } = await params;
 
-  // Fetch invitation strictly bound to the 'wedding' event type slug
-  const { invitation, error } = await getInvitationDetails(code, "wedding");
-  const settingsRes = await getSettings();
+  const { invitation, error, settingsRes } = await getWeddingInvitePageData(code);
   const config = (settingsRes.success ? settingsRes.data?.config : {}) as any;
 
   if (error || !invitation) {
     return <InviteNotFound config={config} />;
   }
-
-  // We have a valid invitation now
-  const guest = invitation.guest;
 
   return (
     <LanguageProvider>

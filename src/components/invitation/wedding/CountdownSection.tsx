@@ -47,7 +47,7 @@ export function CountdownSection({ targetDateStr }: CountdownSectionProps) {
     updateTime();
     const timer = setInterval(updateTime, 1000);
     return () => clearInterval(timer);
-  }, [targetDateStr]);
+  }, [language, targetDateStr]);
 
   const formatDigits = (num: number) => {
     // Dynamically splits numbers into individual character boxes.

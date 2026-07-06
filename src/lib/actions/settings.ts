@@ -1,8 +1,9 @@
 "use server";
 
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
-export async function getSettings() {
+const readSettings = cache(async () => {
   try {
     const supabase = await createClient();
 
@@ -85,6 +86,10 @@ export async function getSettings() {
     console.error("Failed to fetch settings:", error);
     return { success: false, error: error.message };
   }
+});
+
+export async function getSettings() {
+  return readSettings();
 }
 
 export async function saveSettings(payload: any) {

@@ -89,7 +89,7 @@ export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, con
           src={SANGJIT_INVITATION_ASSETS.sangjitRsvpBackground}
           alt="RSVP Texture"
           fill
-          priority
+          sizes="480px"
           className="object-cover"
         />
       </div>
@@ -113,7 +113,7 @@ export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, con
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ position: 'absolute', left: 130, top: 0, width: 320, pointerEvents: 'none', transform: 'rotate(6deg)', transformOrigin: 'top left', zIndex: 10 }}
           >
-            <img style={{ width: '100%', height: 'auto', display: 'block', maxWidth: 'none' }} src={SANGJIT_INVITATION_ASSETS.sangjitRsvpFloralHeader} alt="Floral Header" />
+            <img loading="lazy" style={{ width: '100%', height: 'auto', display: 'block', maxWidth: 'none' }} src={SANGJIT_INVITATION_ASSETS.sangjitRsvpFloralHeader} alt="Floral Header" />
           </motion.div>
         </div>
 

@@ -5,6 +5,7 @@ import { Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WEDDING_INVITATION_ASSETS } from "@/lib/constants";
 
 interface GiftSectionProps {
   bank?: string;
@@ -32,7 +33,7 @@ export function GiftSection({ bank, account, name }: GiftSectionProps) {
       {/* Top Meadow Divider */}
       <div className="absolute top-[-30px] left-0 w-full z-20 pointer-events-none">
         <Image 
-          src="/images/meadow-flower-divider.png" 
+          src={WEDDING_INVITATION_ASSETS.meadowFlowerDivider}
           alt="Meadow Top Divider" 
           width={750} 
           height={579} 

@@ -77,7 +77,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
       {/* Top Meadow Divider */}
       <div className="absolute top-[-30px] left-0 w-full z-20 pointer-events-none">
         <Image 
-          src="/images/meadow-flower-divider.png"
+          src={WEDDING_INVITATION_ASSETS.meadowFlowerDivider}
           alt="Meadow Top Divider"
           width={750}
           height={579}
@@ -214,7 +214,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
       {/* Bottom Transition Daisy Garden */}
       <div className="absolute bottom-[-10px] left-0 w-full z-20 pointer-events-none">
         <Image 
-          src="/images/daisy-garden-divider.png"
+          src={WEDDING_INVITATION_ASSETS.daisyGardenDivider}
           alt="Daisy Garden Divider"
           width={500}
           height={373}

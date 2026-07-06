@@ -65,7 +65,7 @@ export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: Sangji
             src={SANGJIT_INVITATION_ASSETS.sangjitEnvelopeBackPanel}
             alt="Envelope Back"
             fill
-            priority
+            sizes="410px"
             className="object-contain"
           />
 
@@ -85,7 +85,7 @@ export function SangjitCoupleEnvelopeSection({ invitation, config = {} }: Sangji
               src={SANGJIT_INVITATION_ASSETS.sangjitEnvelopeInnerPattern}
               alt="Lining Pattern"
               fill
-              unoptimized
+              sizes="344px"
               className="object-contain object-top"
             />
           </div>

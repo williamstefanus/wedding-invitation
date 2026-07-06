@@ -8,7 +8,6 @@ import { SangjitScheduleSection } from "./SangjitScheduleSection";
 import { SangjitRSVPSection } from "./SangjitRSVPSection";
 import { SangjitGiftSection } from "./SangjitGiftSection";
 import { SangjitThankYouSection } from "./SangjitThankYouSection";
-import { LanguageProvider } from "@/contexts/LanguageContext";
 
 interface SangjitInvitationClientProps {
   invitation: any;
@@ -71,37 +70,35 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
   }, [isOpen]);
 
   return (
-    <LanguageProvider>
-      <div className="min-h-[100dvh] w-full bg-[#FAFAFA] flex justify-center">
-        <main className={`relative scroll-smooth w-full max-w-[480px] mx-auto overflow-x-hidden bg-[#761B33] shadow-2xl ${isOpen ? 'min-h-[100dvh]' : 'h-[100dvh] overflow-hidden'}`}>
-          <audio ref={audioRef} src={musicUrl} loop />
+    <div className="min-h-[100dvh] w-full bg-[#FAFAFA] flex justify-center">
+      <main className={`relative scroll-smooth w-full max-w-[480px] mx-auto overflow-x-hidden bg-[#761B33] shadow-2xl ${isOpen ? 'min-h-[100dvh]' : 'h-[100dvh] overflow-hidden'}`}>
+        <audio ref={audioRef} src={musicUrl} loop preload="none" />
 
-          {/* Floating Music Toggle Button matching Wedding style */}
-          {isOpen && (
-            <button
-              onClick={toggleMusic}
-              className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#761B33] text-white shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 border border-white/20 ${isPlaying ? "animate-pulse" : "opacity-80"}`}
-              aria-label="Toggle music"
-            >
-              {isPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" x2="17" y1="9" y2="15"/><line x1="17" x2="23" y1="9" y2="15"/></svg>
-              )}
-            </button>
-          )}
+        {isOpen && (
+          <button
+            onClick={toggleMusic}
+            className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#761B33] text-white shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 border border-white/20 ${isPlaying ? "animate-pulse" : "opacity-80"}`}
+            aria-label="Toggle music"
+          >
+            {isPlaying ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" x2="17" y1="9" y2="15"/><line x1="17" x2="23" y1="9" y2="15"/></svg>
+            )}
+          </button>
+        )}
 
-          <SangjitOpeningScreen 
-            guestName={invitation?.guest?.name || null}
-            isOpen={isOpen}
-            onOpen={handleOpen}
-            config={config}
-          />
+        <SangjitOpeningScreen
+          guestName={invitation?.guest?.name || null}
+          isOpen={isOpen}
+          onOpen={handleOpen}
+          config={config}
+        />
 
-          {/* Underlying Invitation Content Canvas */}
+        {isOpen && (
           <div ref={contentRef} className="w-full flex flex-col relative z-10 bg-[#761B33]">
-            <SangjitHeroCountdownSection 
-              targetDateStr={targetDateStr} 
+            <SangjitHeroCountdownSection
+              targetDateStr={targetDateStr}
               config={config}
             />
             <SangjitCoupleEnvelopeSection invitation={invitation} config={config} />
@@ -110,8 +107,8 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
             <SangjitGiftSection bank={giftBank} account={giftAccount} name={giftName} invitation={invitation} />
             <SangjitThankYouSection invitation={invitation} config={config} />
           </div>
-        </main>
-      </div>
-    </LanguageProvider>
+        )}
+      </main>
+    </div>
   );
 }

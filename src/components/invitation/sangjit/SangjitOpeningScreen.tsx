@@ -37,7 +37,8 @@ export function SangjitOpeningScreen({
           src={SANGJIT_INVITATION_ASSETS.sangjitWatercolorBackground}
           alt="Texture"
           fill
-          priority
+          loading="eager"
+          sizes="(max-width: 480px) 100vw, 480px"
           className="object-cover object-top opacity-90"
         />
       </div>
@@ -58,7 +59,8 @@ export function SangjitOpeningScreen({
             src={SANGJIT_INVITATION_ASSETS.sangjitOpeningEmblem}
             alt="Sangjit Emblem"
             fill
-            priority
+            preload
+            sizes="320px"
             className="object-contain"
           />
         </motion.div>
@@ -122,7 +124,7 @@ export function SangjitOpeningScreen({
           alt="Footer Floral Wave"
           width={600}
           height={260}
-          priority
+          loading="eager"
           className="w-full h-auto block object-contain object-bottom"
         />
       </motion.div>
