@@ -51,15 +51,34 @@ const egizio = localFont({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Wedding Invitation — John & Jane",
-    template: "%s | John & Jane",
-  },
-  description:
-    "A private digital wedding invitation and guest management platform for John & Jane's celebration.",
-  robots: { index: false, follow: false },
-};
+import { getSettings } from "@/lib/actions/settings";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let faviconUrl = "/favicon-default.ico";
+
+  try {
+    const settingsRes = await getSettings();
+    const config = settingsRes.success ? (settingsRes.data?.config as any) : null;
+    if (config?.faviconUrl) {
+      faviconUrl = config.faviconUrl;
+    }
+  } catch {
+    // Fall back to default favicon
+  }
+
+  return {
+    title: {
+      default: "Wedding Invitation — John & Jane",
+      template: "%s | John & Jane",
+    },
+    description:
+      "A private digital wedding invitation and guest management platform for John & Jane's celebration.",
+    robots: { index: false, follow: false },
+    icons: {
+      icon: faviconUrl,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

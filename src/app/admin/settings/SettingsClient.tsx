@@ -121,10 +121,13 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
     woPin: "123456",
     musicUrl: "",
     countdownDate: "",
-    galleryImages: []
+    galleryImages: [],
+    sangjitGalleryImages: [],
+    faviconUrl: ""
   });
 
   const [uploading, setUploading] = useState(false);
+  const [uploadingFavicon, setUploadingFavicon] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const showNotification = (type: 'success' | 'error', text: string) => {
@@ -206,6 +209,107 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
     setConfig({ ...config, galleryImages: newImages });
   };
 
+  const handleSangjitImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_SOURCE_IMAGE_BYTES) {
+      showNotification('error', `File size exceeds ${formatBytes(MAX_SOURCE_IMAGE_BYTES)} limit.`);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const supabase = createClient();
+      const { file: uploadFile, optimized } = await optimizeImageForUpload(file);
+
+      if (uploadFile.size > MAX_OPTIMIZED_IMAGE_BYTES) {
+        showNotification('error', `Optimized image is still too large (${formatBytes(uploadFile.size)}). Please choose a smaller image.`);
+        return;
+      }
+
+      const fileExt = uploadFile.name.split('.').pop() || 'webp';
+      const fileName = `sangjit_${getFileStem(uploadFile.name)}_${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('gallery')
+        .upload(filePath, uploadFile, {
+          cacheControl: '31536000',
+          contentType: uploadFile.type || 'application/octet-stream',
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage.from('gallery').getPublicUrl(filePath);
+
+      setConfig((prev: any) => ({
+        ...prev,
+        sangjitGalleryImages: [...(prev.sangjitGalleryImages || []), publicUrlData.publicUrl]
+      }));
+
+      if (optimized) {
+        showNotification('success', `Image optimized from ${formatBytes(file.size)} to ${formatBytes(uploadFile.size)} and uploaded.`);
+      } else {
+        showNotification('success', `Image uploaded (${formatBytes(uploadFile.size)}).`);
+      }
+    } catch (err: any) {
+      showNotification('error', `Upload failed: ${err.message}. Ensure 'gallery' bucket exists and is public.`);
+    } finally {
+      e.target.value = "";
+      setUploading(false);
+    }
+  };
+
+  const removeSangjitImage = (index: number) => {
+    const newImages = [...(config.sangjitGalleryImages || [])];
+    newImages.splice(index, 1);
+    setConfig({ ...config, sangjitGalleryImages: newImages });
+  };
+
+  const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_SOURCE_IMAGE_BYTES) {
+      showNotification('error', `File size exceeds ${formatBytes(MAX_SOURCE_IMAGE_BYTES)} limit.`);
+      return;
+    }
+
+    setUploadingFavicon(true);
+    try {
+      const supabase = createClient();
+
+      const fileExt = file.name.split('.').pop() || 'png';
+      const fileName = `favicon_${Date.now()}.${fileExt}`;
+      const filePath = `favicon/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('gallery')
+        .upload(filePath, file, {
+          cacheControl: '31536000',
+          contentType: file.type || 'image/png',
+          upsert: true,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage.from('gallery').getPublicUrl(filePath);
+
+      setConfig((prev: any) => ({
+        ...prev,
+        faviconUrl: publicUrlData.publicUrl
+      }));
+
+      showNotification('success', `Favicon uploaded successfully (${formatBytes(file.size)}).`);
+    } catch (err: any) {
+      showNotification('error', `Favicon upload failed: ${err.message}.`);
+    } finally {
+      e.target.value = "";
+      setUploadingFavicon(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto p-4 md:p-8 font-sans pb-24">
       
@@ -261,6 +365,8 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
         <GeneralSettingsForm 
           config={config}
           setConfig={setConfig}
+          uploadingFavicon={uploadingFavicon}
+          handleFaviconUpload={handleFaviconUpload}
         />
       )}
 
@@ -286,6 +392,9 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
           setDeadlines={setDeadlines}
           sessions={sessions}
           setSessions={setSessions}
+          uploading={uploading}
+          handleSangjitImageUpload={handleSangjitImageUpload}
+          removeSangjitImage={removeSangjitImage}
         />
       )}
 

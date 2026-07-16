@@ -77,6 +77,8 @@ const readSettings = cache(async () => {
           countdownDate: "2026-10-23T11:00:00",
           sangjitCountdownDate: "",
           galleryImages: [],
+          sangjitGalleryImages: [],
+          faviconUrl: "",
           waTemplateWedding: "Halo {nama}! 🎉 Kami dengan hormat mengundang kamu ke pernikahan kami.\n\nSilakan konfirmasi kehadiran melalui link berikut:\n{link}\n\nTerima kasih 🙏",
           waTemplateSangjit: "Halo {nama}! 🎉 Kami mengundang kamu ke acara Sangjit kami.\n\nSilakan konfirmasi kehadiran melalui link berikut:\n{link}\n\nTerima kasih 🙏"
         }

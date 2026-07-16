@@ -7,6 +7,7 @@ import { SangjitCoupleEnvelopeSection } from "./SangjitCoupleEnvelopeSection";
 import { SangjitScheduleSection } from "./SangjitScheduleSection";
 import { SangjitRSVPSection } from "./SangjitRSVPSection";
 import { SangjitGiftSection } from "./SangjitGiftSection";
+import { SangjitGallerySection } from "./SangjitGallerySection";
 import { SangjitThankYouSection } from "./SangjitThankYouSection";
 
 interface SangjitInvitationClientProps {
@@ -105,6 +106,7 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
             <SangjitScheduleSection session={sangjitSession} invitation={invitation} />
             <SangjitRSVPSection invitation={invitation} deadline={deadlines.sangjit} contactPhone={contactPhone} config={config} />
             <SangjitGiftSection bank={giftBank} account={giftAccount} name={giftName} invitation={invitation} />
+            <SangjitGallerySection images={config.sangjitGalleryImages} />
             <SangjitThankYouSection invitation={invitation} config={config} />
           </div>
         )}

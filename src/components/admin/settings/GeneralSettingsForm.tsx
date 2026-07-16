@@ -1,18 +1,64 @@
 "use client";
 
-import { User, Phone, Gift, Lock } from "lucide-react";
+import { User, Phone, Gift, Lock, Globe, UploadCloud, Loader2, Trash2 } from "lucide-react";
 
 interface GeneralSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
+  uploadingFavicon: boolean;
+  handleFaviconUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function GeneralSettingsForm({
   config,
   setConfig,
+  uploadingFavicon,
+  handleFaviconUpload,
 }: GeneralSettingsFormProps) {
   return (
     <div className="space-y-8 animate-fade-up">
+
+      {/* Favicon Upload */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <Globe className="w-5 h-5 text-emerald-600" /> Favicon (Browser Tab Icon)
+        </h2>
+        <p className="text-sm text-slate-500 mb-4">
+          Upload a PNG, SVG, or ICO file. This icon will be displayed in the browser tab when guests visit your invitation.
+        </p>
+        <div className="flex items-center gap-6">
+          {/* Preview */}
+          <div className="flex-shrink-0 w-16 h-16 rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50 overflow-hidden">
+            {config.faviconUrl ? (
+              <img src={config.faviconUrl} alt="Favicon preview" className="w-full h-full object-contain" />
+            ) : (
+              <Globe className="w-6 h-6 text-slate-300" />
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <label className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl shadow-sm cursor-pointer flex items-center gap-2 transition active:scale-95">
+                {uploadingFavicon ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                <span>{config.faviconUrl ? 'Replace' : 'Upload'} Favicon</span>
+                <input type="file" accept="image/png,image/svg+xml,image/x-icon,image/ico,image/vnd.microsoft.icon" onChange={handleFaviconUpload} className="hidden" disabled={uploadingFavicon} />
+              </label>
+              {config.faviconUrl && (
+                <button
+                  type="button"
+                  onClick={() => setConfig({ ...config, faviconUrl: '' })}
+                  className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-xl text-xs font-bold transition flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Remove
+                </button>
+              )}
+            </div>
+            {config.faviconUrl && (
+              <p className="text-[10px] text-slate-400 truncate max-w-xs">Current: {config.faviconUrl.split('/').pop()}</p>
+            )}
+          </div>
+        </div>
+      </div>
       {/* Groom Information */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
