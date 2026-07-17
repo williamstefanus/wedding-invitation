@@ -85,11 +85,11 @@ export function SangjitGallerySection({ images = [] }: SangjitGallerySectionProp
     }
   }
 
-  const placeholderBentoImages = Array(5).fill("/images/gallery-placeholder.png");
+  const placeholderBentoImages = Array(5).fill("/images/image_placeholder.jpg");
 
   return (
     <section 
-      className="w-full flex flex-col items-center py-[48px] z-20 relative overflow-hidden"
+      className="w-full flex flex-col items-center pt-[24px] pb-[48px] z-20 relative overflow-hidden"
       style={{ background: "linear-gradient(180deg, #761B33 0%, #8B2040 50%, #761B33 100%)" }}
     >
       <motion.h2 
@@ -174,7 +174,7 @@ export function SangjitGallerySection({ images = [] }: SangjitGallerySectionProp
                 className="w-full aspect-[4/3] relative rounded-xl overflow-hidden shadow-sm cursor-pointer hover:scale-[1.02] active:scale-95 transition-transform bg-[#5a1427]"
                 onClick={() => setSelectedImage({ label: "Placeholder" })}
               >
-                <Image src="/images/gallery-placeholder.png" fill className="object-cover" alt="Placeholder" />
+                <Image src="/images/image_placeholder.jpg" fill className="object-cover" alt="Placeholder" />
               </motion.div>
 
               {/* Bento Box Layout for Placeholder */}
@@ -203,7 +203,7 @@ export function SangjitGallerySection({ images = [] }: SangjitGallerySectionProp
                <img src={selectedImage.url} alt="Gallery item full" className="object-contain w-full h-full" />
              ) : (
                <Image 
-                 src="/images/gallery-placeholder.png"
+                 src="/images/image_placeholder.jpg"
                  alt="Gallery Placeholder Full" 
                  fill 
                  className="object-contain" 

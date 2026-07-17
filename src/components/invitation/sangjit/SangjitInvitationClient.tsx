@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { SANGJIT_INVITATION_ASSETS } from "@/lib/constants";
 import { SangjitOpeningScreen } from "./SangjitOpeningScreen";
 import { SangjitHeroCountdownSection } from "./SangjitHeroCountdownSection";
 import { SangjitCoupleEnvelopeSection } from "./SangjitCoupleEnvelopeSection";
@@ -106,6 +107,12 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
             <SangjitScheduleSection session={sangjitSession} invitation={invitation} />
             <SangjitRSVPSection invitation={invitation} deadline={deadlines.sangjit} contactPhone={contactPhone} config={config} />
             <SangjitGiftSection bank={giftBank} account={giftAccount} name={giftName} invitation={invitation} />
+            <img
+              src={SANGJIT_INVITATION_ASSETS.sangjitCreamWaveDivider}
+              alt=""
+              loading="lazy"
+              style={{ width: '100%', maxWidth: 480, height: 'auto', display: 'block', position: 'relative', zIndex: 10, marginTop: -1, marginBottom: -1 }}
+            />
             <SangjitGallerySection images={config.sangjitGalleryImages} />
             <SangjitThankYouSection invitation={invitation} config={config} />
           </div>

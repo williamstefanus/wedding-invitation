@@ -29,7 +29,7 @@ export function SangjitGiftSection({ bank, account, name, invitation }: SangjitG
   };
 
   return (
-    <section className="relative w-full bg-white flex flex-col items-center select-none overflow-hidden z-20 pb-12">
+    <section className="relative w-full bg-white flex flex-col items-center select-none overflow-hidden z-20 pb-6">
 
       {/* Background Texture (sangjitGiftBackground at 30% opacity) */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-30">

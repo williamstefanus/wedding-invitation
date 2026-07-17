@@ -22,6 +22,7 @@ export const SANGJIT_INVITATION_ASSETS = {
   sangjitGiftBackground: "/images/sangjit-invitation/sangjit-gift-background.webp",
   sangjitGiftLeftFloral: "/images/sangjit-invitation/sangjit-gift-left-floral.webp",
   sangjitGiftTopWave: "/images/sangjit-invitation/sangjit-gift-top-wave.png",
+  sangjitCreamWaveDivider: "/images/sangjit-invitation/sangjit-cream-wave-divider.png",
 
   sangjitThankYouLeftFloral: "/images/sangjit-invitation/sangjit-thank-you-left-floral.webp",
   sangjitThankYouRightFloral: "/images/sangjit-invitation/sangjit-thank-you-right-floral.webp",

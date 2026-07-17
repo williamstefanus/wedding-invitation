@@ -119,7 +119,7 @@ export function SangjitRSVPSection({ invitation, deadline: settingsDeadline, con
 
         {hasSubmitted ? (
           <div className="bg-white/95 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] rounded-xl p-6 text-center flex flex-col items-center gap-4 my-4 outline outline-1 outline-[#E5E5E5]">
-            <p className="text-[#761B33] font-serif text-base">
+            <p className="text-[#761B33] font-serif text-[24px] leading-snug">
               {t('rsvpAlreadyReceived')}
             </p>
 

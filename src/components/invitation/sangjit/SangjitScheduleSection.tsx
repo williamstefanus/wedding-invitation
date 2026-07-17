@@ -83,7 +83,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
       >
 
         {/* Row Container */}
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', gap: 4 }}>
 
           {/* Phoenix Illustration Container */}
           <motion.div
@@ -92,7 +92,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
             viewport={{ once: false, margin: "-60px" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              width: '100%', maxWidth: 300, position: 'relative', transform: 'rotate(6deg)', transformOrigin: 'top left', flexShrink: 0, marginLeft: -48
+              width: '100%', maxWidth: 300, position: 'relative', transform: 'rotate(6deg)', transformOrigin: 'top left', flexShrink: 0, marginLeft: -64
             }}
           >
             <img
@@ -104,7 +104,7 @@ export function SangjitScheduleSection({ session, invitation }: SangjitScheduleS
           </motion.div>
 
           {/* Right Detail Stack (-44px gap overlap) */}
-          <div style={{ flex: '1 1 0', paddingTop: 24, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: 24, zIndex: 10, marginLeft: -44 }}>
+          <div style={{ flex: '1 1 0', paddingTop: 24, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: 24, zIndex: 10 }}>
 
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: 10 }}>
 

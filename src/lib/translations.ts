@@ -78,7 +78,7 @@ export const translations = {
     // Thank you
     thankYou: "Thank You",
     forYourLove: "for your prayers and blessings",
-    greatestJoy: "It would be our greatest joy to have your presence\nas we celebrate this special moment together.",
+    greatestJoy: "It would be our greatest joy to have your presence as we celebrate this special moment together.",
 
     // Sangjit specific
     theSangjitOf: "The Sangjit of",
