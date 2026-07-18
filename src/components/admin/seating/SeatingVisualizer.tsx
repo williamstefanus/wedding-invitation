@@ -66,7 +66,7 @@ export function SeatingVisualizer({
         {/* ─── Header ─── */}
         <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "center" }} mb="6" gap="4">
           <Box>
-            <Heading size="7" weight="bold" style={{ tracking: "tight" }}>Seating Assignment</Heading>
+            <Heading size="7" weight="bold" style={{ letterSpacing: "-0.025em" }}>Seating Assignment</Heading>
             <Text as="p" size="3" color="gray" mt="1">Design and manage table layouts.</Text>
           </Box>
 
