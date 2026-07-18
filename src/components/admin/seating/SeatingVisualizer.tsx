@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { LayoutDashboard, Users, AlertTriangle, Plus, LayoutGrid, Map } from "lucide-react";
 import { FloorPlanView } from "@/components/admin/seating/FloorPlanView";
+import { Box, Flex, Text, Heading, Button, Grid, Card, Badge, SegmentedControl } from "@radix-ui/themes";
 
 interface SeatingVisualizerProps {
   initialTables: any[];
@@ -59,130 +60,118 @@ export function SeatingVisualizer({
   }, [canShowMap, viewMode]);
 
   return (
-    <div className={`flex-1 overflow-y-auto transition-all duration-300 ${selectedTableId ? "mr-0 xl:mr-96" : "mr-0"}`}>
-      <div className="p-4 md:p-8">
+    <Box className={`flex-1 overflow-y-auto transition-all duration-300 ${selectedTableId ? "mr-0 xl:mr-96" : "mr-0"}`}>
+      <Box p={{ initial: "4", md: "8" }}>
 
         {/* ─── Header ─── */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Seating Assignment</h1>
-            <p className="text-slate-500 mt-1">Design and manage table layouts.</p>
-          </div>
+        <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "center" }} mb="6" gap="4">
+          <Box>
+            <Heading size="7" weight="bold" style={{ tracking: "tight" }}>Seating Assignment</Heading>
+            <Text as="p" size="3" color="gray" mt="1">Design and manage table layouts.</Text>
+          </Box>
 
-          <div className="flex items-center gap-3 flex-wrap">
+          <Flex align="center" gap="3" wrap="wrap">
             {/* Event switcher */}
-            <div className="flex bg-slate-200/50 p-1 rounded-xl">
-              <button
-                onClick={() => { setSelectedTableId(null); updateUrl({ event: "wedding" }); }}
-                className={`px-6 py-2 rounded-lg font-medium text-sm transition ${currentEvent === "wedding" ? "bg-white shadow text-slate-800" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                Wedding
-              </button>
-              <button
-                onClick={() => { setSelectedTableId(null); updateUrl({ event: "sangjit" }); }}
-                className={`px-6 py-2 rounded-lg font-medium text-sm transition ${currentEvent === "sangjit" ? "bg-white shadow text-slate-800" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                Sangjit
-              </button>
-            </div>
+            <SegmentedControl.Root value={currentEvent} onValueChange={(val) => { setSelectedTableId(null); updateUrl({ event: val }); }}>
+              <SegmentedControl.Item value="wedding">Wedding</SegmentedControl.Item>
+              <SegmentedControl.Item value="sangjit">Sangjit</SegmentedControl.Item>
+            </SegmentedControl.Root>
 
             {/* View toggle (wedding only) */}
             {canShowMap && initialTables.length > 0 && (
-              <div className="flex bg-slate-200/50 p-1 rounded-xl">
-                <button
-                  onClick={() => handleViewChange("grid")}
-                  title="Grid View"
-                  className={`px-3 py-2 rounded-lg text-sm transition flex items-center gap-1.5 font-medium ${viewMode === "grid" ? "bg-white shadow text-slate-800" : "text-slate-500 hover:text-slate-700"}`}
-                >
-                  <LayoutGrid className="w-4 h-4" /> Grid
-                </button>
-                <button
-                  onClick={() => handleViewChange("map")}
-                  title="Floor Plan View"
-                  className={`px-3 py-2 rounded-lg text-sm transition flex items-center gap-1.5 font-medium ${viewMode === "map" ? "bg-white shadow text-slate-800" : "text-slate-500 hover:text-slate-700"}`}
-                >
-                  <Map className="w-4 h-4" /> Floor Plan
-                </button>
-              </div>
+              <SegmentedControl.Root value={viewMode} onValueChange={(val: any) => handleViewChange(val)}>
+                <SegmentedControl.Item value="grid"><Flex align="center" gap="1"><LayoutGrid className="w-3 h-3"/> Grid</Flex></SegmentedControl.Item>
+                <SegmentedControl.Item value="map"><Flex align="center" gap="1"><Map className="w-3 h-3"/> Map</Flex></SegmentedControl.Item>
+              </SegmentedControl.Root>
             )}
 
             {/* Add Table (grid mode only) */}
             {handleAddTable && viewMode === "grid" && (
-              <button
-                onClick={handleAddTable}
-                className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 transition active:scale-95"
-              >
+              <Button onClick={handleAddTable} color="crimson" variant="solid" style={{ cursor: "pointer" }}>
                 <Plus className="w-4 h-4" /> Add Table
-              </button>
+              </Button>
             )}
-          </div>
-        </div>
+          </Flex>
+        </Flex>
 
         {/* ─── Metrics ─── */}
         {initialTables.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
-              <div className="p-3 bg-blue-50 text-blue-600 rounded-lg"><LayoutDashboard className="w-5 h-5" /></div>
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase">Total Tables</p>
-                <p className="text-2xl font-bold text-slate-800">{totalTables}</p>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
-              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-lg"><Users className="w-5 h-5" /></div>
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase">Occupied Seats</p>
-                <p className="text-2xl font-bold text-slate-800">{occupiedSeats} <span className="text-sm font-medium text-slate-400">/ {totalCapacity}</span></p>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
-              <div className="p-3 bg-purple-50 text-purple-600 rounded-lg"><Users className="w-5 h-5" /></div>
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase">Assigned Pax</p>
-                <p className="text-2xl font-bold text-slate-800">{occupiedSeats} <span className="text-sm font-medium text-slate-400">/ {allPax}</span></p>
-              </div>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
-              <div className="p-3 bg-amber-50 text-amber-600 rounded-lg"><Users className="w-5 h-5" /></div>
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase">Remaining Seats</p>
-                <p className="text-2xl font-bold text-slate-800">{remainingSeats}</p>
-              </div>
-            </div>
-          </div>
+          <Grid columns={{ initial: "1", sm: "2", lg: "4" }} gap="4" mb="6">
+            <Card size="2">
+              <Flex align="center" gap="4">
+                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                  <LayoutDashboard className="w-5 h-5" />
+                </Box>
+                <Box>
+                  <Text as="div" size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Tables</Text>
+                  <Text as="div" size="6" weight="bold">{totalTables}</Text>
+                </Box>
+              </Flex>
+            </Card>
+            <Card size="2">
+              <Flex align="center" gap="4">
+                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                  <Users className="w-5 h-5" />
+                </Box>
+                <Box>
+                  <Text as="div" size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Occupied Seats</Text>
+                  <Text as="div" size="6" weight="bold">{occupiedSeats} <Text size="2" color="gray" weight="medium">/ {totalCapacity}</Text></Text>
+                </Box>
+              </Flex>
+            </Card>
+            <Card size="2">
+              <Flex align="center" gap="4">
+                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                  <Users className="w-5 h-5" />
+                </Box>
+                <Box>
+                  <Text size="1" weight="bold" color="crimson" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Assigned Pax</Text>
+                  <Text as="div" size="6" weight="bold">{occupiedSeats} <Text size="2" color="gray" weight="medium">/ {allPax}</Text></Text>
+                </Box>
+              </Flex>
+            </Card>
+            <Card size="2">
+              <Flex align="center" gap="4">
+                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                  <Users className="w-5 h-5" />
+                </Box>
+                <Box>
+                  <Text as="div" size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Remaining Seats</Text>
+                  <Text as="div" size="6" weight="bold">{remainingSeats}</Text>
+                </Box>
+              </Flex>
+            </Card>
+          </Grid>
         )}
 
         {/* ─── Content: Empty state / Map / Grid ─── */}
         {initialTables.length === 0 ? (
-          <div className="bg-white border border-dashed border-slate-300 rounded-2xl p-12 text-center flex flex-col items-center justify-center h-64">
-            <LayoutDashboard className="w-12 h-12 text-slate-300 mb-4" />
-            <h3 className="text-lg font-bold text-slate-700">No Tables Found</h3>
-            <p className="text-slate-500 max-w-sm mx-auto mt-2 mb-6">
+          <Box p="9" style={{ textAlign: "center", border: "1px dashed var(--gray-5)", borderRadius: "var(--radius-4)", backgroundColor: "white", minHeight: "250px" }} className="flex flex-col items-center justify-center">
+            <LayoutDashboard className="w-12 h-12 mb-4" style={{ color: "var(--gray-8)" }} />
+            <Heading size="5" mb="2">No Tables Found</Heading>
+            <Text as="p" size="2" color="gray" mb="5" style={{ maxWidth: "400px" }}>
               There are currently no tables initialized for the {currentEvent} event.
-            </p>
-            <button
-              onClick={handleInitialize}
-              className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-medium shadow-sm transition"
-            >
+            </Text>
+            <Button size="3" color="crimson" onClick={handleInitialize} style={{ cursor: "pointer" }}>
               Initialize Default Tables
-            </button>
-          </div>
+            </Button>
+          </Box>
         ) : viewMode === "map" && canShowMap ? (
           /* ─── Floor Plan View ─── */
-          <div>
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mb-4">
-              <Map className="w-3.5 h-3.5" />
-              <span>Royal Dynasty Lt.3 — Click a table to select it, then use the sidebar to assign guests.</span>
-            </div>
+          <Box>
+            <Flex align="center" gap="2" mb="4">
+              <Map className="w-3.5 h-3.5" style={{ color: "var(--gray-10)" }} />
+              <Text size="2" weight="medium" color="gray">Royal Dynasty Lt.3 — Click a table to select it, then use the sidebar to assign guests.</Text>
+            </Flex>
             <FloorPlanView
               tables={initialTables}
               selectedTableId={selectedTableId}
               setSelectedTableId={setSelectedTableId}
             />
-          </div>
+          </Box>
         ) : (
           /* ─── Grid View ─── */
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <Grid columns={{ initial: "2", sm: "3", md: "4", lg: "5", xl: "6" }} gap="4">
             {initialTables.map((table: any, idx: number) => {
               const currentOccupancy = table.assignments.reduce((sum: number, a: any) => sum + a.assigned_pax, 0);
               const isOverCapacity = currentOccupancy > table.capacity;
@@ -192,65 +181,100 @@ export function SeatingVisualizer({
               const isDefaultName = new RegExp(`^Table\\s*${tableNumber}$`, "i").test(table.table_name || "");
 
               return (
-                <div
+                <Card 
                   key={table.id}
                   onClick={() => setSelectedTableId(table.id)}
-                  className={`
-                    relative group cursor-pointer overflow-hidden rounded-2xl p-4 transition-all duration-200 border-2 flex flex-col justify-between
-                    ${isSelected ? "border-amber-500 shadow-md ring-4 ring-amber-500/10" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-slate-200"}
-                  `}
+                  style={{ 
+                    cursor: "pointer", 
+                    borderColor: isSelected ? "var(--amber-9)" : undefined,
+                    boxShadow: isSelected ? "0 0 0 1px var(--amber-9)" : undefined,
+                  }}
+                  className="group transition-all hover:shadow-2"
                 >
-                  <div className="flex justify-between items-start mb-3 gap-2">
-                    <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-amber-800 mb-1 inline-block">
+                  <Flex justify="between" align="start" mb="3" gap="2">
+                    <Box>
+                      <Badge color="amber" variant="soft" size="1" mb="1">
                         Table #{tableNumber}
-                      </span>
+                      </Badge>
                       {!isDefaultName && table.table_name && (
-                        <span className={`font-bold text-sm block leading-snug mt-0.5 ${isSelected ? "text-amber-600" : "text-slate-800"}`}>
+                        <Text as="div" size="2" weight="bold" style={{ color: isSelected ? "var(--amber-11)" : "var(--gray-12)", lineHeight: 1.2 }}>
                           {table.table_name}
-                        </span>
+                        </Text>
                       )}
-                    </div>
+                    </Box>
                     {isOverCapacity && <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />}
-                  </div>
+                  </Flex>
 
-                  <div className={`w-16 h-16 mx-auto rounded-full border-4 flex items-center justify-center mb-4 transition-colors
-                    ${isOverCapacity ? "border-red-100 bg-red-50 text-red-600" :
-                      isFull ? "border-green-100 bg-green-50 text-green-600" :
-                      isSelected ? "border-amber-100 bg-amber-50 text-amber-600" : "border-slate-100 bg-slate-50 text-slate-600"}`}
-                  >
-                    <span className="font-bold">{currentOccupancy}</span>
-                  </div>
+                  <Flex align="center" justify="center" mb="4">
+                    <Flex 
+                      align="center" 
+                      justify="center" 
+                      style={{ 
+                        width: "64px", 
+                        height: "64px", 
+                        borderRadius: "50%", 
+                        border: "4px solid",
+                        borderColor: isOverCapacity ? "var(--red-5)" : isFull ? "var(--green-5)" : isSelected ? "var(--amber-5)" : "var(--gray-4)",
+                        backgroundColor: isOverCapacity ? "var(--red-2)" : isFull ? "var(--green-2)" : isSelected ? "var(--amber-2)" : "var(--gray-2)",
+                        color: isOverCapacity ? "var(--red-11)" : isFull ? "var(--green-11)" : isSelected ? "var(--amber-11)" : "var(--gray-11)",
+                      }}
+                    >
+                      <Text size="5" weight="bold">{currentOccupancy}</Text>
+                    </Flex>
+                  </Flex>
 
-                  <div className="text-center">
-                    <div className="text-xs font-medium text-slate-500">Capacity: {table.capacity} pax</div>
-                  </div>
+                  <Box style={{ textAlign: "center" }}>
+                    <Text size="1" weight="medium" color="gray">Capacity: {table.capacity} pax</Text>
+                  </Box>
 
-                  <div className="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${isOverCapacity ? "bg-red-500" : isFull ? "bg-green-500" : "bg-amber-400"}`}
-                      style={{ width: `${Math.min(100, (currentOccupancy / table.capacity) * 100)}%` }}
+                  <Box mt="3" style={{ height: "6px", backgroundColor: "var(--gray-3)", borderRadius: "var(--radius-full)", overflow: "hidden" }}>
+                    <Box 
+                      style={{ 
+                        height: "100%", 
+                        borderRadius: "var(--radius-full)", 
+                        backgroundColor: isOverCapacity ? "var(--red-9)" : isFull ? "var(--green-9)" : "var(--amber-9)",
+                        width: `${Math.min(100, (currentOccupancy / table.capacity) * 100)}%` 
+                      }} 
                     />
-                  </div>
-                </div>
+                  </Box>
+                </Card>
               );
             })}
 
             {handleAddTable && (
-              <div
+              <button
                 onClick={handleAddTable}
-                className="border-2 border-dashed border-slate-300 hover:border-amber-400 bg-slate-50 hover:bg-amber-50/30 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition min-h-[140px] group"
+                style={{ 
+                  border: "2px dashed var(--gray-5)", 
+                  borderRadius: "var(--radius-4)", 
+                  backgroundColor: "var(--gray-2)", 
+                  minHeight: "140px",
+                  cursor: "pointer",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                className="transition group hover:border-[var(--crimson-7)] hover:bg-[var(--crimson-2)]"
               >
-                <div className="w-10 h-10 rounded-full bg-slate-200 group-hover:bg-amber-100 flex items-center justify-center text-slate-500 group-hover:text-amber-600 transition mb-2">
+                <div 
+                  style={{ 
+                    width: "40px", height: "40px", borderRadius: "50%", 
+                    backgroundColor: "var(--gray-4)",
+                    display: "flex", alignItems: "center", justifyContent: "center" 
+                  }}
+                  className="group-hover:bg-[var(--crimson-4)] group-hover:text-[var(--crimson-11)] transition mb-2 text-slate-500"
+                >
                   <Plus className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-bold text-slate-600 group-hover:text-amber-700">Add Table</span>
-              </div>
+                <Text size="1" weight="bold" color="gray" className="group-hover:text-[var(--crimson-11)]">Add Table</Text>
+              </button>
             )}
-          </div>
+          </Grid>
         )}
 
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

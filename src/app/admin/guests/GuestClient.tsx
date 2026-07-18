@@ -7,6 +7,7 @@ import { createGuest, updateGuest, deleteGuest, deleteInvitationAction, regenera
 import type { GuestOwner, GuestCategory } from "@/types";
 import { GuestMetrics } from "@/components/admin/guests/GuestMetrics";
 import { formatWhatsAppPhone } from "@/lib/utils";
+import { Box, Flex, Heading, Text, Button as RadixButton } from "@radix-ui/themes";
 
 // Import Extracted Components
 import { GuestFilters } from "@/components/admin/guests/GuestFilters";
@@ -142,7 +143,14 @@ export function GuestClient({
       : `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(waUrl, "_blank");
 
-    setCopiedId(inv.id);
+    setCopiedId(inv.id + "_wa");
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleCopyLinkOnly = (inv: any) => {
+    const url = `${window.location.origin}/invite/${inv.event_type.slug}/${inv.invitation_code}`;
+    navigator.clipboard.writeText(url);
+    setCopiedId(inv.id + "_link");
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -277,43 +285,69 @@ export function GuestClient({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 font-sans">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Guest Management</h1>
-          <p className="text-slate-500 mt-1">Total {total} guests found.</p>
-        </div>
-        <button 
-          onClick={openAddModal}
-          className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition"
-        >
-          <Plus className="w-4 h-4" />
-          Add Guest
-        </button>
-      </div>
-
-      {allInvitations && allInvitations.length > 0 && (
-        <GuestMetrics invitations={filteredOverviewInvitations} config={config} />
-      )}
-
-      {/* Tabs */}
-      <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
-        <button
-          onClick={() => updateUrl({ tab: "all" })}
-          className={`px-6 py-3 font-medium text-sm whitespace-nowrap transition-colors border-b-2 ${currentTab === "all" ? "border-amber-500 text-amber-600" : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"}`}
-        >
-          All Guests
-        </button>
-        {eventTypes.map(et => (
-          <button
-            key={et.id}
-            onClick={() => updateUrl({ tab: et.slug })}
-            className={`px-6 py-3 font-medium text-sm whitespace-nowrap transition-colors border-b-2 ${currentTab === et.slug ? "border-amber-500 text-amber-600" : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"}`}
+    <Box className="knotice-app" p={{ initial: "4", md: "7" }}>
+      <Flex direction="column" gap="4" style={{ maxWidth: 1180, margin: "0 auto" }}>
+        
+        <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "end" }} gap="4">
+          <Box>
+            <Heading size="8">Guest Management</Heading>
+            <Text color="gray" size="3" mt="2" as="p">
+              Total {total} guests found.
+            </Text>
+          </Box>
+          <RadixButton 
+            onClick={openAddModal}
+            color="crimson"
+            size="3"
+            style={{ fontWeight: 600, cursor: "pointer" }}
           >
-            {et.name} Invitations
+            <Plus width={18} height={18} />
+            Add Guest
+          </RadixButton>
+        </Flex>
+
+        {allInvitations && allInvitations.length > 0 && (
+          <GuestMetrics invitations={filteredOverviewInvitations} config={config} />
+        )}
+
+        {/* Tabs */}
+        <Flex gap="4" style={{ borderBottom: "1px solid var(--gray-5)", overflowX: "auto" }}>
+          <button
+            onClick={() => updateUrl({ tab: "all" })}
+            style={{
+              padding: "12px 16px",
+              fontWeight: 600,
+              fontSize: "14px",
+              cursor: "pointer",
+              background: "none",
+              border: "none",
+              borderBottom: currentTab === "all" ? "2px solid var(--crimson-9)" : "2px solid transparent",
+              color: currentTab === "all" ? "var(--crimson-11)" : "var(--gray-11)",
+              whiteSpace: "nowrap"
+            }}
+          >
+            All Guests
           </button>
-        ))}
-      </div>
+          {eventTypes.map(et => (
+            <button
+              key={et.id}
+              onClick={() => updateUrl({ tab: et.slug })}
+              style={{
+                padding: "12px 16px",
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: "pointer",
+                background: "none",
+                border: "none",
+                borderBottom: currentTab === et.slug ? "2px solid var(--crimson-9)" : "2px solid transparent",
+                color: currentTab === et.slug ? "var(--crimson-11)" : "var(--gray-11)",
+                whiteSpace: "nowrap"
+              }}
+            >
+              {et.name} Invitations
+            </button>
+          ))}
+        </Flex>
 
       <GuestFilters 
         currentSearch={currentSearch}
@@ -341,6 +375,7 @@ export function GuestClient({
         setIsRegenerateOpen={setIsRegenerateOpen}
         setIsDeleteInvOpen={setIsDeleteInvOpen}
         handleCopyLink={handleCopyLink}
+        handleCopyLinkOnly={handleCopyLinkOnly}
         handleToggleSent={handleToggleSent}
         handlePageChange={handlePageChange}
         config={config}
@@ -391,6 +426,7 @@ export function GuestClient({
         handleRegenerate={handleRegenerate}
       />
 
-    </div>
+      </Flex>
+    </Box>
   );
 }

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { MetricCard } from "./components/MetricCard";
-import { ProgressBar } from "./components/ProgressBar";
 import { OverviewMetrics } from "@/components/admin/OverviewMetrics";
-import { Users, UserCheck } from "lucide-react";
+import { Mail, Users, UserCheck, Clock } from "lucide-react";
+import { Box, Flex, Grid, Card, Heading, Text, Button, Progress, SegmentedControl, Badge } from "@radix-ui/themes";
 
 interface DashboardClientProps {
   invitations: any[];
@@ -43,7 +42,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
   };
 
   const attendingInvitations = filteredInvitations.filter(inv => getAttendanceStatus(inv) === "attending").length;
-  const declinedInvitations = filteredInvitations.filter(inv => getAttendanceStatus(inv) === "not_attending").length;
+  const declinedInvitations = filteredInvitations.filter(inv => getAttendanceStatus(inv) === "declined").length;
 
   const expectedAttendance = filteredInvitations.reduce((sum, inv) => {
     if (getAttendanceStatus(inv) === "attending") {
@@ -52,33 +51,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
     return sum;
   }, 0);
 
-  // Pax & RSVP Breakdown by Owner
-  const ownerStats = ["groom", "bride"].map(owner => {
-    const ownerInvs = filteredInvitations.filter(inv => inv.guest?.owner === owner);
-    const invitedPax = ownerInvs.reduce((s, inv) => s + (inv.max_pax || 0), 0);
-    const attendingPax = ownerInvs.reduce((s, inv) => {
-      if (getAttendanceStatus(inv) === "attending") return s + getConfirmedPax(inv);
-      return s;
-    }, 0);
-    const attendingInvs = ownerInvs.filter(inv => getAttendanceStatus(inv) === "attending").length;
-    const declinedInvs = ownerInvs.filter(inv => getAttendanceStatus(inv) === "declined").length;
-    const pendingInvs = ownerInvs.length - attendingInvs - declinedInvs;
-    const respondedInvs = attendingInvs + declinedInvs;
-
-    return { 
-      owner, 
-      invitedPax, 
-      attendingPax, 
-      invitations: ownerInvs.length,
-      attendingInvs,
-      declinedInvs,
-      pendingInvs,
-      respondedInvs
-    };
-  });
-
-  // Attending by Event Session (for wedding filter: Holy Matrimony vs Reception)
-  // Counts how many attending guests selected each session
+  // Attending by Event Session
   const sessionCountMap: Record<string, number> = {};
   filteredInvitations.forEach(inv => {
     const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
@@ -92,96 +65,152 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
   const sessionBreakdown = Object.entries(sessionCountMap).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4 md:p-8 font-sans">
-      
-      {/* Header & Filters */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Admin Dashboard</h1>
-          <p className="text-slate-500 mt-1">Command center for your event planning.</p>
-        </div>
+    <Box className="knotice-app" p={{ initial: "4", md: "7" }}>
+      <Flex direction="column" gap="6" style={{ maxWidth: 1180, margin: "0 auto" }}>
+        
+        {/* Header & Filters */}
+        <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "end" }} gap="4">
+          <Box>
+            <Flex align="center" gap="3">
+              <Heading size="8">Hello {config.groomFirstName || "William"} & {config.brideFirstName || "Aziel"}</Heading>
+            </Flex>
+            <Text color="gray" size="3" mt="2" as="p">
+              Here's what's happening with your event today.
+            </Text>
+          </Box>
 
-        <div className="flex bg-slate-100 p-1 rounded-lg w-full md:w-auto">
-          {(["all", "wedding", "sangjit"] as const).map((opt) => (
-            <button
-              key={opt}
-              onClick={() => setFilter(opt)}
-              className={`flex-1 md:flex-none px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                filter === opt 
-                  ? "bg-white text-slate-800 shadow-sm" 
-                  : "text-slate-500 hover:text-slate-700"
-              }`}
-            >
-              {opt.charAt(0).toUpperCase() + opt.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
+          <Flex gap="4" align="center" direction={{ initial: "column-reverse", sm: "row" }}>
+            <SegmentedControl.Root value={filter} onValueChange={(v) => setFilter(v as FilterOption)} size="2">
+              <SegmentedControl.Item value="all">All Events</SegmentedControl.Item>
+              <SegmentedControl.Item value="wedding">Wedding</SegmentedControl.Item>
+              <SegmentedControl.Item value="sangjit">Sangjit</SegmentedControl.Item>
+            </SegmentedControl.Root>
 
-      {/* Main Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <MetricCard title="Total Invitations" value={totalInvitations} />
-        <MetricCard title="Total Invited Pax" value={totalInvitedPax} />
-        <MetricCard title="Expected Attendance" value={expectedAttendance} />
-        <MetricCard title="Pending RSVP" value={pendingRsvp} />
-      </div>
+            {/* Dynamic Event Date Display */}
+            {filter !== "all" && (
+              <Badge variant="surface" color="gray" size="2" style={{ backgroundColor: "white", padding: "6px 12px", fontWeight: 500, fontSize: "13px" }}>
+                {filter === "wedding" 
+                  ? (config.countdownDate ? new Date(config.countdownDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Oct 23, 2026")
+                  : (config.sangjitCountdownDate ? new Date(config.sangjitCountdownDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Oct 17, 2026")
+                }
+              </Badge>
+            )}
+          </Flex>
+        </Flex>
 
-      {/* Attendance Projection */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-8">
-        <h3 className="text-lg font-bold text-slate-800 mb-6">Attendance Projection (Pax)</h3>
-        <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="flex-1 w-full">
-            <ProgressBar 
-              label="Expected vs Total Invited" 
-              value={expectedAttendance} 
-              total={totalInvitedPax} 
-              colorClass="bg-blue-500"
-            />
-          </div>
-          <div className="flex justify-between md:flex-col justify-center items-end md:items-end w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-slate-100">
-            <div className="flex flex-col text-left md:text-right">
-              <span className="text-slate-500 text-sm font-medium">Unconfirmed Pax</span>
-              <span className="text-slate-400 text-xs mt-1">Assuming pending RSVPs</span>
-            </div>
-            <span className="text-xl font-bold text-amber-500 mt-1">
-              {totalInvitedPax - expectedAttendance} pax
-            </span>
-          </div>
-        </div>
-      </div>
+        {/* Main Metric Cards */}
+        <Grid columns={{ initial: "2", md: "4" }} gap="3">
+          <Card size="2" style={{ backgroundColor: "white" }}>
+            <Flex align="start" gap="3">
+              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Mail className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              </Box>
+              <Box>
+                <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Invitations</Text>
+                <Heading size="7" mt="1" style={{ color: "var(--gray-12)" }}>{totalInvitations}</Heading>
+                <Text size="1" style={{ color: "var(--gray-10)" }}>All sent invitations</Text>
+              </Box>
+            </Flex>
+          </Card>
+          <Card size="2" style={{ backgroundColor: "white" }}>
+            <Flex align="start" gap="3">
+              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Users className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              </Box>
+              <Box>
+                <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Invited Pax</Text>
+                <Heading size="7" mt="1" style={{ color: "var(--gray-12)" }}>{totalInvitedPax}</Heading>
+                <Text size="1" style={{ color: "var(--gray-10)" }}>Total people invited</Text>
+              </Box>
+            </Flex>
+          </Card>
+          <Card size="2" style={{ backgroundColor: "white" }}>
+            <Flex align="start" gap="3">
+              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <UserCheck className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              </Box>
+              <Box>
+                <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Expected Attendance</Text>
+                <Heading size="7" mt="1" style={{ color: "var(--gray-12)" }}>{expectedAttendance}</Heading>
+                <Text size="1" style={{ color: "var(--gray-10)" }}>Based on responses</Text>
+              </Box>
+            </Flex>
+          </Card>
+          <Card size="2" style={{ backgroundColor: "white" }}>
+            <Flex align="start" gap="3">
+              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Clock className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              </Box>
+              <Box>
+                <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Pending RSVP</Text>
+                <Heading size="7" mt="1" style={{ color: "var(--gray-12)" }}>{pendingRsvp}</Heading>
+                <Text size="1" style={{ color: "var(--gray-10)" }}>Awaiting response</Text>
+              </Box>
+            </Flex>
+          </Card>
+        </Grid>
 
-      {/* John / Jane Overview Breakdown */}
-      <OverviewMetrics 
-        invitations={filteredInvitations} 
-        config={config}
-      />
+        {/* Attendance Projection */}
+        <Card size="3" style={{ backgroundColor: "white" }}>
+          <Heading size="4" mb="5">Attendance Projection (Pax)</Heading>
+          <Flex direction={{ initial: "column", md: "row" }} align="center" gap="6">
+            <Box style={{ flex: 1, width: "100%" }}>
+              <Flex justify="between" mb="2">
+                <Text size="2" weight="medium">Expected vs Total Invited</Text>
+                <Text size="2" style={{ color: "var(--gray-11)" }} weight="medium">{expectedAttendance} / {totalInvitedPax}</Text>
+              </Flex>
+              <Progress 
+                value={totalInvitedPax > 0 ? (expectedAttendance / totalInvitedPax) * 100 : 0} 
+                color="crimson"
+                style={{ height: "12px", backgroundColor: "var(--gray-3)" }}
+              />
+            </Box>
+            <Box style={{ textAlign: "right", minWidth: "140px" }}>
+              <Text size="2" weight="medium" style={{ color: "var(--gray-12)" }} as="div">Unconfirmed Pax</Text>
+              <Text size="1" style={{ color: "var(--gray-10)" }} as="div">Assuming pending RSVPs</Text>
+              <Text size="6" weight="bold" style={{ color: "var(--orange-10)" }} as="div" mt="1">
+                {totalInvitedPax - expectedAttendance} pax
+              </Text>
+            </Box>
+          </Flex>
+        </Card>
 
-      {/* Attending by Event Session */}
-      {sessionBreakdown.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-amber-50 rounded-lg">
-              <UserCheck className="w-5 h-5 text-amber-600" />
-            </div>
-            <h3 className="text-lg font-bold text-slate-800">Attending by Event Session (Pax)</h3>
-          </div>
-          <div className="space-y-4">
-            {sessionBreakdown.map(([name, pax]) => (
-              <div key={name} className="flex items-center gap-4">
-                <span className="text-sm font-medium text-slate-700 w-40 flex-shrink-0">{name}</span>
-                <div className="flex-1 bg-slate-100 rounded-full overflow-hidden h-3">
-                  <div 
-                    className="h-full bg-amber-500 rounded-full transition-all"
-                    style={{ width: expectedAttendance > 0 ? `${Math.round((pax / expectedAttendance) * 100)}%` : "0%" }}
-                  />
-                </div>
-                <span className="text-sm font-bold text-slate-800 w-16 text-right">{pax} pax</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        {/* John / Jane Overview Breakdown */}
+        <Box>
+          <OverviewMetrics 
+            invitations={filteredInvitations} 
+            config={config}
+          />
+        </Box>
 
-    </div>
+        {/* Attending by Event Session */}
+        {sessionBreakdown.length > 0 && (
+          <Card size="3" style={{ backgroundColor: "white" }}>
+            <Flex align="center" gap="3" mb="5">
+              <Box style={{ padding: "6px", background: "var(--crimson-3)", borderRadius: "var(--radius-full)" }}>
+                <Users className="w-4 h-4" style={{ color: "var(--crimson-10)" }} />
+              </Box>
+              <Heading size="4">Attending by Event Session (Pax)</Heading>
+            </Flex>
+            <Flex direction="column" gap="4">
+              {sessionBreakdown.map(([name, pax]) => (
+                <Flex key={name} align="center" gap="4">
+                  <Text size="2" weight="medium" style={{ width: "160px", flexShrink: 0 }}>{name}</Text>
+                  <Box style={{ flex: 1 }}>
+                    <Progress 
+                      value={expectedAttendance > 0 ? (pax / expectedAttendance) * 100 : 0} 
+                      color="crimson"
+                      style={{ height: "12px", backgroundColor: "var(--gray-3)" }}
+                    />
+                  </Box>
+                  <Text size="2" weight="bold" style={{ width: "64px", textAlign: "right" }}>{pax} pax</Text>
+                </Flex>
+              ))}
+            </Flex>
+          </Card>
+        )}
+
+      </Flex>
+    </Box>
   );
 }

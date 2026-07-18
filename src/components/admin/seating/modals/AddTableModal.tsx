@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Plus, Loader2 } from "lucide-react";
+import { Dialog, Button, Flex, Box, Text, TextField, Badge } from "@radix-ui/themes";
 
 interface AddTableModalProps {
   isOpen: boolean;
@@ -13,8 +14,6 @@ export function AddTableModal({ isOpen, onClose, onAdd }: AddTableModalProps) {
   const [tableName, setTableName] = useState("");
   const [capacity, setCapacity] = useState(10);
   const [loading, setLoading] = useState(false);
-
-  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,81 +29,68 @@ export function AddTableModal({ isOpen, onClose, onAdd }: AddTableModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-[60] animate-fade-in">
-      <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl animate-fade-up">
-        <div className="flex justify-between items-center p-6 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
-              <Plus className="w-5 h-5" />
-            </div>
-            <h2 className="text-xl font-bold text-slate-800">Add New Table</h2>
-          </div>
-          <button 
-            type="button" 
-            onClick={onClose} 
-            disabled={loading}
-            className="text-slate-400 hover:text-slate-600 transition disabled:opacity-50"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+    <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <Dialog.Content size="3" maxWidth="450px" className="animate-fade-up">
+        <Dialog.Title>
+          <Flex align="center" gap="2">
+            <Box p="1" style={{ backgroundColor: "var(--amber-3)", color: "var(--amber-11)", borderRadius: "var(--radius-2)" }}>
+              <Plus className="w-4 h-4" />
+            </Box>
+            Add New Table
+          </Flex>
+        </Dialog.Title>
+        <Dialog.Description size="2" mb="4">
+          Fill in the details to create a new seating table.
+        </Dialog.Description>
 
-        <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
-          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-xs text-amber-800 flex items-center justify-between">
-            <span className="font-bold">Table Number</span>
-            <span className="font-semibold bg-amber-200/60 px-2 py-0.5 rounded text-[11px]">Auto-Generated (Sequential)</span>
-          </div>
+        <form onSubmit={handleSubmit}>
+          <Flex direction="column" gap="4">
+            <Box p="2" style={{ backgroundColor: "var(--amber-3)", borderRadius: "var(--radius-2)", border: "1px solid var(--amber-5)" }}>
+              <Flex justify="between" align="center">
+                <Text size="1" weight="bold" color="amber">Table Number</Text>
+                <Badge color="amber" variant="solid" size="1">Auto-Generated (Sequential)</Badge>
+              </Flex>
+            </Box>
 
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-              Table Name <span className="text-slate-400 font-normal">(Optional)</span>
-            </label>
-            <input 
-              type="text" 
-              placeholder="e.g. VIP Family, Bride Friends (Optional)" 
-              value={tableName}
-              onChange={e => setTableName(e.target.value)}
-              disabled={loading}
-              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition disabled:bg-slate-50"
-            />
-          </div>
+            <Box>
+              <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                Table Name <Text color="gray" weight="regular">(Optional)</Text>
+              </Text>
+              <TextField.Root 
+                placeholder="e.g. VIP Family, Bride Friends" 
+                value={tableName}
+                onChange={e => setTableName(e.target.value)}
+                disabled={loading}
+              />
+            </Box>
 
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-              Seating Capacity
-            </label>
-            <input 
-              required
-              type="number" 
-              min="1"
-              max="50"
-              value={capacity}
-              onChange={e => setCapacity(parseInt(e.target.value) || 1)}
-              disabled={loading}
-              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition disabled:bg-slate-50"
-            />
-          </div>
+            <Box>
+              <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                Seating Capacity
+              </Text>
+              <TextField.Root 
+                type="number" 
+                min="1"
+                max="50"
+                value={capacity}
+                onChange={e => setCapacity(parseInt(e.target.value) || 1)}
+                disabled={loading}
+                required
+              />
+            </Box>
+          </Flex>
 
-          <div className="flex justify-end gap-3 mt-4 pt-2 border-t border-slate-100">
-            <button 
-              type="button" 
-              onClick={onClose} 
-              disabled={loading}
-              className="px-5 py-2.5 text-slate-600 text-sm font-bold border border-slate-200 hover:bg-slate-50 rounded-xl transition disabled:opacity-50"
-            >
+          <Flex justify="end" gap="3" mt="5">
+            <Button variant="soft" color="gray" onClick={onClose} disabled={loading} style={{ cursor: "pointer" }}>
               Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold rounded-xl transition shadow-sm flex items-center gap-2 disabled:opacity-50"
-            >
+            </Button>
+            <Button type="submit" color="crimson" disabled={loading} style={{ cursor: "pointer" }}>
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Create Table
-            </button>
-          </div>
+            </Button>
+          </Flex>
         </form>
-      </div>
-    </div>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

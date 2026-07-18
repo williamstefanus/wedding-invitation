@@ -1,7 +1,7 @@
 "use client";
 
 import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, MessageSquare } from "lucide-react";
-
+import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code } from "@radix-ui/themes";
 interface WeddingSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
@@ -37,290 +37,320 @@ export function WeddingSettingsForm({
   };
 
   return (
-    <div className="space-y-8 animate-fade-up">
+    <Flex direction="column" gap="6" className="animate-fade-up">
       {/* General Config */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <Settings className="w-5 h-5 text-amber-600" /> General Configuration
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Countdown Date/Time</label>
-            <input 
+      <Card size="3">
+        <Flex align="center" gap="2" mb="5">
+          <Settings className="w-5 h-5 text-amber-600" />
+          <Heading size="4">General Configuration</Heading>
+        </Flex>
+        <Grid columns={{ initial: "1", md: "2" }} gap="4">
+          <Box>
+            <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Countdown Date/Time</Text>
+            <TextField.Root 
               type="datetime-local" 
+              size="3"
               value={config.countdownDate ? new Date(config.countdownDate).toISOString().slice(0, 16) : ""}
               onChange={e => setConfig({...config, countdownDate: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Clock className="w-3 h-3"/> RSVP Submission Deadline</label>
-            <input 
+          </Box>
+          <Box>
+            <Flex align="center" gap="1" mb="1">
+              <Clock className="w-3 h-3 text-gray-500" />
+              <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>RSVP Submission Deadline</Text>
+            </Flex>
+            <TextField.Root 
               type="datetime-local" 
+              size="3"
               value={deadlines.wedding ? new Date(deadlines.wedding).toISOString().slice(0, 16) : ""}
               onChange={e => setDeadlines({...deadlines, wedding: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
-            <p className="text-[10px] text-slate-400 mt-1">After this date, new RSVP submissions will be closed.</p>
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2"><Music className="w-3 h-3"/> Background Music URL</label>
-            <input 
-              type="text" 
+            <Text as="p" size="1" color="gray" mt="1">After this date, new RSVP submissions will be closed.</Text>
+          </Box>
+          <Box style={{ gridColumn: "1 / -1" }}>
+            <Flex align="center" gap="1" mb="1">
+              <Music className="w-3 h-3 text-gray-500" />
+              <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Background Music URL</Text>
+            </Flex>
+            <TextField.Root 
+              size="3"
               placeholder="e.g. /audio/bgm.mp3 or https://example.com/song.mp3"
               value={config.musicUrl || ""} 
               onChange={e => setConfig({...config, musicUrl: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Grid>
+      </Card>
 
       {/* Event Sessions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <Grid columns={{ initial: "1", md: "2" }} gap="6">
         {/* Holy Matrimony */}
         {sessions.holyMatrimony && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-            <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-amber-600" /> Holy Matrimony
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Date</label>
-                <input type="date" value={sessions.holyMatrimony.date} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, date: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Start Time</label>
-                  <input type="time" value={sessions.holyMatrimony.start_time} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, start_time: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-1">End Time</label>
-                  <input type="time" value={sessions.holyMatrimony.end_time} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, end_time: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1"><MapPin className="w-3 h-3 inline"/> Venue Name</label>
-                <input type="text" value={sessions.holyMatrimony.venue_name} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, venue_name: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Address</label>
-                <textarea value={sessions.holyMatrimony.address} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, address: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" rows={2} />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1"><LinkIcon className="w-3 h-3 inline"/> Google Maps URL</label>
-                <input type="text" value={sessions.holyMatrimony.google_maps_url} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, google_maps_url: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-              </div>
-            </div>
-          </div>
+          <Card size="3">
+            <Flex align="center" gap="2" mb="5">
+              <Calendar className="w-5 h-5 text-amber-600" />
+              <Heading size="3">Holy Matrimony</Heading>
+            </Flex>
+            <Flex direction="column" gap="4">
+              <Box>
+                <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Date</Text>
+                <TextField.Root type="date" size="3" value={sessions.holyMatrimony.date} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, date: e.target.value}})} />
+              </Box>
+              <Grid columns="2" gap="4">
+                <Box>
+                  <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Start Time</Text>
+                  <TextField.Root type="time" size="3" value={sessions.holyMatrimony.start_time} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, start_time: e.target.value}})} />
+                </Box>
+                <Box>
+                  <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>End Time</Text>
+                  <TextField.Root type="time" size="3" value={sessions.holyMatrimony.end_time} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, end_time: e.target.value}})} />
+                </Box>
+              </Grid>
+              <Box>
+                <Flex align="center" gap="1" mb="1">
+                  <MapPin className="w-3 h-3 text-gray-500" />
+                  <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Venue Name</Text>
+                </Flex>
+                <TextField.Root size="3" value={sessions.holyMatrimony.venue_name} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, venue_name: e.target.value}})} />
+              </Box>
+              <Box>
+                <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Address</Text>
+                <TextArea size="3" value={sessions.holyMatrimony.address} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, address: e.target.value}})} rows={2} />
+              </Box>
+              <Box>
+                <Flex align="center" gap="1" mb="1">
+                  <LinkIcon className="w-3 h-3 text-gray-500" />
+                  <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Google Maps URL</Text>
+                </Flex>
+                <TextField.Root size="3" value={sessions.holyMatrimony.google_maps_url} onChange={e => setSessions({...sessions, holyMatrimony: {...sessions.holyMatrimony, google_maps_url: e.target.value}})} />
+              </Box>
+            </Flex>
+          </Card>
         )}
 
         {/* Reception */}
         {sessions.reception && (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-            <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-amber-600" /> Reception Dinner
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Date</label>
-                <input type="date" value={sessions.reception.date} onChange={e => setSessions({...sessions, reception: {...sessions.reception, date: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Start Time</label>
-                  <input type="time" value={sessions.reception.start_time} onChange={e => setSessions({...sessions, reception: {...sessions.reception, start_time: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-1">End Time</label>
-                  <input type="time" value={sessions.reception.end_time} onChange={e => setSessions({...sessions, reception: {...sessions.reception, end_time: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1"><MapPin className="w-3 h-3 inline"/> Venue Name</label>
-                <input type="text" value={sessions.reception.venue_name} onChange={e => setSessions({...sessions, reception: {...sessions.reception, venue_name: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Address</label>
-                <textarea value={sessions.reception.address} onChange={e => setSessions({...sessions, reception: {...sessions.reception, address: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" rows={2} />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-1"><LinkIcon className="w-3 h-3 inline"/> Google Maps URL</label>
-                <input type="text" value={sessions.reception.google_maps_url} onChange={e => setSessions({...sessions, reception: {...sessions.reception, google_maps_url: e.target.value}})} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm" />
-              </div>
-            </div>
-          </div>
+          <Card size="3">
+            <Flex align="center" gap="2" mb="5">
+              <Calendar className="w-5 h-5 text-amber-600" />
+              <Heading size="3">Reception Dinner</Heading>
+            </Flex>
+            <Flex direction="column" gap="4">
+              <Box>
+                <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Date</Text>
+                <TextField.Root type="date" size="3" value={sessions.reception.date} onChange={e => setSessions({...sessions, reception: {...sessions.reception, date: e.target.value}})} />
+              </Box>
+              <Grid columns="2" gap="4">
+                <Box>
+                  <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Start Time</Text>
+                  <TextField.Root type="time" size="3" value={sessions.reception.start_time} onChange={e => setSessions({...sessions, reception: {...sessions.reception, start_time: e.target.value}})} />
+                </Box>
+                <Box>
+                  <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>End Time</Text>
+                  <TextField.Root type="time" size="3" value={sessions.reception.end_time} onChange={e => setSessions({...sessions, reception: {...sessions.reception, end_time: e.target.value}})} />
+                </Box>
+              </Grid>
+              <Box>
+                <Flex align="center" gap="1" mb="1">
+                  <MapPin className="w-3 h-3 text-gray-500" />
+                  <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Venue Name</Text>
+                </Flex>
+                <TextField.Root size="3" value={sessions.reception.venue_name} onChange={e => setSessions({...sessions, reception: {...sessions.reception, venue_name: e.target.value}})} />
+              </Box>
+              <Box>
+                <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Address</Text>
+                <TextArea size="3" value={sessions.reception.address} onChange={e => setSessions({...sessions, reception: {...sessions.reception, address: e.target.value}})} rows={2} />
+              </Box>
+              <Box>
+                <Flex align="center" gap="1" mb="1">
+                  <LinkIcon className="w-3 h-3 text-gray-500" />
+                  <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Google Maps URL</Text>
+                </Flex>
+                <TextField.Root size="3" value={sessions.reception.google_maps_url} onChange={e => setSessions({...sessions, reception: {...sessions.reception, google_maps_url: e.target.value}})} />
+              </Box>
+            </Flex>
+          </Card>
         )}
-      </div>
+      </Grid>
 
       {/* Wedding Bible Verse */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          📖 Wedding Bible Verse
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (EN)</label>
-            <textarea 
+      <Card size="3">
+        <Flex align="center" gap="2" mb="5">
+          <Text size="5">📖</Text>
+          <Heading size="4">Wedding Bible Verse</Heading>
+        </Flex>
+        <Grid columns={{ initial: "1", md: "2" }} gap="4">
+          <Box>
+            <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Verse Text (EN)</Text>
+            <TextArea 
+              size="3"
               value={config.bibleVerseTextEn || ""} 
               onChange={e => setConfig({...config, bibleVerseTextEn: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
               placeholder="Every good and perfect gift is from above..."
+              style={{ minHeight: "100px" }}
             />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Text (ID)</label>
-            <textarea 
+          </Box>
+          <Box>
+            <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Verse Text (ID)</Text>
+            <TextArea 
+              size="3"
               value={config.bibleVerseTextId || ""} 
               onChange={e => setConfig({...config, bibleVerseTextId: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition min-h-[100px]"
               placeholder="Semua yang baik datang dari Allah..."
+              style={{ minHeight: "100px" }}
             />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference (EN)</label>
-            <input 
-              type="text" 
+          </Box>
+          <Box>
+            <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Verse Reference (EN)</Text>
+            <TextField.Root 
+              size="3"
               value={config.bibleVerseReferenceEn || ""} 
               onChange={e => setConfig({...config, bibleVerseReferenceEn: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
               placeholder="e.g. James 1:17"
             />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verse Reference (ID)</label>
-            <input 
-              type="text" 
+          </Box>
+          <Box>
+            <Text as="div" size="1" weight="bold" color="gray" mb="1" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Verse Reference (ID)</Text>
+            <TextField.Root 
+              size="3"
               value={config.bibleVerseReferenceId || ""} 
               onChange={e => setConfig({...config, bibleVerseReferenceId: e.target.value})}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
               placeholder="e.g. Yakobus 1:17"
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Grid>
+      </Card>
 
       {/* Gallery */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-              <ImageIcon className="w-5 h-5 text-amber-600" /> Image Gallery & Layout Preview
-            </h2>
-            <p className="text-sm text-slate-500 mt-1">Use arrow buttons to rearrange photos. The order below reflects the exact arrangement on the web invitation.</p>
-          </div>
-          <label className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-sm cursor-pointer flex items-center gap-2 transition active:scale-95">
-            {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
-            <span>Upload Image</span>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+      <Card size="3">
+        <Flex justify="between" align="start" mb="5">
+          <Box>
+            <Flex align="center" gap="2">
+              <ImageIcon className="w-5 h-5 text-amber-600" />
+              <Heading size="4">Image Gallery & Layout Preview</Heading>
+            </Flex>
+            <Text as="p" size="2" color="gray" mt="1">
+              Use arrow buttons to rearrange photos. The order below reflects the exact arrangement on the web invitation.
+            </Text>
+          </Box>
+          <label>
+            <Button color="amber" disabled={uploading} style={{ cursor: "pointer" }}>
+              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+              Upload Image
+            </Button>
+            <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} disabled={uploading} />
           </label>
-        </div>
+        </Flex>
 
-        {/* Web Layout Preview Structure */}
-        <div className="space-y-6">
+        <Flex direction="column" gap="5">
           {/* Section 1: Top Hero Image */}
-          <div className="border border-amber-200 bg-amber-50/30 rounded-xl p-4">
-            <h3 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <span>🌟 Top Featured Hero Image (Web Cover)</span>
-            </h3>
+          <Box p="4" style={{ backgroundColor: "var(--amber-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--amber-5)" }}>
+            <Flex align="center" gap="2" mb="3">
+              <Text size="1" weight="bold" color="amber" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>🌟 Top Featured Hero Image (Web Cover)</Text>
+            </Flex>
             {(!config.galleryImages || config.galleryImages.length === 0) ? (
-              <p className="text-xs text-slate-400 italic">No images uploaded yet.</p>
+              <Text size="2" color="gray" style={{ fontStyle: "italic" }}>No images uploaded yet.</Text>
             ) : (
-              <div className="relative aspect-[16/9] max-w-md rounded-lg overflow-hidden border border-amber-300 group shadow-sm bg-white">
-                <img src={config.galleryImages[0]} alt="Hero preview" className="object-cover w-full h-full" />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                  <button type="button" onClick={() => moveImage(0, 'right')} disabled={config.galleryImages.length <= 1} className="p-2 bg-white/90 hover:bg-white text-slate-800 rounded-lg text-xs font-bold shadow disabled:opacity-30">
+              <Box style={{ position: "relative", aspectRatio: "16/9", maxWidth: "448px", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--amber-6)" }} className="group">
+                <img src={config.galleryImages[0]} alt="Hero preview" style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                <Box className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                  <Button variant="solid" color="gray" onClick={() => moveImage(0, 'right')} disabled={config.galleryImages.length <= 1}>
                     Move Next ▶
-                  </button>
-                  <button type="button" onClick={() => removeImage(0)} className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-bold shadow">
+                  </Button>
+                  <Button color="red" onClick={() => removeImage(0)}>
                     <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-                <span className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded">#1 Featured</span>
-              </div>
+                  </Button>
+                </Box>
+                <Text size="1" weight="bold" style={{ position: "absolute", bottom: "8px", left: "8px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px" }}>
+                  #1 Featured
+                </Text>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* Section 2: Bento Block 1 (Next 5 images) */}
           {config.galleryImages && config.galleryImages.length > 1 && (
-            <div className="border border-slate-200 bg-slate-50/50 rounded-xl p-4">
-              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+            <Box p="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--gray-5)" }}>
+              <Text as="div" size="1" weight="bold" color="gray" mb="3" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 🍱 Bento Grid Block 1 (Positions #2 to #6 on Web)
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              </Text>
+              <Grid columns={{ initial: "2", sm: "3", md: "5" }} gap="3">
                 {config.galleryImages.slice(1, 6).map((url: string, subIdx: number) => {
                   const actualIdx = subIdx + 1;
                   return (
-                    <div key={actualIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-300 group bg-white shadow-sm">
-                      <img src={url} alt="Bento item" className="object-cover w-full h-full" />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1">
-                        <div className="flex gap-1">
-                          <button type="button" onClick={() => moveImage(actualIdx, 'left')} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow">◀</button>
-                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
-                        </div>
-                        <button type="button" onClick={() => removeImage(actualIdx)} className="p-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs">
+                    <Box key={actualIdx} className="group" style={{ position: "relative", aspectRatio: "1", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--gray-5)", backgroundColor: "white" }}>
+                      <img src={url} alt="Bento item" style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                      <Box className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                        <Flex gap="1">
+                          <Button size="1" variant="solid" color="gray" onClick={() => moveImage(actualIdx, 'left')}>◀</Button>
+                          <Button size="1" variant="solid" color="gray" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1}>▶</Button>
+                        </Flex>
+                        <Button size="1" color="red" onClick={() => removeImage(actualIdx)}>
                           <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                      <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">#{actualIdx + 1}</span>
-                    </div>
+                        </Button>
+                      </Box>
+                      <Text size="1" weight="bold" style={{ position: "absolute", bottom: "4px", left: "4px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>
+                        #{actualIdx + 1}
+                      </Text>
+                    </Box>
                   );
                 })}
-              </div>
-            </div>
+              </Grid>
+            </Box>
           )}
 
           {/* Section 3: Bento Block 2 / Remaining Grid */}
           {config.galleryImages && config.galleryImages.length > 6 && (
-            <div className="border border-slate-200 bg-slate-50/50 rounded-xl p-4">
-              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+            <Box p="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--gray-5)" }}>
+              <Text as="div" size="1" weight="bold" color="gray" mb="3" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 📱 Additional Gallery Photos (Positions #7+ on Web)
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              </Text>
+              <Grid columns={{ initial: "2", sm: "3", md: "5" }} gap="3">
                 {config.galleryImages.slice(6).map((url: string, subIdx: number) => {
                   const actualIdx = subIdx + 6;
                   return (
-                    <div key={actualIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-300 group bg-white shadow-sm">
-                      <img src={url} alt="Grid item" className="object-cover w-full h-full" />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1">
-                        <div className="flex gap-1">
-                          <button type="button" onClick={() => moveImage(actualIdx, 'left')} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow">◀</button>
-                          <button type="button" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1} className="p-1.5 bg-white/90 hover:bg-white text-slate-800 rounded text-xs font-bold shadow disabled:opacity-30">▶</button>
-                        </div>
-                        <button type="button" onClick={() => removeImage(actualIdx)} className="p-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs">
+                    <Box key={actualIdx} className="group" style={{ position: "relative", aspectRatio: "1", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--gray-5)", backgroundColor: "white" }}>
+                      <img src={url} alt="Bento item" style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                      <Box className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                        <Flex gap="1">
+                          <Button size="1" variant="solid" color="gray" onClick={() => moveImage(actualIdx, 'left')}>◀</Button>
+                          <Button size="1" variant="solid" color="gray" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1}>▶</Button>
+                        </Flex>
+                        <Button size="1" color="red" onClick={() => removeImage(actualIdx)}>
                           <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                      <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">#{actualIdx + 1}</span>
-                    </div>
+                        </Button>
+                      </Box>
+                      <Text size="1" weight="bold" style={{ position: "absolute", bottom: "4px", left: "4px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>
+                        #{actualIdx + 1}
+                      </Text>
+                    </Box>
                   );
                 })}
-              </div>
-            </div>
+              </Grid>
+            </Box>
           )}
-        </div>
-      </div>
+        </Flex>
+      </Card>
 
       {/* WhatsApp Message Template */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-          <MessageSquare className="w-5 h-5 text-amber-600" /> WhatsApp Message Template
-        </h2>
-        <p className="text-sm text-slate-500 mb-6">
-          Use <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{nama}"}</code>,{" "}
-          <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{link}"}</code>, and{" "}
-          <code className="bg-slate-100 px-1 rounded text-amber-600 font-mono">{"{deadline}"}</code> as placeholders.
+      <Card size="3">
+        <Flex align="center" gap="2" mb="2">
+          <MessageSquare className="w-5 h-5 text-amber-600" />
+          <Heading size="4">WhatsApp Message Template</Heading>
+        </Flex>
+        <Text as="p" size="2" color="gray" mb="4">
+          Use <Code>{"{nama}"}</Code>, <Code>{"{link}"}</Code>, and <Code>{"{deadline}"}</Code> as placeholders.
           They will be replaced dynamically when copying.
-        </p>
-        <textarea
+        </Text>
+        <TextArea
           rows={5}
+          size="3"
           value={config.waTemplateWedding || ""}
           onChange={e => setConfig({ ...config, waTemplateWedding: e.target.value })}
-          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 text-sm font-mono focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
           placeholder="Halo {nama}! ..."
+          style={{ fontFamily: "monospace" }}
         />
-      </div>
-
-    </div>
+      </Card>
+    </Flex>
   );
 }

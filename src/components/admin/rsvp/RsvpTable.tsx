@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Eye, Edit2, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit2, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { bulkResetRsvps, bulkDeleteRsvpInvitations } from "@/lib/actions/adminRsvp";
+import { Table, Checkbox, Badge, IconButton, Flex, Box, Text, Button } from "@radix-ui/themes";
 
 interface RsvpTableProps {
   initialInvitations: any[];
@@ -35,8 +36,8 @@ export function RsvpTable({
   const currentVisibleIds = initialInvitations.map(inv => inv.id).filter(Boolean);
   const allSelected = currentVisibleIds.length > 0 && currentVisibleIds.every(id => selectedIds.includes(id));
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
       setSelectedIds(Array.from(new Set([...selectedIds, ...currentVisibleIds])));
     } else {
       setSelectedIds(selectedIds.filter(id => !currentVisibleIds.includes(id)));
@@ -66,70 +67,55 @@ export function RsvpTable({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+    <Box style={{ overflow: "hidden" }}>
       {/* ── Bulk Actions Banner ── */}
       {selectedIds.length > 0 && (
-        <div className="bg-amber-50 border-b border-amber-200 px-6 py-3 flex items-center justify-between animate-fadeIn">
-          <span className="text-sm font-bold text-amber-900">
+        <Flex align="center" justify="between" px="4" py="3" style={{ backgroundColor: "var(--amber-3)", borderBottom: "1px solid var(--amber-5)" }}>
+          <Text size="2" weight="bold" style={{ color: "var(--amber-11)" }}>
             {selectedIds.length} invitation(s) selected
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSelectedIds([])}
-              className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 transition"
-            >
+          </Text>
+          <Flex align="center" gap="3">
+            <Button variant="ghost" color="gray" size="1" onClick={() => setSelectedIds([])}>
               Clear Selection
-            </button>
-            <button
-              disabled={isBulkProcessing}
-              onClick={handleBulkReset}
-              className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition disabled:opacity-50"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
+            </Button>
+            <Button disabled={isBulkProcessing} onClick={handleBulkReset} color="amber" size="1" variant="solid">
+              <Trash2 width={14} height={14} />
               {isBulkProcessing ? "Processing..." : "Reset RSVPs"}
-            </button>
-            <button
-              disabled={isBulkProcessing}
-              onClick={handleBulkDelete}
-              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition disabled:opacity-50"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
+            </Button>
+            <Button disabled={isBulkProcessing} onClick={handleBulkDelete} color="red" size="1" variant="solid">
+              <Trash2 width={14} height={14} />
               {isBulkProcessing ? "Processing..." : "Delete Invitations"}
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Flex>
+        </Flex>
       )}
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm whitespace-nowrap">
-          <thead className="bg-slate-50 text-slate-500 border-b border-slate-100">
-            <tr>
-              <th className="px-6 py-4 font-medium text-center w-12">
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={handleSelectAll}
-                  className="rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4 cursor-pointer"
-                  title="Select All"
-                />
-              </th>
-              <th className="px-6 py-4 font-medium">Guest Name</th>
-              <th className="px-6 py-4 font-medium">Event</th>
-              <th className="px-6 py-4 font-medium">Owner / Cat</th>
-              <th className="px-6 py-4 font-medium">Status</th>
-              <th className="px-6 py-4 font-medium">Pax</th>
-              <th className="px-6 py-4 font-medium">Submitted</th>
-              <th className="px-6 py-4 font-medium">Table</th>
-              <th className="px-6 py-4 font-medium text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      <Box style={{ overflowX: "auto" }}>
+        <Table.Root variant="ghost" size="2">
+          <Table.Header>
+            <Table.Row style={{ height: "64px", verticalAlign: "middle" }}>
+              <Table.ColumnHeaderCell align="center" width="40px" style={{ verticalAlign: "middle" }}>
+                <Checkbox checked={allSelected} onCheckedChange={(checked: boolean) => handleSelectAll(checked)} />
+              </Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Guest Name</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Event</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Owner / Cat</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Pax</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Submitted</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Table</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell justify="center">Actions</Table.ColumnHeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {initialInvitations.length === 0 ? (
-              <tr>
-                <td colSpan={9} className="px-6 py-12 text-center text-slate-500">
-                  No RSVP records found.
-                </td>
-              </tr>
+              <Table.Row>
+                <Table.Cell colSpan={9} align="center">
+                  <Box py="6">
+                    <Text color="gray">No RSVP records found.</Text>
+                  </Box>
+                </Table.Cell>
+              </Table.Row>
             ) : (
               initialInvitations.map((inv: any) => {
                 let rsvp = null;
@@ -141,82 +127,84 @@ export function RsvpTable({
                 const isPend = !rsvp;
                 const isChecked = selectedIds.includes(inv.id);
 
-                const toggleRow = () => {
-                  if (isChecked) setSelectedIds(selectedIds.filter(id => id !== inv.id));
+                const toggleRow = (checked: boolean) => {
+                  if (!checked) setSelectedIds(selectedIds.filter(id => id !== inv.id));
                   else setSelectedIds([...selectedIds, inv.id]);
                 };
                 
                 return (
-                  <tr key={inv.id} className={`hover:bg-slate-50/50 transition ${isChecked ? "bg-amber-50/30" : ""}`}>
-                    <td className="px-6 py-4 text-center">
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={toggleRow}
-                        className="rounded border-slate-300 text-amber-600 focus:ring-amber-500 w-4 h-4 cursor-pointer"
-                      />
-                    </td>
-                    <td className="px-6 py-4 font-medium text-slate-800">{inv.guest.name}</td>
-                    <td className="px-6 py-4 text-slate-600">{inv.event_type.name}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="text-slate-800">{inv.guest.owner}</span>
-                        <span className="text-xs text-slate-500">{inv.guest.category}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
+                  <Table.Row key={inv.id} style={{ backgroundColor: isChecked ? "var(--amber-2)" : "transparent", height: "64px", verticalAlign: "middle" }}>
+                    <Table.Cell align="center" style={{ verticalAlign: "middle" }}>
+                      <Checkbox checked={isChecked} onCheckedChange={(c: boolean) => toggleRow(c)} />
+                    </Table.Cell>
+                    <Table.RowHeaderCell>
+                      <button 
+                        onClick={() => openViewModal(inv)}
+                        className="font-medium text-[var(--crimson-11)] hover:underline text-left bg-transparent border-none p-0 cursor-pointer"
+                        style={{ fontSize: "var(--font-size-2)" }}
+                      >
+                        {inv.guest.name}
+                      </button>
+                    </Table.RowHeaderCell>
+                    <Table.Cell>
+                      <Text color="gray">{inv.event_type.name}</Text>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Flex direction="column">
+                        <Text>{inv.guest.owner}</Text>
+                        <Text size="1" color="gray">{inv.guest.category}</Text>
+                      </Flex>
+                    </Table.Cell>
+                    <Table.Cell style={{ verticalAlign: "middle" }}>
                       {isPend ? (
-                        <span className="px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">Pending</span>
+                        <Badge size="2" color="gray" variant="soft">Pending</Badge>
                       ) : rsvp.attendance_status === 'attending' ? (
-                        <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700">Attending</span>
+                        <Badge size="2" color="green" variant="soft">Attending</Badge>
                       ) : (
-                        <span className="px-2 py-0.5 rounded text-xs font-medium bg-red-50 text-red-700">Declined</span>
+                        <Badge size="2" color="red" variant="soft">Declined</Badge>
                       )}
-                    </td>
-                    <td className="px-6 py-4 text-slate-700">
-                      {isPend ? "-" : `${rsvp.confirmed_pax} / ${inv.max_pax}`}
-                    </td>
-                    <td className="px-6 py-4 text-slate-500 text-xs">
-                      {isPend ? "-" : new Date(rsvp.submitted_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-slate-600">
-                      {inv.seating_assignment?.seating_table?.table_name || "-"}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button onClick={() => openViewModal(inv)} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition" title="View Details">
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => openEditModal(inv)} className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-lg transition" title="Edit RSVP">
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => openResetModal(inv)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Reset RSVP">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Text>{isPend ? "-" : `${rsvp.confirmed_pax} / ${inv.max_pax}`}</Text>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Text size="1" color="gray">{isPend ? "-" : new Date(rsvp.submitted_at).toLocaleDateString()}</Text>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Text color="gray">{inv.seating_assignment?.seating_table?.table_name || "-"}</Text>
+                    </Table.Cell>
+                    <Table.Cell justify="center" style={{ verticalAlign: "middle" }}>
+                      <Flex align="center" justify="center" gap="3">
+                        <IconButton variant="ghost" color="gray" onClick={() => openEditModal(inv)} title="Edit RSVP">
+                          <Edit2 width={18} height={18} />
+                        </IconButton>
+                        <IconButton variant="ghost" color="gray" onClick={() => openResetModal(inv)} title="Reset RSVP">
+                          <Trash2 width={18} height={18} />
+                        </IconButton>
+                      </Flex>
+                    </Table.Cell>
+                  </Table.Row>
                 );
               })
             )}
-          </tbody>
-        </table>
-      </div>
+          </Table.Body>
+        </Table.Root>
+      </Box>
       
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50">
-          <span className="text-sm text-slate-500">Page {currentPage} of {totalPages}</span>
-          <div className="flex gap-2">
-            <button disabled={currentPage === 1 || isPending} onClick={() => handlePageChange(currentPage - 1)} className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button disabled={currentPage === totalPages || isPending} onClick={() => handlePageChange(currentPage + 1)} className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50">
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <Flex align="center" justify="between" px="2" py="4">
+          <Text size="2" color="gray">Page {currentPage} of {totalPages}</Text>
+          <Flex gap="2">
+            <IconButton variant="surface" color="gray" disabled={currentPage === 1 || isPending} onClick={() => handlePageChange(currentPage - 1)}>
+              <ChevronLeft width={16} height={16} />
+            </IconButton>
+            <IconButton variant="surface" color="gray" disabled={currentPage === totalPages || isPending} onClick={() => handlePageChange(currentPage + 1)}>
+              <ChevronRight width={16} height={16} />
+            </IconButton>
+          </Flex>
+        </Flex>
       )}
-    </div>
+    </Box>
   );
 }

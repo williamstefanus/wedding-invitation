@@ -18,7 +18,7 @@ export default async function AdminPage() {
       max_pax,
       invitation_code,
       event_type:event_types!inner(slug, name),
-      guest:guests!inner(owner),
+      guest:guests!inner(id, name, owner),
       rsvp:rsvps(
         attendance_status, 
         confirmed_pax,

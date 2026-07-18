@@ -1,0 +1,96 @@
+/* Load after @radix-ui/themes/styles.css */
+
+:root {
+  --knotice-chestnut-rose-50: #fcf5f4;
+  --knotice-chestnut-rose-100: #faebe9;
+  --knotice-chestnut-rose-200: #f5d8d6;
+  --knotice-chestnut-rose-300: #edb7b4;
+  --knotice-chestnut-rose-400: #e28c8a;
+  --knotice-chestnut-rose-500: #d36060;
+  --knotice-chestnut-rose-600: #bd4147;
+  --knotice-chestnut-rose-700: #9f3139;
+  --knotice-chestnut-rose-800: #852c35;
+  --knotice-chestnut-rose-900: #732832;
+  --knotice-chestnut-rose-950: #3f1217;
+  --knotice-ink: #1a1a1a;
+  --knotice-white: #ffffff;
+}
+
+.radix-themes {
+  color-scheme: light;
+
+  --color-background: #ffffff;
+  --color-panel-solid: #ffffff;
+  --color-surface: #ffffff;
+
+  --default-font-family:
+    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --heading-font-family: var(--default-font-family);
+  --strong-font-family: var(--default-font-family);
+
+  /* Knotice brand mapped to Radix crimson.
+     Keep native Radix red free for destructive/error states. */
+  --crimson-1: #fcf5f4;
+  --crimson-2: #faebe9;
+  --crimson-3: #f5d8d6;
+  --crimson-4: #f1c8c5;
+  --crimson-5: #edb7b4;
+  --crimson-6: #e7a09d;
+  --crimson-7: #e28c8a;
+  --crimson-8: #d97272;
+  --crimson-9: #d36060;
+  --crimson-10: #bd4147;
+  --crimson-11: #9f3139;
+  --crimson-12: #3f1217;
+
+  --crimson-a1: color-mix(in srgb, #d36060 4%, transparent);
+  --crimson-a2: color-mix(in srgb, #d36060 8%, transparent);
+  --crimson-a3: color-mix(in srgb, #d36060 13%, transparent);
+  --crimson-a4: color-mix(in srgb, #d36060 18%, transparent);
+  --crimson-a5: color-mix(in srgb, #d36060 25%, transparent);
+  --crimson-a6: color-mix(in srgb, #d36060 33%, transparent);
+  --crimson-a7: color-mix(in srgb, #d36060 43%, transparent);
+  --crimson-a8: color-mix(in srgb, #d36060 56%, transparent);
+  --crimson-a9: #d36060;
+  --crimson-a10: #bd4147;
+  --crimson-a11: #9f3139;
+  --crimson-a12: #3f1217;
+
+  --crimson-surface: color-mix(in srgb, #d36060 10%, white);
+  --crimson-indicator: #d36060;
+  --crimson-track: #d36060;
+  --crimson-contrast: #ffffff;
+}
+
+/* Optional app-shell helpers. Radix components should remain the main UI layer. */
+.knotice-app {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 0%, var(--crimson-a2), transparent 28rem),
+    var(--color-background);
+  color: var(--gray-12);
+}
+
+.knotice-topbar {
+  background: color-mix(in srgb, white 94%, transparent);
+  border-bottom: 1px solid var(--gray-6);
+  backdrop-filter: blur(14px);
+}
+
+.knotice-sidebar {
+  background: var(--color-panel-solid);
+  border-right: 1px solid var(--gray-6);
+}
+
+.knotice-logo-horizontal {
+  display: block;
+  width: auto;
+  height: 32px;
+}
+
+.knotice-logo-mark {
+  display: block;
+  width: 36px;
+  height: 36px;
+}

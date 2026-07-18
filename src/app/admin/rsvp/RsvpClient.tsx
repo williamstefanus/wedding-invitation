@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Download } from "lucide-react";
 import { adminUpdateRsvp, resetRsvp, getAllRsvpsForExport } from "@/lib/actions/adminRsvp";
 import { exportToExcel } from "@/lib/utils";
+import { Box, Flex, Heading, Text, Button as RadixButton, Tabs, Card } from "@radix-ui/themes";
 import { RsvpMetrics } from "@/components/admin/rsvp/RsvpMetrics";
 
 // Extracted Components
@@ -164,78 +165,69 @@ export function RsvpClient({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-8 font-sans">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">RSVP Management</h1>
-          <p className="text-slate-500 mt-1">Monitor, edit, and export guest submissions.</p>
-        </div>
-        <button 
-          onClick={handleExport}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition"
-        >
-          <Download className="w-4 h-4" />
-          Export to Excel
-        </button>
-      </div>
-
-      {exportError && (
-        <div className="p-4 rounded-xl mb-6 font-bold flex items-center gap-2 bg-rose-50 text-rose-800 border border-rose-200">
-          <span>✕</span> {exportError}
-        </div>
-      )}
-
-      {allInvitations && allInvitations.length > 0 && (
-        <RsvpMetrics invitations={filteredOverviewInvitations} config={config} />
-      )}
-
-      {/* Tabs */}
-      <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
-        <button
-          onClick={() => updateUrl({ tab: "all" })}
-          className={`px-6 py-3 font-medium text-sm whitespace-nowrap transition-colors border-b-2 ${
-            currentTab === "all" || !currentTab
-              ? "border-emerald-500 text-emerald-600"
-              : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-          }`}
-        >
-          All RSVPs
-        </button>
-        {eventTypes.map((et: any) => (
-          <button
-            key={et.id}
-            onClick={() => updateUrl({ tab: et.slug })}
-            className={`px-6 py-3 font-medium text-sm whitespace-nowrap transition-colors border-b-2 ${
-              currentTab === et.slug
-                ? "border-emerald-500 text-emerald-600"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-            }`}
+    <Box className="knotice-app" p={{ initial: "4", md: "7" }}>
+      <Flex direction="column" gap="4" style={{ maxWidth: 1180, margin: "0 auto" }}>
+        
+        <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "end" }} gap="4">
+          <Box>
+            <Heading size="8">RSVP Management</Heading>
+            <Text color="gray" size="3" mt="2" as="p">
+              Monitor, edit, and export guest submissions.
+            </Text>
+          </Box>
+          <RadixButton 
+            onClick={handleExport}
+            color="crimson"
+            size="3"
+            style={{ fontWeight: 600, cursor: "pointer" }}
           >
-            {et.name}
-          </button>
-        ))}
-      </div>
+            <Download width={18} height={18} />
+            Export to Excel
+          </RadixButton>
+        </Flex>
 
-      <RsvpFilters 
-        currentSearch={currentSearch}
-        currentOwner={currentOwner}
-        currentCategory={currentCategory}
-        currentStatus={currentStatus}
-        currentSort={currentSort}
-        updateUrl={updateUrl}
-        config={config}
-      />
+        {exportError && (
+          <Box p="4" style={{ backgroundColor: "var(--red-2)", color: "var(--red-11)", border: "1px solid var(--red-5)", borderRadius: "var(--radius-3)", fontWeight: 600 }}>
+            <span>✕</span> {exportError}
+          </Box>
+        )}
 
-      <RsvpTable 
-        initialInvitations={initialInvitations}
-        totalPages={totalPages}
-        currentPage={currentPage}
-        isPending={isPending}
-        openViewModal={openViewModal}
-        openEditModal={openEditModal}
-        openResetModal={openResetModal}
-        handlePageChange={handlePageChange}
-      />
+        {allInvitations && allInvitations.length > 0 && (
+          <RsvpMetrics invitations={filteredOverviewInvitations} config={config} />
+        )}
+
+        {/* Tabs */}
+        <Box mb="4">
+          <Tabs.Root value={currentTab || "all"} onValueChange={(val) => updateUrl({ tab: val })}>
+            <Tabs.List size="2">
+              <Tabs.Trigger value="all">All RSVPs</Tabs.Trigger>
+              {eventTypes.map((et: any) => (
+                <Tabs.Trigger key={et.id} value={et.slug}>{et.name}</Tabs.Trigger>
+              ))}
+            </Tabs.List>
+          </Tabs.Root>
+        </Box>
+
+          <RsvpFilters 
+            currentSearch={currentSearch}
+            currentOwner={currentOwner}
+            currentCategory={currentCategory}
+            currentStatus={currentStatus}
+            currentSort={currentSort}
+            updateUrl={updateUrl}
+            config={config}
+          />
+
+          <RsvpTable 
+            initialInvitations={initialInvitations}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            isPending={isPending}
+            openViewModal={openViewModal}
+            openEditModal={openEditModal}
+            openResetModal={openResetModal}
+            handlePageChange={handlePageChange}
+          />
 
       <ViewRsvpModal 
         isViewOpen={isViewOpen}
@@ -267,6 +259,7 @@ export function RsvpClient({
         handleReset={handleReset}
       />
 
-    </div>
+      </Flex>
+    </Box>
   );
 }

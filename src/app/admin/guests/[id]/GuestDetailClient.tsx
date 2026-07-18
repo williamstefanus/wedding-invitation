@@ -2,11 +2,12 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Edit2, Copy, Check, CheckCheck, Send, Loader2 } from "lucide-react";
+import { Edit2, Copy, Check, CheckCheck, Send, Loader2, Link as LinkIcon, MessageCircle, User, Phone, Tag, Building } from "lucide-react";
 import { getGuestById, updateGuest, toggleInvitationSent } from "@/lib/actions/guests";
 import { formatWhatsAppPhone } from "@/lib/utils";
 import { GuestFormModal } from "@/components/admin/guests/modals/GuestFormModal";
 import type { GuestOwner, GuestCategory } from "@/types";
+import { Box, Flex, Heading, Text, Button, Card, Grid, Badge } from "@radix-ui/themes";
 
 interface GuestDetailClientProps {
   guest: any;
@@ -70,7 +71,14 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
       : `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(waUrl, "_blank");
 
-    setCopiedId(inv.id);
+    setCopiedId(inv.id + "_wa");
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleCopyLinkOnly = (inv: any) => {
+    const url = `${window.location.origin}/invite/${inv.event_type.slug}/${inv.invitation_code}`;
+    navigator.clipboard.writeText(url);
+    setCopiedId(inv.id + "_link");
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -133,124 +141,174 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
 
   return (
     <>
+      {/* Guest Info Card */}
+      <Box style={{ gridColumn: "span 1" }}>
+        <Card size="3" style={{ padding: "24px", backgroundColor: "white" }}>
+          <Heading size="5" mb="6">Contact Info</Heading>
+          
+          <Flex direction="column" gap="4">
+            <Box>
+              <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "8px" }} mb="1">
+                <Phone className="w-3 h-3" /> Phone Number
+              </Text>
+              <Text size="3" weight="medium">{currentGuest.phone || "No phone provided"}</Text>
+            </Box>
+            <Box>
+              <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "8px" }} mb="1">
+                <Building className="w-3 h-3" /> Side / Owner
+              </Text>
+              <Text size="3" weight="medium">{currentGuest.owner}</Text>
+            </Box>
+            <Box>
+              <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "8px" }} mb="1">
+                <Tag className="w-3 h-3" /> Category
+              </Text>
+              <Text size="3" weight="medium">{currentGuest.category}</Text>
+            </Box>
+            {currentGuest.notes && (
+              <Box>
+                <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Notes</Text>
+                <Box p="3" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--gray-4)" }}>
+                  <Text size="2" color="gray">{currentGuest.notes}</Text>
+                </Box>
+              </Box>
+            )}
+
+            <Button 
+              color="amber" 
+              variant="surface" 
+              onClick={openEditModal} 
+              size="3" 
+              style={{ cursor: "pointer", fontWeight: "bold", marginTop: "16px", width: "100%" }}
+            >
+              <Edit2 className="w-4 h-4" />
+              Edit Guest
+            </Button>
+          </Flex>
+        </Card>
+      </Box>
+
       {/* Invitations & RSVPs */}
-      <div className="md:col-span-2 space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-slate-800">Invitations</h2>
-          <button
-            onClick={openEditModal}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold rounded-xl transition shadow-sm"
-          >
-            <Edit2 className="w-4 h-4" />
-            Edit Guest
-          </button>
-        </div>
+      <Box style={{ gridColumn: "span 2" }}>
         
         {currentGuest.invitations?.length === 0 ? (
-          <div className="bg-white p-8 rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
-            This guest has no active invitations.
-          </div>
+          <Box p="6" style={{ backgroundColor: "var(--gray-1)", border: "1px dashed var(--gray-6)", borderRadius: "var(--radius-4)", textAlign: "center" }}>
+            <Text color="gray">This guest has no active invitations.</Text>
+          </Box>
         ) : (
-          currentGuest.invitations?.map((inv: any) => {
-            const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
-            const assignment = Array.isArray(inv.seating_assignment) ? inv.seating_assignment[0] : inv.seating_assignment;
+          <Flex direction="column" gap="5">
+            {currentGuest.invitations?.map((inv: any) => {
+              const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
+              const assignment = Array.isArray(inv.seating_assignment) ? inv.seating_assignment[0] : inv.seating_assignment;
 
-            return (
-              <div key={inv.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                {/* Card Header */}
-                <div className={`px-6 py-4 border-b flex justify-between items-center
-                  ${inv.event_type.slug === 'wedding' ? 'bg-amber-50 border-amber-100' : 'bg-rose-50 border-rose-100'}
-                `}>
-                  <h3 className={`font-bold text-lg 
-                    ${inv.event_type.slug === 'wedding' ? 'text-amber-800' : 'text-rose-800'}
-                  `}>
-                    {inv.event_type.name}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white px-3 py-1 rounded-lg border border-slate-200 text-sm font-mono font-bold text-slate-600 shadow-sm">
-                      {inv.invitation_code}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <div className="grid grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Max Pax</p>
-                      <p className="text-xl font-bold text-slate-700">{inv.max_pax} <span className="text-sm font-medium text-slate-400">pax</span></p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">RSVP Status</p>
-                      {rsvp ? (
-                        <p className={`text-xl font-bold ${rsvp.attendance_status === 'attending' ? 'text-green-600' : 'text-rose-600'}`}>
-                          {rsvp.attendance_status === 'attending' ? `Attending (${rsvp.confirmed_pax} pax)` : 'Declined'}
-                        </p>
-                      ) : (
-                        <p className="text-xl font-bold text-amber-500">Pending</p>
-                      )}
-                    </div>
-                  </div>
+              const isWedding = inv.event_type.slug === 'wedding';
+              const headerTextColor = isWedding ? "var(--amber-11)" : "var(--crimson-11)";
+              const headerBgColor = isWedding ? "var(--amber-2)" : "var(--crimson-2)";
+              const headerBorderColor = isWedding ? "var(--amber-4)" : "var(--crimson-4)";
+              
+              return (
+                <Card key={inv.id} size="3" style={{ padding: 0, overflow: "hidden", backgroundColor: "white" }}>
+                  {/* Card Header */}
+                  <Box px="5" py="4" style={{ borderBottom: `1px solid ${headerBorderColor}`, backgroundColor: headerBgColor }}>
+                    <Flex justify="between" align="center">
+                      <Heading size="4" weight="bold" style={{ color: headerTextColor, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        {inv.event_type.name}
+                      </Heading>
+                      <Badge size="2" style={{ fontFamily: "var(--font-mono)", fontWeight: "bold", backgroundColor: "white", color: headerTextColor, border: `1px solid ${headerBorderColor}` }}>
+                        {inv.invitation_code}
+                      </Badge>
+                    </Flex>
+                  </Box>
+                  
+                  <Box p="5">
+                    <Grid columns="2" gap="5" mb="5">
+                      <Box>
+                        <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Max Pax</Text>
+                        <Text size="5" weight="bold" as="div">
+                          {inv.max_pax} <Text size="2" color="gray" weight="medium">pax</Text>
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">RSVP Status</Text>
+                        {rsvp ? (
+                          <Text size="5" weight="bold" color={rsvp.attendance_status === 'attending' ? 'green' : 'crimson'} as="div">
+                            {rsvp.attendance_status === 'attending' ? `Attending (${rsvp.confirmed_pax} pax)` : 'Declined'}
+                          </Text>
+                        ) : (
+                          <Text size="5" weight="bold" color="amber" as="div">Pending</Text>
+                        )}
+                      </Box>
+                    </Grid>
 
-                  {rsvp?.wish_message && (
-                    <div className="mb-6">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Wish Message</p>
-                      <p className="text-slate-600 italic bg-slate-50 p-4 rounded-xl border border-slate-100">&ldquo;{rsvp.wish_message}&rdquo;</p>
-                    </div>
-                  )}
-
-                  <div className="mb-6">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Table Assignment</p>
-                    {assignment ? (
-                      <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-xl font-bold border border-blue-100">
-                        {assignment.seating_table.table_name}
-                        <span className="text-sm font-medium opacity-75">({assignment.assigned_pax} pax)</span>
-                      </div>
-                    ) : (
-                      <p className="text-sm font-medium text-slate-500">Not assigned yet.</p>
+                    {rsvp?.wish_message && (
+                      <Box mb="5">
+                        <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Wish Message</Text>
+                        <Box p="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--gray-4)" }}>
+                          <Text size="2" color="gray" style={{ fontStyle: "italic" }}>&ldquo;{rsvp.wish_message}&rdquo;</Text>
+                        </Box>
+                      </Box>
                     )}
-                  </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                    {/* Copy WhatsApp Message */}
-                    <button
-                      onClick={() => handleCopyLink(inv)}
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border transition ${
-                        copiedId === inv.id
-                          ? "bg-green-50 text-green-700 border-green-200"
-                          : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200"
-                      }`}
-                    >
-                      {copiedId === inv.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copiedId === inv.id ? "Opening WA..." : "Copy & Send WA"}
-                    </button>
-
-                    {/* Mark as Sent */}
-                    <button
-                      onClick={() => handleToggleSent(inv)}
-                      disabled={togglingId === inv.id}
-                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border transition disabled:opacity-50 ${
-                        inv.is_sent
-                          ? "bg-green-50 text-green-700 border-green-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
-                          : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-green-50 hover:text-green-600 hover:border-green-200"
-                      }`}
-                    >
-                      {togglingId === inv.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : inv.is_sent ? (
-                        <CheckCheck className="w-4 h-4" />
+                    <Box mb="5">
+                      <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Table Assignment</Text>
+                      {assignment ? (
+                        <Text size="2" weight="bold" as="div" color="blue">
+                          {assignment.seating_table.table_name} <Text size="2" weight="medium" style={{ opacity: 0.75 }}>({assignment.assigned_pax} pax)</Text>
+                        </Text>
                       ) : (
-                        <Send className="w-4 h-4" />
+                        <Text size="2" weight="medium" color="gray" as="div">Not assigned yet.</Text>
                       )}
-                      {inv.is_sent ? "Invitation Sent" : "Mark as Sent"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })
+                    </Box>
+
+                    {/* Action Buttons */}
+                    <Flex align="center" gap="3" pt="4" mt="4" style={{ borderTop: "1px solid var(--gray-4)" }}>
+                      {/* Copy Link Only */}
+                      <Button
+                        variant={copiedId === inv.id + "_link" ? "soft" : "outline"}
+                        color={copiedId === inv.id + "_link" ? "green" : "gray"}
+                        onClick={() => handleCopyLinkOnly(inv)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {copiedId === inv.id + "_link" ? <Check className="w-4 h-4" /> : <LinkIcon className="w-4 h-4" />}
+                        {copiedId === inv.id + "_link" ? "Copied!" : "Copy Link"}
+                      </Button>
+
+                      {/* Copy WhatsApp Message */}
+                      <Button
+                        variant={copiedId === inv.id + "_wa" ? "soft" : "outline"}
+                        color={copiedId === inv.id + "_wa" ? "green" : "gray"}
+                        onClick={() => handleCopyLink(inv)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {copiedId === inv.id + "_wa" ? <Check className="w-4 h-4" /> : <MessageCircle className="w-4 h-4" />}
+                        {copiedId === inv.id + "_wa" ? "Opening WA..." : "Copy & Send WA"}
+                      </Button>
+
+                      {/* Mark as Sent */}
+                      <Button
+                        variant={inv.is_sent ? "soft" : "outline"}
+                        color={inv.is_sent ? "green" : "gray"}
+                        onClick={() => handleToggleSent(inv)}
+                        disabled={togglingId === inv.id}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {togglingId === inv.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : inv.is_sent ? (
+                          <CheckCheck className="w-4 h-4" />
+                        ) : (
+                          <Send className="w-4 h-4" />
+                        )}
+                        {inv.is_sent ? "Invitation Sent" : "Mark as Sent"}
+                      </Button>
+                    </Flex>
+                  </Box>
+                </Card>
+              );
+            })}
+          </Flex>
         )}
-      </div>
+      </Box>
 
       {/* Edit Modal */}
       <GuestFormModal 

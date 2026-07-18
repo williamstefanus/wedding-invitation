@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { Dialog, Flex, Box, Text, Button, Callout } from "@radix-ui/themes";
 
 interface ViewRsvpModalProps {
   isViewOpen: boolean;
@@ -22,67 +23,81 @@ export function ViewRsvpModal({
   if (!isViewOpen || !selectedInv) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl animate-fade-up">
-        <div className="flex justify-between items-center p-6 border-b border-slate-100">
-          <h2 className="text-xl font-bold text-slate-800">RSVP Details</h2>
-          <button onClick={() => setIsViewOpen(false)} className="text-slate-400 hover:text-slate-600 transition">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        <div className="p-6">
-          <h3 className="text-lg font-bold text-slate-800 mb-1">{selectedInv.guest.name}</h3>
-          <p className="text-sm text-slate-500 mb-6">{selectedInv.event_type.name} Invitation</p>
+    <Dialog.Root open={isViewOpen} onOpenChange={setIsViewOpen}>
+      <Dialog.Content size="3" maxWidth="450px">
+        <Dialog.Title>RSVP Details</Dialog.Title>
+
+        <Box mt="4">
+          <Text size="5" weight="bold" as="div" mb="1">{selectedInv.guest.name}</Text>
+          <Text size="2" color="gray" as="div" mb="5">{selectedInv.event_type.name} Invitation</Text>
 
           {isSelectedPending ? (
-            <div className="text-center text-slate-500 py-8 bg-slate-50 rounded-lg border border-slate-100">
-              Guest has not submitted an RSVP yet.
-            </div>
+            <Callout.Root color="gray" variant="surface">
+              <Callout.Text>Guest has not submitted an RSVP yet.</Callout.Text>
+            </Callout.Root>
           ) : (
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between pb-3 border-b border-slate-100">
-                <span className="text-slate-500 text-sm">Status</span>
-                <span className={`font-medium ${currentRsvp?.attendance_status === 'attending' ? 'text-green-600' : 'text-red-600'}`}>
+            <Flex direction="column" gap="4">
+              <Flex justify="between" pb="3" style={{ borderBottom: "1px solid var(--gray-5)" }}>
+                <Text size="2" color="gray">Status</Text>
+                <Text size="2" weight="medium" color={currentRsvp?.attendance_status === 'attending' ? 'green' : 'red'}>
                   {currentRsvp?.attendance_status === 'attending' ? 'Attending' : 'Declined'}
-                </span>
-              </div>
+                </Text>
+              </Flex>
               
               {currentRsvp?.attendance_status === 'attending' && (
                 <>
-                  <div className="flex justify-between pb-3 border-b border-slate-100">
-                    <span className="text-slate-500 text-sm">Confirmed Pax</span>
-                    <span className="font-medium text-slate-800">{currentRsvp.confirmed_pax} of {selectedInv.max_pax}</span>
-                  </div>
-                  <div className="flex flex-col pb-3 border-b border-slate-100 gap-1">
-                    <span className="text-slate-500 text-sm">Selected Sessions</span>
+                  <Flex justify="between" pb="3" style={{ borderBottom: "1px solid var(--gray-5)" }}>
+                    <Text size="2" color="gray">Confirmed Pax</Text>
+                    <Text size="2" weight="medium">{currentRsvp.confirmed_pax} of {selectedInv.max_pax}</Text>
+                  </Flex>
+                  <Flex direction="column" pb="3" gap="1" style={{ borderBottom: "1px solid var(--gray-5)" }}>
+                    <Text size="2" color="gray">Selected Sessions</Text>
                     {currentRsvp.selected_sessions.length > 0 ? (
-                      <ul className="list-disc pl-5 text-sm text-slate-800 font-medium">
+                      <ul style={{ paddingLeft: "20px", margin: 0 }}>
                         {currentRsvp.selected_sessions.map((ss: any) => {
                           const sObj = eventSessions.find((es: any) => es.id === ss.event_session_id);
-                          return <li key={ss.event_session_id}>{sObj?.name || 'Unknown Session'}</li>;
+                          return (
+                            <li key={ss.event_session_id}>
+                              <Text size="2" weight="medium">{sObj?.name || 'Unknown Session'}</Text>
+                            </li>
+                          );
                         })}
                       </ul>
                     ) : (
-                      <span className="text-sm text-slate-400">None selected</span>
+                      <Text size="2" color="gray">None selected</Text>
                     )}
-                  </div>
+                  </Flex>
                 </>
               )}
 
-              <div className="flex flex-col gap-1 pt-2">
-                <span className="text-slate-500 text-sm">Wishes Message</span>
-                <div className="bg-amber-50 p-4 rounded-lg border border-amber-100 text-slate-800 text-sm italic min-h-[80px]">
-                  {currentRsvp?.wish_message ? `"${currentRsvp.wish_message}"` : <span className="text-amber-600/50 not-italic">No message provided.</span>}
-                </div>
-              </div>
+              <Flex direction="column" gap="2" pt="2">
+                <Text size="2" color="gray">Wishes Message</Text>
+                <Box p="4" style={{ backgroundColor: "var(--amber-2)", border: "1px solid var(--amber-5)", borderRadius: "var(--radius-3)", minHeight: "80px" }}>
+                  {currentRsvp?.wish_message ? (
+                    <Text size="2" style={{ fontStyle: "italic", color: "var(--amber-12)" }}>
+                      "{currentRsvp.wish_message}"
+                    </Text>
+                  ) : (
+                    <Text size="2" style={{ color: "var(--amber-11)", opacity: 0.5 }}>
+                      No message provided.
+                    </Text>
+                  )}
+                </Box>
+              </Flex>
               
-              <p className="text-xs text-slate-400 text-right mt-2">
+              <Text size="1" color="gray" align="right" mt="2">
                 Submitted: {new Date(currentRsvp?.submitted_at).toLocaleString()}
-              </p>
-            </div>
+              </Text>
+            </Flex>
           )}
-        </div>
-      </div>
-    </div>
+        </Box>
+
+        <Flex justify="end" mt="5">
+          <Button variant="soft" color="gray" onClick={() => setIsViewOpen(false)}>
+            Close
+          </Button>
+        </Flex>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

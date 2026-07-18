@@ -1,6 +1,7 @@
 "use client";
 
 import { X, Search, ChevronRight } from "lucide-react";
+import { Dialog, Flex, Box, Text, TextField, Select, Card, Button, Badge } from "@radix-ui/themes";
 
 interface AssignGuestModalProps {
   isSearchModalOpen: boolean;
@@ -28,87 +29,91 @@ export function AssignGuestModal({
   if (!isSearchModalOpen || !selectedTable) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-[60]">
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl animate-fade-up">
-        
-        <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50">
-          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            Assign to {selectedTable.table_name}
-          </h2>
-          <button onClick={() => { setIsSearchModalOpen(false); updateUrl({ guestSearch: null, guestOwner: null, guestCategory: null }); }} className="p-2 text-slate-400 hover:bg-slate-200 rounded-full transition">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+    <Dialog.Root open={isSearchModalOpen} onOpenChange={(open) => {
+      if (!open) {
+        setIsSearchModalOpen(false);
+        updateUrl({ guestSearch: null, guestOwner: null, guestCategory: null });
+      }
+    }}>
+      <Dialog.Content size="3" maxWidth="600px" className="animate-fade-up">
+        <Dialog.Title mb="4">
+          Assign to {selectedTable?.table_name}
+        </Dialog.Title>
 
         {/* Filters Bar */}
-        <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-3 bg-white">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input 
-              type="text" 
+        <Flex direction={{ initial: "column", sm: "row" }} gap="3" pb="4" mb="4" style={{ borderBottom: "1px solid var(--gray-5)" }}>
+          <Box style={{ flex: 1 }}>
+            <TextField.Root 
               placeholder="Search attending guests..." 
               defaultValue={currentSearch}
               onChange={(e) => updateUrl({ guestSearch: e.target.value })}
-              className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-amber-500"
-            />
-          </div>
-          <select 
-            value={currentOwner} 
-            onChange={(e) => updateUrl({ guestOwner: e.target.value })}
-            className="w-full sm:w-32 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-amber-500"
-          >
-            <option value="All">All Owners</option>
-            <option value="groom">William</option>
-            <option value="bride">Aziel</option>
-          </select>
-          <select 
-            value={currentCategory} 
-            onChange={(e) => updateUrl({ guestCategory: e.target.value })}
-            className="w-full sm:w-36 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-amber-500"
-          >
-            <option value="All">All Categories</option>
-            <option value="Relatives">Relatives</option>
-            <option value="Friends">Friends</option>
-            <option value="Church">Church</option>
-          </select>
-        </div>
+            >
+              <TextField.Slot>
+                <Search className="w-4 h-4" />
+              </TextField.Slot>
+            </TextField.Root>
+          </Box>
+          <Select.Root value={currentOwner || "All"} onValueChange={(val) => updateUrl({ guestOwner: val })}>
+            <Select.Trigger style={{ minWidth: "120px" }} />
+            <Select.Content>
+              <Select.Item value="All">All Owners</Select.Item>
+              <Select.Item value="groom">William</Select.Item>
+              <Select.Item value="bride">Aziel</Select.Item>
+            </Select.Content>
+          </Select.Root>
+          <Select.Root value={currentCategory || "All"} onValueChange={(val) => updateUrl({ guestCategory: val })}>
+            <Select.Trigger style={{ minWidth: "140px" }} />
+            <Select.Content>
+              <Select.Item value="All">All Categories</Select.Item>
+              <Select.Item value="Relatives">Relatives</Select.Item>
+              <Select.Item value="Friends">Friends</Select.Item>
+              <Select.Item value="Church">Church</Select.Item>
+            </Select.Content>
+          </Select.Root>
+        </Flex>
 
         {/* Results List */}
-        <div className="flex-1 overflow-y-auto bg-slate-50/50 p-4">
+        <Box p="4" style={{ backgroundColor: "var(--gray-2)", maxHeight: "50vh", overflowY: "auto" }}>
           {initialEligibleGuests.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Box py="9" style={{ textAlign: "center" }}>
+              <Flex align="center" justify="center" style={{ width: "64px", height: "64px", backgroundColor: "white", borderRadius: "50%", margin: "0 auto 16px", border: "1px solid var(--gray-5)" }}>
                 <Search className="w-6 h-6 text-slate-300" />
-              </div>
-              <h3 className="text-slate-700 font-medium">No eligible guests found.</h3>
-              <p className="text-sm text-slate-500 max-w-sm mx-auto mt-2">Only guests who have RSVP'd as "Attending" and are not yet assigned to a table will appear here.</p>
-            </div>
+              </Flex>
+              <Text as="div" weight="medium" size="3" mb="2">No eligible guests found.</Text>
+              <Text as="p" size="2" color="gray" style={{ maxWidth: "300px", margin: "0 auto" }}>
+                Only guests who have RSVP'd as "Attending" and are not yet assigned to a table will appear here.
+              </Text>
+            </Box>
           ) : (
-            <div className="flex flex-col gap-2">
+            <Flex direction="column" gap="2">
               {initialEligibleGuests.map((inv: any) => (
-                <div key={inv.id} className="bg-white border border-slate-200 p-4 rounded-xl flex justify-between items-center hover:border-amber-300 hover:shadow-sm transition group">
-                  <div>
-                    <h4 className="font-bold text-slate-800">{inv.guest.name}</h4>
-                    <p className="text-xs text-slate-500 mt-1">{inv.guest.owner} • {inv.guest.category}</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg">
-                      {inv.rsvp.confirmed_pax} pax
-                    </span>
-                    <button 
-                      onClick={() => handleAssignGuest(inv)}
-                      className="p-2 bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-600 rounded-lg transition"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
+                <Card key={inv.id} className="group hover:border-amber-300 transition" style={{ cursor: "pointer" }} onClick={() => handleAssignGuest(inv)}>
+                  <Flex justify="between" align="center">
+                    <Box>
+                      <Text as="div" weight="bold" size="2">{inv.guest.name}</Text>
+                      <Text as="div" size="1" color="gray" mt="1">{inv.guest.owner} • {inv.guest.category}</Text>
+                    </Box>
+                    <Flex align="center" gap="4">
+                      <Badge color="amber" variant="soft" size="2">
+                        {inv.rsvp.confirmed_pax} pax
+                      </Badge>
+                      <Button size="2" variant="ghost" color="gray" style={{ cursor: "pointer" }}>
+                        <ChevronRight className="w-4 h-4" />
+                      </Button>
+                    </Flex>
+                  </Flex>
+                </Card>
               ))}
-            </div>
+            </Flex>
           )}
-        </div>
+        </Box>
 
-      </div>
-    </div>
+        <Flex justify="end" p="4" style={{ borderTop: "1px solid var(--gray-5)" }}>
+          <Dialog.Close>
+            <Button variant="soft" color="gray" style={{ cursor: "pointer" }}>Close</Button>
+          </Dialog.Close>
+        </Flex>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

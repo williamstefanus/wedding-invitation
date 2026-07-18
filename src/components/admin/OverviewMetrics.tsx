@@ -1,7 +1,7 @@
 "use client";
 
 import { Users } from "lucide-react";
-import { ProgressBar } from "@/app/admin/components/ProgressBar";
+import { Box, Flex, Grid, Card, Heading, Text, Progress } from "@radix-ui/themes";
 
 interface OverviewMetricsProps {
   invitations: any[];
@@ -19,8 +19,8 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
     return rsvp?.confirmed_pax || 0;
   };
 
-  const groomName = config.groomFirstName || "John";
-  const brideName = config.brideFirstName || "Jane";
+  const groomName = config.groomFirstName || "William";
+  const brideName = config.brideFirstName || "Aziel";
 
   const ownerStats = [
     { key: "groom", displayName: groomName },
@@ -51,86 +51,85 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 animate-fade-up">
+    <Grid columns={{ initial: "1", md: "2" }} gap="4" mt="4">
       {ownerStats.map(stat => {
-        const isWilliam = stat.owner === "groom";
-        const headerBg = isWilliam ? "bg-blue-50 border-blue-100" : "bg-pink-50 border-pink-100";
-        const titleColor = isWilliam ? "text-blue-700" : "text-pink-700";
-        const barColor = isWilliam ? "bg-blue-500" : "bg-pink-500";
-
         return (
-          <div key={stat.owner} className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+          <Card key={stat.owner} size="3" style={{ padding: 0, overflow: "hidden", backgroundColor: "white" }}>
             {/* Owner Header */}
-            <div className={`p-6 border-b ${headerBg} flex justify-between items-center`}>
-              <div>
-                <h3 className={`text-xl font-black tracking-wider uppercase ${titleColor}`}>
+            <Flex justify="between" align="center" style={{ backgroundColor: "var(--crimson-2)", borderBottom: "1px solid var(--crimson-4)", padding: "16px 24px" }}>
+              <Box>
+                <Heading size="4" weight="bold" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   {stat.displayName}
-                </h3>
-                <p className="text-xs text-slate-500 font-medium mt-0.5">{stat.invitations} Total Invitations</p>
-              </div>
-              <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Users className={`w-5 h-5 ${titleColor}`} />
-              </div>
-            </div>
+                </Heading>
+                <Text size="1" style={{ color: "var(--crimson-11)", opacity: 0.8 }}>{stat.invitations} Total Invitations</Text>
+              </Box>
+              <Box style={{ padding: "6px", backgroundColor: "white", borderRadius: "var(--radius-3)", border: "1px solid var(--crimson-4)" }}>
+                <Users className="w-4 h-4" style={{ color: "var(--crimson-10)" }} />
+              </Box>
+            </Flex>
 
-            <div className="p-6 space-y-8 flex-1 flex flex-col justify-between">
+            <Box p="5">
               {/* Total Pax Subsection */}
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
+              <Box mb="6">
+                <Text size="1" weight="bold" style={{ color: "var(--gray-9)", textTransform: "uppercase", letterSpacing: "0.05em" }} mb="3" as="div">
                   Total Pax Breakdown
-                </h4>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-slate-50 rounded-lg p-3.5 border border-slate-100/80">
-                    <p className="text-slate-500 text-xs font-medium mb-1">Invited Pax</p>
-                    <p className="text-2xl font-extrabold text-slate-800">{stat.invitedPax}</p>
-                  </div>
-                  <div className="bg-slate-50 rounded-lg p-3.5 border border-slate-100/80">
-                    <p className="text-slate-500 text-xs font-medium mb-1">Expected Attendance</p>
-                    <p className={`text-2xl font-extrabold ${titleColor}`}>{stat.attendingPax}</p>
-                  </div>
-                </div>
-                <ProgressBar 
-                  label="Pax Attendance Rate" 
-                  value={stat.attendingPax} 
-                  total={stat.invitedPax} 
-                  colorClass={barColor}
-                  format="percentage"
+                </Text>
+                <Grid columns="2" gap="4" mb="4">
+                  <Box>
+                    <Text size="1" style={{ color: "var(--gray-10)" }} as="div">Invited Pax</Text>
+                    <Heading size="6" style={{ color: "var(--gray-12)" }}>{stat.invitedPax}</Heading>
+                  </Box>
+                  <Box>
+                    <Text size="1" style={{ color: "var(--gray-10)" }} as="div">Expected Attendance</Text>
+                    <Heading size="6" style={{ color: "var(--gray-12)" }}>{stat.attendingPax}</Heading>
+                  </Box>
+                </Grid>
+                
+                <Flex justify="between" mb="2">
+                  <Text size="2" weight="medium">Pax Attendance Rate</Text>
+                  <Text size="2" weight="bold">{stat.invitedPax > 0 ? Math.round((stat.attendingPax / stat.invitedPax) * 100) : 0}%</Text>
+                </Flex>
+                <Progress 
+                  value={stat.invitedPax > 0 ? (stat.attendingPax / stat.invitedPax) * 100 : 0} 
+                  color="crimson" 
+                  style={{ height: "6px", backgroundColor: "var(--gray-3)" }} 
                 />
-              </div>
-
-              <hr className="border-slate-100" />
+              </Box>
 
               {/* RSVP Status Subsection */}
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
+              <Box>
+                <Text size="1" weight="bold" style={{ color: "var(--gray-9)", textTransform: "uppercase", letterSpacing: "0.05em" }} mb="3" as="div">
                   RSVP Status Breakdown
-                </h4>
-                <div className="grid grid-cols-3 gap-3 mb-4 text-center">
-                  <div className="bg-green-50/70 border border-green-100 rounded-lg p-3">
-                    <p className="text-green-700 text-xs font-bold mb-1">Attending</p>
-                    <p className="text-xl font-extrabold text-green-600">{stat.attendingInvs}</p>
-                  </div>
-                  <div className="bg-rose-50/70 border border-rose-100 rounded-lg p-3">
-                    <p className="text-rose-700 text-xs font-bold mb-1">Declined</p>
-                    <p className="text-xl font-extrabold text-rose-500">{stat.declinedInvs}</p>
-                  </div>
-                  <div className="bg-amber-50/70 border border-amber-100 rounded-lg p-3">
-                    <p className="text-amber-700 text-xs font-bold mb-1">Pending</p>
-                    <p className="text-xl font-extrabold text-amber-600">{stat.pendingInvs}</p>
-                  </div>
-                </div>
-                <ProgressBar 
-                  label="Response Rate" 
-                  value={stat.respondedInvs} 
-                  total={stat.invitations} 
-                  colorClass="bg-[#416130]"
-                  format="percentage"
+                </Text>
+                <Grid columns="3" gap="3" mb="4">
+                  <Flex direction="column" align="center" justify="center" p="3" style={{ backgroundColor: "var(--green-2)", border: "1px solid var(--green-4)", borderRadius: "var(--radius-3)" }}>
+                    <Text size="1" weight="bold" style={{ color: "var(--green-11)" }}>Attending</Text>
+                    <Heading size="5" style={{ color: "var(--green-11)" }}>{stat.attendingInvs}</Heading>
+                  </Flex>
+                  <Flex direction="column" align="center" justify="center" p="3" style={{ backgroundColor: "var(--red-2)", border: "1px solid var(--red-4)", borderRadius: "var(--radius-3)" }}>
+                    <Text size="1" weight="bold" style={{ color: "var(--red-11)" }}>Declined</Text>
+                    <Heading size="5" style={{ color: "var(--red-11)" }}>{stat.declinedInvs}</Heading>
+                  </Flex>
+                  <Flex direction="column" align="center" justify="center" p="3" style={{ backgroundColor: "var(--orange-2)", border: "1px solid var(--orange-4)", borderRadius: "var(--radius-3)" }}>
+                    <Text size="1" weight="bold" style={{ color: "var(--orange-11)" }}>Pending</Text>
+                    <Heading size="5" style={{ color: "var(--orange-11)" }}>{stat.pendingInvs}</Heading>
+                  </Flex>
+                </Grid>
+                
+                <Flex justify="between" mb="2">
+                  <Text size="2" weight="medium">Response Rate</Text>
+                  <Text size="2" weight="bold">{stat.invitations > 0 ? Math.round((stat.respondedInvs / stat.invitations) * 100) : 0}%</Text>
+                </Flex>
+                <Progress 
+                  value={stat.invitations > 0 ? (stat.respondedInvs / stat.invitations) * 100 : 0} 
+                  color="crimson" 
+                  style={{ height: "6px", backgroundColor: "var(--gray-3)" }} 
                 />
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Card>
         );
       })}
-    </div>
+    </Grid>
   );
 }

@@ -2,6 +2,7 @@ import { getAdminRsvps } from "@/lib/actions/adminRsvp";
 import { getSettings } from "@/lib/actions/settings";
 import { createClient } from "@/lib/supabase/server";
 import { RsvpClient } from "./RsvpClient";
+import { Box } from "@radix-ui/themes";
 
 export const revalidate = 0;
 
@@ -63,7 +64,7 @@ export default async function RsvpPage({
   const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <Box style={{ minHeight: "100vh", backgroundColor: "var(--gray-1)", paddingBottom: "80px" }}>
       <RsvpClient 
         initialInvitations={invitations || []} 
         allInvitations={allInvitations || []}
@@ -80,6 +81,6 @@ export default async function RsvpPage({
         currentSort={sort}
         config={config}
       />
-    </div>
+    </Box>
   );
 }

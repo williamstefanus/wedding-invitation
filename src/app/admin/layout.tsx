@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { GlobalSearch } from "@/components/admin/GlobalSearch";
+import { Box, Flex, Grid, Avatar } from "@radix-ui/themes";
 
 export const metadata: Metadata = {
   title: {
@@ -16,31 +17,37 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-slate-50">
-      {/* Sidebar */}
-      <AdminSidebar />
+    <Grid columns={{ initial: "1", md: "240px 1fr" }} style={{ minHeight: "100vh" }}>
+      {/* Desktop Sidebar */}
+      <Box display={{ initial: "none", md: "block" }}>
+        <AdminSidebar />
+      </Box>
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden relative">
+      <Flex direction="column" style={{ overflow: "hidden", position: "relative" }}>
         {/* Topbar (Desktop only) */}
-        <header className="hidden md:flex h-16 shrink-0 items-center border-b border-slate-200 bg-white px-6 z-[60]">
-          <div className="flex flex-1 items-center justify-between">
-            <div className="flex-1 max-w-md">
-              <GlobalSearch />
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="h-7 w-7 rounded-full bg-amber-500 flex items-center justify-center">
-                <span className="text-[10px] font-bold text-white">A</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Flex 
+          display={{ initial: "none", md: "flex" }}
+          align="center" 
+          justify="between" 
+          className="knotice-topbar"
+          px="6" 
+          py="3"
+          style={{ height: "64px", flexShrink: 0, zIndex: 60 }}
+        >
+          <Box style={{ flex: 1, maxWidth: "400px" }}>
+            <GlobalSearch />
+          </Box>
+          <Flex align="center" gap="3">
+            <Avatar fallback="A" size="2" color="crimson" radius="full" />
+          </Flex>
+        </Flex>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto">
+        <Box style={{ flex: 1, overflowY: "auto" }}>
           {children}
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Flex>
+    </Grid>
   );
 }

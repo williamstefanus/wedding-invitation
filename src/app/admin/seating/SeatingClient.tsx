@@ -135,7 +135,7 @@ export function SeatingClient({
   };
 
   return (
-    <div className="w-full h-full md:h-[calc(100vh-64px)] flex overflow-hidden font-sans relative bg-slate-100">
+    <div className="w-full h-full md:h-[calc(100vh-64px)] flex overflow-hidden font-sans relative bg-slate-100 knotice-app">
       
       <SeatingVisualizer 
         initialTables={initialTables}

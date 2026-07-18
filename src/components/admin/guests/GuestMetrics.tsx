@@ -1,6 +1,7 @@
 "use client";
 
 import { Mail, Users, UserCheck } from "lucide-react";
+import { Grid, Card, Flex, Box, Text, Heading } from "@radix-ui/themes";
 
 interface GuestMetricsProps {
   invitations: any[];
@@ -8,8 +9,8 @@ interface GuestMetricsProps {
 }
 
 export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProps) {
-  const groomName = config.groomFirstName || "John";
-  const brideName = config.brideFirstName || "Jane";
+  const groomName = config.groomFirstName || "William";
+  const brideName = config.brideFirstName || "Aziel";
   const totalInv = invitations.length;
   const totalPax = invitations.reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
@@ -25,81 +26,86 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
     .filter(inv => inv.guest?.category === "Church")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
-  const williamPax = invitations
+  const groomPax = invitations
     .filter(inv => inv.guest?.owner === "groom")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
-  const azielPax = invitations
+  const bridePax = invitations
     .filter(inv => inv.guest?.owner === "bride")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const sentInv = invitations.filter(inv => !!inv.is_sent).length;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 animate-fade-up">
-      {/* Total Inv */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
-        <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-          <Mail className="w-5 h-5" />
-        </div>
-        <div>
-          <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Inv.</p>
-          <p className="text-2xl font-bold text-slate-800">{totalInv}</p>
-        </div>
-      </div>
+    <Grid columns={{ initial: "2", md: "5" }} gap="4" mb="2">
+      <Card size="2">
+        <Flex align="center" gap="3">
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+            <Mail width={20} height={20} />
+          </Flex>
+          <Box>
+            <Text size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }}>Total Inv.</Text>
+            <Heading size="6" mt="1">{totalInv}</Heading>
+          </Box>
+        </Flex>
+      </Card>
 
-      {/* Total Pax Breakdown */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-center col-span-2 md:col-span-1">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
-            <Users className="w-4 h-4" />
-          </div>
-          <div>
-            <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Total Pax</p>
-            <p className="text-xl font-bold text-slate-800">{totalPax}</p>
-          </div>
-        </div>
-        <div className="text-[11px] text-slate-500 flex justify-between pt-1 border-t border-slate-100 font-medium">
-          <span>Rel: <b className="text-slate-700">{relativesPax}</b></span>
-          <span>Fri: <b className="text-slate-700">{friendsPax}</b></span>
-          <span>Chr: <b className="text-slate-700">{churchPax}</b></span>
-        </div>
-      </div>
+      <Card size="2">
+        <Flex direction="column" justify="center" style={{ height: "100%" }}>
+          <Flex align="center" gap="3" mb="2">
+            <Flex align="center" justify="center" style={{ width: 32, height: 32, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+              <Users width={16} height={16} />
+            </Flex>
+            <Box>
+              <Text size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }}>Total Pax</Text>
+              <Heading size="5" mt="1">{totalPax}</Heading>
+            </Box>
+          </Flex>
+          <Flex justify="between" style={{ borderTop: "1px solid var(--gray-4)", paddingTop: "8px", marginTop: "4px" }}>
+            <Text size="1" color="gray">Rel: <Text weight="bold" color="gray">{relativesPax}</Text></Text>
+            <Text size="1" color="gray">Fri: <Text weight="bold" color="gray">{friendsPax}</Text></Text>
+            <Text size="1" color="gray">Chr: <Text weight="bold" color="gray">{churchPax}</Text></Text>
+          </Flex>
+        </Flex>
+      </Card>
 
-      {/* Groom's Pax */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-100/60 flex items-center gap-4 bg-gradient-to-br from-blue-50/30 to-white">
-        <div className="p-3 bg-blue-100/70 text-blue-700 rounded-lg font-black text-sm">
-          {groomName.charAt(0)}
-        </div>
-        <div>
-          <p className="text-xs text-blue-600 font-bold uppercase tracking-wider">{groomName}&apos;s Pax</p>
-          <p className="text-2xl font-extrabold text-blue-900">{williamPax}</p>
-        </div>
-      </div>
+      <Card size="2">
+        <Flex align="center" gap="3">
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-4)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+            <Text weight="bold">{groomName.charAt(0)}</Text>
+          </Flex>
+          <Box>
+            <Text size="1" weight="medium" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>{groomName}'s Pax</Text>
+            <Heading size="6" mt="1">{groomPax}</Heading>
+          </Box>
+        </Flex>
+      </Card>
 
-      {/* Bride's Pax */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-pink-100/60 flex items-center gap-4 bg-gradient-to-br from-pink-50/30 to-white">
-        <div className="p-3 bg-pink-100/70 text-pink-700 rounded-lg font-black text-sm">
-          {brideName.charAt(0)}
-        </div>
-        <div>
-          <p className="text-xs text-pink-600 font-bold uppercase tracking-wider">{brideName}&apos;s Pax</p>
-          <p className="text-2xl font-extrabold text-pink-900">{azielPax}</p>
-        </div>
-      </div>
+      <Card size="2">
+        <Flex align="center" gap="3">
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-4)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+            <Text weight="bold">{brideName.charAt(0)}</Text>
+          </Flex>
+          <Box>
+            <Text size="1" weight="medium" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>{brideName}'s Pax</Text>
+            <Heading size="6" mt="1">{bridePax}</Heading>
+          </Box>
+        </Flex>
+      </Card>
 
-      {/* Sent Invitations */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 col-span-2 md:col-span-1">
-        <div className="p-3 bg-amber-50 text-amber-600 rounded-lg">
-          <UserCheck className="w-5 h-5" />
-        </div>
-        <div>
-          <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Sent Invitations</p>
-          <p className="text-2xl font-bold text-slate-800">
-            {sentInv} <span className="text-sm font-medium text-slate-400">/ {totalInv}</span>
-          </p>
-        </div>
-      </div>
-    </div>
+      <Card size="2">
+        <Flex align="center" gap="3">
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+            <UserCheck width={20} height={20} />
+          </Flex>
+          <Box>
+            <Text size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }}>Sent Invs.</Text>
+            <Heading size="6" mt="1">
+              {sentInv} <Text size="2" color="gray" weight="medium">/ {totalInv}</Text>
+            </Heading>
+          </Box>
+        </Flex>
+      </Card>
+    </Grid>
   );
 }

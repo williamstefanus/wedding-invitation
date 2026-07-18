@@ -80,6 +80,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+import { KnoticeTheme } from "@/theme/KnoticeTheme";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -92,7 +94,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full bg-white text-slate-900 antialiased">
-        {children}
+        <KnoticeTheme>
+          {children}
+        </KnoticeTheme>
       </body>
     </html>
   );

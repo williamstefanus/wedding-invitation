@@ -10,6 +10,9 @@ import { WeddingSettingsForm } from "@/components/admin/settings/WeddingSettings
 import { SangjitSettingsForm } from "@/components/admin/settings/SangjitSettingsForm";
 import { GeneralSettingsForm } from "@/components/admin/settings/GeneralSettingsForm";
 
+import { Box, Flex, Heading, Text, Button, Tabs, Callout } from "@radix-ui/themes";
+import { CheckCircle2, XCircle } from "lucide-react";
+
 interface SettingsClientProps {
   initialData: any;
 }
@@ -311,93 +314,86 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 md:p-8 font-sans pb-24">
-      
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Settings</h1>
-          <p className="text-slate-500 mt-1">Manage public invitation content dynamically.</p>
-        </div>
-        <button 
-          onClick={handleSave}
-          disabled={isSaving}
-          className="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold rounded-xl transition flex items-center gap-2 shadow-sm"
-        >
-          {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          Save Changes
-        </button>
-      </div>
+    <Box className="knotice-app" p={{ initial: "4", md: "7" }}>
+      <Flex direction="column" gap="4" style={{ maxWidth: 1180, margin: "0 auto", paddingBottom: "96px" }}>
+        
+        <Flex direction={{ initial: "column", sm: "row" }} justify="between" align={{ initial: "start", sm: "center" }} gap="4" mb="4">
+          <Box>
+            <Heading size="7" weight="bold" color="gray" style={{ color: "var(--slate-12)" }}>Settings</Heading>
+            <Text color="gray" size="2">Manage public invitation content dynamically.</Text>
+          </Box>
+          <Button 
+            size="3"
+            color="crimson"
+            variant="solid"
+            onClick={handleSave}
+            disabled={isSaving}
+            style={{ cursor: "pointer", fontWeight: "bold" }}
+          >
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            Save Changes
+          </Button>
+        </Flex>
 
-      {notification && (
-        <div className={`p-4 rounded-xl mb-6 font-bold flex items-center gap-2 shadow-sm transition-all duration-300 ${
-          notification.type === 'success' 
-            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
-            : 'bg-rose-50 text-rose-800 border border-rose-200'
-        }`}>
-          <span>{notification.type === 'success' ? '✓' : '✕'}</span>
-          <span>{notification.text}</span>
-        </div>
-      )}
+        {notification && (
+          <Callout.Root color={notification.type === 'success' ? 'green' : 'red'} mb="4">
+            <Callout.Icon>
+              {notification.type === 'success' ? <CheckCircle2 width={18} /> : <XCircle width={18} />}
+            </Callout.Icon>
+            <Callout.Text>
+              {notification.text}
+            </Callout.Text>
+          </Callout.Root>
+        )}
 
-      {/* Tabs */}
-      <div className="flex flex-wrap gap-2 p-1 bg-slate-200/50 rounded-xl mb-8 w-fit">
-        <button 
-          onClick={() => setActiveTab("general")}
-          className={`px-6 py-2 rounded-lg font-bold text-sm transition ${activeTab === 'general' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-        >
-          General
-        </button>
-        <button 
-          onClick={() => setActiveTab("wedding")}
-          className={`px-6 py-2 rounded-lg font-bold text-sm transition ${activeTab === 'wedding' ? 'bg-white text-amber-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-        >
-          Wedding Celebration
-        </button>
-        <button 
-          onClick={() => setActiveTab("sangjit")}
-          className={`px-6 py-2 rounded-lg font-bold text-sm transition ${activeTab === 'sangjit' ? 'bg-white text-rose-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-        >
-          Sangjit Ceremony
-        </button>
-      </div>
+        <Tabs.Root value={activeTab} onValueChange={(v: any) => setActiveTab(v)}>
+          <Tabs.List size="2" mb="6" style={{ width: "fit-content" }}>
+            <Tabs.Trigger value="general">General</Tabs.Trigger>
+            <Tabs.Trigger value="wedding">Wedding Celebration</Tabs.Trigger>
+            <Tabs.Trigger value="sangjit">Sangjit Ceremony</Tabs.Trigger>
+          </Tabs.List>
 
-      {activeTab === "general" && (
-        <GeneralSettingsForm 
-          config={config}
-          setConfig={setConfig}
-          uploadingFavicon={uploadingFavicon}
-          handleFaviconUpload={handleFaviconUpload}
-        />
-      )}
+          <Box pt="2">
+            <Tabs.Content value="general">
+              <GeneralSettingsForm 
+                config={config}
+                setConfig={setConfig}
+                uploadingFavicon={uploadingFavicon}
+                handleFaviconUpload={handleFaviconUpload}
+              />
+            </Tabs.Content>
 
-      {activeTab === "wedding" && (
-        <WeddingSettingsForm 
-          config={config}
-          setConfig={setConfig}
-          deadlines={deadlines}
-          setDeadlines={setDeadlines}
-          sessions={sessions}
-          setSessions={setSessions}
-          uploading={uploading}
-          handleImageUpload={handleImageUpload}
-          removeImage={removeImage}
-        />
-      )}
+            <Tabs.Content value="wedding">
+              <WeddingSettingsForm 
+                config={config}
+                setConfig={setConfig}
+                deadlines={deadlines}
+                setDeadlines={setDeadlines}
+                sessions={sessions}
+                setSessions={setSessions}
+                uploading={uploading}
+                handleImageUpload={handleImageUpload}
+                removeImage={removeImage}
+              />
+            </Tabs.Content>
 
-      {activeTab === "sangjit" && (
-        <SangjitSettingsForm 
-          config={config}
-          setConfig={setConfig}
-          deadlines={deadlines}
-          setDeadlines={setDeadlines}
-          sessions={sessions}
-          setSessions={setSessions}
-          uploading={uploading}
-          handleSangjitImageUpload={handleSangjitImageUpload}
-          removeSangjitImage={removeSangjitImage}
-        />
-      )}
+            <Tabs.Content value="sangjit">
+              <SangjitSettingsForm 
+                config={config}
+                setConfig={setConfig}
+                deadlines={deadlines}
+                setDeadlines={setDeadlines}
+                sessions={sessions}
+                setSessions={setSessions}
+                uploading={uploading}
+                handleSangjitImageUpload={handleSangjitImageUpload}
+                removeSangjitImage={removeSangjitImage}
+              />
+            </Tabs.Content>
+          </Box>
+        </Tabs.Root>
 
-    </div>
+      </Flex>
+    </Box>
   );
 }

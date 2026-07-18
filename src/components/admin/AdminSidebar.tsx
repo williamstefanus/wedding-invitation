@@ -4,23 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
-  LayoutDashboard,
+  Home,
   Users,
-  Mail,
   CheckSquare,
   Grid3X3,
   Settings,
   Database,
-  Heart,
-  ChevronRight,
   Menu,
   X
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Box, Flex, Text, Button, IconButton, Card, Heading } from "@radix-ui/themes";
 import { GlobalSearch } from "./GlobalSearch";
 
 const NAV_ITEMS = [
-  { label: "Overview",    href: "/admin",             icon: LayoutDashboard },
+  { label: "Overview",    href: "/admin",             icon: Home },
   { label: "Guests",      href: "/admin/guests",      icon: Users },
   { label: "RSVP",        href: "/admin/rsvp",        icon: CheckSquare },
   { label: "Seating",     href: "/admin/seating",     icon: Grid3X3 },
@@ -38,30 +35,30 @@ export function AdminSidebar() {
   }, [pathname]);
 
   const SidebarContent = () => (
-    <>
+    <Flex direction="column" className="knotice-sidebar" style={{ height: "100%", width: "100%" }}>
       {/* Logo */}
-      <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-slate-800 px-5 relative">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500">
-          <Heart className="h-3.5 w-3.5 fill-white text-white" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-white leading-none">
-            Wedding Hub
-          </p>
-          <p className="mt-0.5 text-[10px] text-slate-400 leading-none">
-            Admin Dashboard
-          </p>
-        </div>
-      </div>
+      <Box px="4" pt="5" pb="3">
+        <img 
+          src="/images/logo_horizontal.png" 
+          alt="Knotice" 
+          style={{ 
+            height: "56px", 
+            width: "160px", 
+            objectFit: "cover", 
+            objectPosition: "left center",
+            marginLeft: "4px"
+          }} 
+        />
+      </Box>
 
-      {/* Mobile Search - Visible only inside the sidebar overlay on md:hidden */}
-      <div className="md:hidden p-4 border-b border-slate-800 shrink-0">
+      {/* Mobile Search */}
+      <Box display={{ initial: "block", md: "none" }} p="4" style={{ borderBottom: "1px solid var(--gray-6)" }}>
         <GlobalSearch />
-      </div>
+      </Box>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <ul className="flex flex-col gap-0.5">
+      <Box style={{ flex: 1, overflowY: "auto" }} px="3" py="4">
+        <Flex direction="column" gap="1">
           {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
             const isActive =
               href === "/admin"
@@ -69,72 +66,74 @@ export function AdminSidebar() {
                 : pathname.startsWith(href);
 
             return (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={cn(
-                    "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium",
-                    "transition-all duration-150",
-                    isActive
-                      ? "bg-amber-500 text-white shadow-sm"
-                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                  )}
-                >
-                  <Icon className="h-4 w-4 flex-shrink-0" />
-                  <span className="flex-1">{label}</span>
-                  {isActive && (
-                    <ChevronRight className="h-3.5 w-3.5 opacity-70" />
-                  )}
-                </Link>
-              </li>
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  padding: "12px 16px",
+                  borderRadius: "10px",
+                  backgroundColor: isActive ? "var(--crimson-3)" : "transparent",
+                  color: isActive ? "var(--crimson-11)" : "var(--gray-11)",
+                  fontWeight: isActive ? 600 : 500,
+                  textDecoration: "none",
+                  transition: "background-color 0.2s"
+                }}
+              >
+                <Icon width={22} height={22} />
+                <span style={{ marginLeft: "14px", fontSize: "15px" }}>{label}</span>
+              </Link>
             );
           })}
-        </ul>
-      </nav>
+        </Flex>
+
+      </Box>
 
       {/* Footer */}
-      <div className="border-t border-slate-800 px-4 py-3 shrink-0">
-        <p className="text-[10px] text-slate-500">
-          © 2025 Wedding Platform
-        </p>
-      </div>
-    </>
+      <Box px="4" py="4" style={{ borderTop: "1px solid var(--gray-6)" }}>
+        <Text size="1" color="gray">
+          © 2025 Knotice Platform
+        </Text>
+      </Box>
+    </Flex>
   );
 
   return (
     <>
       {/* Mobile Topbar */}
-      <div className="md:hidden flex items-center justify-between bg-slate-900 px-4 py-3 border-b border-slate-800 shrink-0">
-        <div className="flex items-center gap-2">
-           <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-500">
-             <Heart className="h-3 w-3 fill-white text-white" />
-           </div>
-           <span className="text-white font-bold text-sm">Wedding Hub</span>
-        </div>
-        <button onClick={() => setIsOpen(true)} className="text-slate-300 p-2 -mr-2">
-          <Menu className="w-5 h-5" />
-        </button>
-      </div>
+      <Flex display={{ initial: "flex", md: "none" }} align="center" justify="between" px="4" py="3" style={{ borderBottom: "1px solid var(--gray-6)", backgroundColor: "white" }}>
+        <Flex align="center" gap="2">
+           <Flex align="center" justify="center" style={{ width: 24, height: 24, backgroundColor: "var(--crimson-9)", borderRadius: "var(--radius-2)" }}>
+             <Text size="2" weight="bold" style={{ color: "white", lineHeight: 1 }}>K</Text>
+           </Flex>
+           <Text size="3" weight="bold">Knotice</Text>
+        </Flex>
+        <IconButton variant="ghost" color="gray" onClick={() => setIsOpen(true)}>
+          <Menu width={20} height={20} />
+        </IconButton>
+      </Flex>
 
       {/* Mobile Overlay */}
       {isOpen && (
-        <div className="md:hidden fixed inset-0 z-[100] flex">
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-          <aside className="relative flex w-64 flex-col bg-slate-900 border-r border-slate-800 h-full shadow-2xl animate-fade-right">
-             <div className="absolute top-4 right-4 z-10">
-               <button onClick={() => setIsOpen(false)} className="p-2 text-slate-400 hover:text-white transition rounded-full hover:bg-slate-800">
-                 <X className="w-5 h-5"/>
-               </button>
-             </div>
-             <SidebarContent />
-          </aside>
-        </div>
+        <Box position="fixed" top="0" left="0" right="0" bottom="0" style={{ zIndex: 100, display: "flex" }}>
+          <Box position="absolute" top="0" left="0" right="0" bottom="0" style={{ backgroundColor: "rgba(0,0,0,0.4)" }} onClick={() => setIsOpen(false)} />
+          <Box position="relative" style={{ width: 260, height: "100%" }}>
+            <Box position="absolute" top="4" right="4" style={{ zIndex: 10 }}>
+              <IconButton variant="ghost" color="gray" onClick={() => setIsOpen(false)}>
+                <X width={20} height={20} />
+              </IconButton>
+            </Box>
+            <SidebarContent />
+          </Box>
+        </Box>
       )}
 
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex h-full w-60 shrink-0 flex-col border-r border-slate-800 bg-slate-900 z-10">
+      {/* Desktop Sidebar Content (rendered through layout Grid) */}
+      <Box display={{ initial: "none", md: "block" }} style={{ height: "100%" }}>
         <SidebarContent />
-      </aside>
+      </Box>
     </>
   );
 }
