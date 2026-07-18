@@ -1,7 +1,7 @@
 "use client";
 
-import { Clock, Calendar, MapPin, Link as LinkIcon, Music, MessageSquare, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2 } from "lucide-react";
-import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code } from "@radix-ui/themes";
+import { Clock, Calendar, MapPin, Link as LinkIcon, Music, MessageSquare, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, CheckCircle2 } from "lucide-react";
+import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code, Callout } from "@radix-ui/themes";
 interface SangjitSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
@@ -199,14 +199,14 @@ export function SangjitSettingsForm({
 
         <Flex direction="column" gap="5">
           {/* Section 1: Top Hero Image */}
-          <Box p="4" style={{ backgroundColor: "var(--rose-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--rose-5)" }}>
+          <Box p="4" style={{ backgroundColor: "var(--ruby-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--ruby-5)" }}>
             <Flex align="center" gap="2" mb="3">
-              <Text size="1" weight="bold" color="rose" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>🌟 Top Featured Hero Image (Web Cover)</Text>
+              <Text size="1" weight="bold" color="ruby" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>🌟 Top Featured Hero Image (Web Cover)</Text>
             </Flex>
             {(!config.sangjitGalleryImages || config.sangjitGalleryImages.length === 0) ? (
               <Text size="2" color="gray" style={{ fontStyle: "italic" }}>No images uploaded yet.</Text>
             ) : (
-              <Box style={{ position: "relative", aspectRatio: "16/9", maxWidth: "448px", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--rose-6)" }} className="group">
+              <Box style={{ position: "relative", aspectRatio: "16/9", maxWidth: "448px", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--ruby-6)" }} className="group">
                 <img src={config.sangjitGalleryImages[0]} alt="Hero preview" style={{ objectFit: "cover", width: "100%", height: "100%" }} />
                 <Box className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
                   <Button variant="solid" color="gray" onClick={() => moveSangjitImage(0, 'right')} disabled={config.sangjitGalleryImages.length <= 1}>
