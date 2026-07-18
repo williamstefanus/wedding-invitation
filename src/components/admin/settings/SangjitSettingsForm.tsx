@@ -189,7 +189,7 @@ export function SangjitSettingsForm({
             </Text>
           </Box>
           <label>
-            <Button as="span" color="ruby" disabled={uploading} style={{ cursor: "pointer" }}>
+            <Button type="button" color="ruby" disabled={uploading} style={{ cursor: "pointer" }}>
               {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
               Upload Image
             </Button>

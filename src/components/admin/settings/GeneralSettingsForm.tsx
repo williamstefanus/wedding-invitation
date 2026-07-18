@@ -38,7 +38,7 @@ export function GeneralSettingsForm({
           <Flex direction="column" gap="2">
             <Flex align="center" gap="2">
               <label>
-                <Button as="span" color="green" disabled={uploadingFavicon} style={{ cursor: "pointer" }}>
+                <Button type="button" color="green" disabled={uploadingFavicon} style={{ cursor: "pointer" }}>
                   {uploadingFavicon ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
                   {config.faviconUrl ? 'Replace' : 'Upload'} Favicon
                 </Button>
