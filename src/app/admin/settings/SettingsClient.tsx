@@ -286,7 +286,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
 
       const fileExt = file.name.split('.').pop() || 'png';
       const fileName = `favicon_${Date.now()}.${fileExt}`;
-      const filePath = `favicon/${fileName}`;
+      const filePath = fileName;
 
       const { error: uploadError } = await supabase.storage
         .from('gallery')
