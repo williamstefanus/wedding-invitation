@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Box, Flex, Text, Button, IconButton, Card, Heading } from "@radix-ui/themes";
 import { GlobalSearch } from "./GlobalSearch";
+import { useTheme } from "next-themes";
 import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_ITEMS = [
@@ -31,11 +32,16 @@ const NAV_ITEMS = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   // Close sidebar on route change
   useEffect(() => {
     setIsOpen(false);
+    setMounted(true);
   }, [pathname]);
+
+  const isDark = mounted && resolvedTheme === "dark";
 
   const SidebarContent = ({ isMobileOverlay }: { isMobileOverlay?: boolean } = {}) => (
     <Flex direction="column" className="knotice-sidebar" style={{ height: "100%", width: "100%", backgroundColor: "var(--color-panel-solid)" }}>
@@ -49,7 +55,9 @@ export function AdminSidebar() {
             width: isMobileOverlay ? "130px" : "200px", 
             objectFit: "cover", 
             objectPosition: "left center",
-            marginLeft: "4px"
+            marginLeft: "4px",
+            filter: isDark ? "invert(1) brightness(100)" : "none",
+            transition: "filter 0.2s ease"
           }} 
         />
         {isMobileOverlay && (

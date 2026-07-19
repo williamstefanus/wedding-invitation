@@ -6,6 +6,9 @@ import { verifyAdminLogin } from "@/lib/actions/auth";
 import { Lock, Loader2, Eye, EyeOff } from "lucide-react";
 import { Box, Flex, Heading, Button, Card, TextField, Text, IconButton } from "@radix-ui/themes";
 
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
+
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +16,11 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = mounted && resolvedTheme === "dark";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +68,9 @@ export default function AdminLoginPage() {
                 height: "auto",
                 objectFit: "contain",
                 marginTop: "-20px",
-                marginBottom: "-25px"
+                marginBottom: "-25px",
+                filter: isDark ? "invert(1) brightness(100)" : "none",
+                transition: "filter 0.2s ease"
               }} 
             />
             <Box style={{ textAlign: "center" }}>
