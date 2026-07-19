@@ -55,6 +55,7 @@ import { getSettings } from "@/lib/actions/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
   let faviconUrl = "/favicon-default.ico";
+  let coupleName = "John & Jane";
 
   try {
     const settingsRes = await getSettings();
@@ -62,17 +63,20 @@ export async function generateMetadata(): Promise<Metadata> {
     if (config?.faviconUrl) {
       faviconUrl = config.faviconUrl;
     }
+    if (config?.groomFirstName && config?.brideFirstName) {
+      coupleName = `${config.groomFirstName} & ${config.brideFirstName}`;
+    }
   } catch {
-    // Fall back to default favicon
+    // Fall back to default favicon and names
   }
 
   return {
     title: {
-      default: "Wedding Invitation — John & Jane",
-      template: "%s | John & Jane",
+      default: `Wedding Invitation — ${coupleName}`,
+      template: `%s | ${coupleName}`,
     },
     description:
-      "A private digital wedding invitation and guest management platform for John & Jane's celebration.",
+      `A private digital wedding invitation and guest management platform for ${coupleName}'s celebration.`,
     robots: { index: false, follow: false },
     icons: {
       icon: faviconUrl,

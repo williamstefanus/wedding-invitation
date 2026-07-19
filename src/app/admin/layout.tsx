@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s | Admin — Wedding Platform",
   },
   icons: {
-    icon: "/assets/logo_icononly.png",
+    icon: "/assets/logo_icononly.png?v=2",
   },
   robots: { index: false, follow: false },
 };
