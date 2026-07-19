@@ -1,15 +1,12 @@
+import { Suspense } from "react";
 import { getSeatingData, getEligibleGuests } from "@/lib/actions/seating";
 import { createClient } from "@/lib/supabase/server";
 import { SeatingClient } from "./SeatingClient";
+import { Box, Flex, Spinner, Text } from "@radix-ui/themes";
 
 export const revalidate = 0;
 
-export default async function SeatingPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const resolvedParams = await searchParams;
+async function SeatingFetcher({ resolvedParams }: { resolvedParams: any }) {
   const event = typeof resolvedParams.event === "string" ? resolvedParams.event : "wedding";
   
   // For the eligible guest search modal
@@ -48,16 +45,39 @@ export default async function SeatingPage({
   const allPax = totalAttendingPax > 0 ? totalAttendingPax : totalInvitedPax;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
-      <SeatingClient 
-        initialTables={tables || []} 
-        initialEligibleGuests={eligibleGuests || []}
-        allPax={allPax}
-        currentEvent={event}
-        currentSearch={guestSearch}
-        currentOwner={guestOwner}
-        currentCategory={guestCategory}
-      />
-    </div>
+    <SeatingClient 
+      initialTables={tables || []} 
+      initialEligibleGuests={eligibleGuests || []}
+      allPax={allPax}
+      currentEvent={event}
+      currentSearch={guestSearch}
+      currentOwner={guestOwner}
+      currentCategory={guestCategory}
+    />
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <Flex align="center" justify="center" style={{ height: '50vh' }} direction="column" gap="4">
+      <Spinner size="3" />
+      <Text color="gray">Loading seating data...</Text>
+    </Flex>
+  );
+}
+
+export default async function SeatingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  
+  return (
+    <Box className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+      <Suspense fallback={<LoadingSkeleton />}>
+        <SeatingFetcher resolvedParams={resolvedParams} />
+      </Suspense>
+    </Box>
   );
 }

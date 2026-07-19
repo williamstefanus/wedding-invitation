@@ -1,18 +1,14 @@
+import { Suspense } from "react";
 import { getGuests } from "@/lib/actions/guests";
 import { getSettings } from "@/lib/actions/settings";
 import { GuestClient } from "./GuestClient";
 import type { GuestOwner, GuestCategory } from "@/types";
 import { createClient } from "@/lib/supabase/server";
+import { Flex, Spinner, Text, Box } from "@radix-ui/themes";
 
 export const revalidate = 0;
 
-export default async function GuestsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const resolvedParams = await searchParams;
-  
+async function GuestFetcher({ resolvedParams }: { resolvedParams: any }) {
   const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
   const search = typeof resolvedParams.search === "string" ? resolvedParams.search : "";
   const owner = typeof resolvedParams.owner === "string" ? (resolvedParams.owner as GuestOwner | "All") : "All";
@@ -48,21 +44,44 @@ export default async function GuestsPage({
   const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
-      <GuestClient 
-        initialGuests={guests || []} 
-        allInvitations={allInvitations || []}
-        total={total || 0}
-        totalPages={totalPages || 0}
-        currentPage={page}
-        currentSearch={search}
-        currentOwner={owner}
-        currentCategory={category}
-        currentTab={tab}
-        currentSort={sort}
-        eventTypes={eventTypes || []}
-        config={config}
-      />
-    </div>
+    <GuestClient 
+      initialGuests={guests || []} 
+      allInvitations={allInvitations || []}
+      total={total || 0}
+      totalPages={totalPages || 0}
+      currentPage={page}
+      currentSearch={search}
+      currentOwner={owner}
+      currentCategory={category}
+      currentTab={tab}
+      currentSort={sort}
+      eventTypes={eventTypes || []}
+      config={config}
+    />
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <Flex align="center" justify="center" style={{ height: '50vh' }} direction="column" gap="4">
+      <Spinner size="3" />
+      <Text color="gray">Loading guest data...</Text>
+    </Flex>
+  );
+}
+
+export default async function GuestsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  
+  return (
+    <Box className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+      <Suspense fallback={<LoadingSkeleton />}>
+        <GuestFetcher resolvedParams={resolvedParams} />
+      </Suspense>
+    </Box>
   );
 }

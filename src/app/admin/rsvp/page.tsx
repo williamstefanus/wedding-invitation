@@ -1,18 +1,13 @@
+import { Suspense } from "react";
 import { getAdminRsvps } from "@/lib/actions/adminRsvp";
 import { getSettings } from "@/lib/actions/settings";
 import { createClient } from "@/lib/supabase/server";
 import { RsvpClient } from "./RsvpClient";
-import { Box } from "@radix-ui/themes";
+import { Box, Flex, Spinner, Text } from "@radix-ui/themes";
 
 export const revalidate = 0;
 
-export default async function RsvpPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const resolvedParams = await searchParams;
-  
+async function RsvpFetcher({ resolvedParams }: { resolvedParams: any }) {
   const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
   const search = typeof resolvedParams.search === "string" ? resolvedParams.search : "";
   const tab = typeof resolvedParams.tab === "string" ? resolvedParams.tab : "all";
@@ -54,23 +49,46 @@ export default async function RsvpPage({
   const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (
+    <RsvpClient 
+      initialInvitations={invitations || []} 
+      allInvitations={allInvitations || []}
+      eventTypes={eventTypes || []}
+      eventSessions={eventSessions || []}
+      total={total || 0}
+      totalPages={totalPages || 0}
+      currentPage={page}
+      currentSearch={search}
+      currentTab={tab}
+      currentOwner={owner}
+      currentCategory={category}
+      currentStatus={status}
+      currentSort={sort}
+      config={config}
+    />
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <Flex align="center" justify="center" style={{ height: '50vh' }} direction="column" gap="4">
+      <Spinner size="3" />
+      <Text color="gray">Loading RSVPs...</Text>
+    </Flex>
+  );
+}
+
+export default async function RsvpPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  
+  return (
     <Box style={{ minHeight: "100vh", backgroundColor: "var(--gray-1)", paddingBottom: "80px" }}>
-      <RsvpClient 
-        initialInvitations={invitations || []} 
-        allInvitations={allInvitations || []}
-        eventTypes={eventTypes || []}
-        eventSessions={eventSessions || []}
-        total={total || 0}
-        totalPages={totalPages || 0}
-        currentPage={page}
-        currentSearch={search}
-        currentTab={tab}
-        currentOwner={owner}
-        currentCategory={category}
-        currentStatus={status}
-        currentSort={sort}
-        config={config}
-      />
+      <Suspense fallback={<LoadingSkeleton />}>
+        <RsvpFetcher resolvedParams={resolvedParams} />
+      </Suspense>
     </Box>
   );
 }
