@@ -37,7 +37,7 @@ export async function getUsherRoster(eventSlug: string) {
         checked_in_at,
         checked_in_pax,
         event_type:event_types!inner(slug),
-        guest:guests!inner(name, owner, category, notes),
+        guest:guests!inner(id, name, owner, category, notes),
         rsvp:rsvps(attendance_status, confirmed_pax),
         seating_assignment:seating_assignments(
           assigned_pax,

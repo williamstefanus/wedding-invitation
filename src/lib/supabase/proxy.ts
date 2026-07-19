@@ -51,34 +51,37 @@ export async function updateSession(request: NextRequest) {
   return supabaseResponse;
 }
 
+import { jwtVerify } from "jose";
+
+// Must match the secret in auth.ts
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || "wedding-invitation-super-secret-key-2026-fallback-only"
+);
+
 /**
  * Next.js Proxy handler — refreshes Supabase sessions and enforces basic auth on admin routes.
  */
 export async function proxy(request: NextRequest) {
   const url = request.nextUrl;
 
-  // Intercept Admin Routes for Basic Auth
-  if (url.pathname.startsWith('/admin')) {
-    const basicAuth = request.headers.get('authorization');
-    
-    const ADMIN_USER = process.env.ADMIN_USERNAME || 'admin';
-    const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'wedding2026';
+  // Protect /admin routes, but allow /admin/login
+  if (url.pathname.startsWith('/admin') && url.pathname !== '/admin/login') {
+    const token = request.cookies.get('admin_auth_token')?.value;
 
-    if (basicAuth) {
-      const authValue = basicAuth.split(' ')[1];
-      const [user, pwd] = atob(authValue).split(':');
-
-      if (user === ADMIN_USER && pwd === ADMIN_PASS) {
-        return await updateSession(request);
+    let valid = false;
+    if (token) {
+      try {
+        await jwtVerify(token, JWT_SECRET);
+        valid = true;
+      } catch (e) {
+        valid = false;
       }
     }
 
-    return new NextResponse('Auth required', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="Secure Admin Area"',
-      },
-    });
+    if (!valid) {
+      const loginUrl = new URL('/admin/login', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return await updateSession(request);

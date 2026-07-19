@@ -27,11 +27,11 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const groomPax = invitations
-    .filter(inv => inv.guest?.owner === "groom")
+    .filter(inv => inv.guest?.owner?.toLowerCase() === "groom" || inv.guest?.owner?.toLowerCase() === "william")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const bridePax = invitations
-    .filter(inv => inv.guest?.owner === "bride")
+    .filter(inv => inv.guest?.owner?.toLowerCase() === "bride" || inv.guest?.owner?.toLowerCase() === "aziel")
     .reduce((s, inv) => s + (inv.max_pax || 0), 0);
 
   const sentInv = invitations.filter(inv => !!inv.is_sent).length;
@@ -51,20 +51,21 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
       </Card>
 
       <Card size="2">
-        <Flex direction="column" justify="center" style={{ height: "100%" }}>
-          <Flex align="center" gap="3" mb="2">
-            <Flex align="center" justify="center" style={{ width: 32, height: 32, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
-              <Users width={16} height={16} />
+        <Flex align="center" justify="between" gap="2" style={{ height: "100%" }}>
+          <Flex align="center" gap="3">
+            <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+              <Users width={20} height={20} />
             </Flex>
             <Box>
               <Text size="1" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }}>Total Pax</Text>
-              <Heading size="5" mt="1">{totalPax}</Heading>
+              <Heading size="6" mt="1">{totalPax}</Heading>
             </Box>
           </Flex>
-          <Flex justify="between" style={{ borderTop: "1px solid var(--gray-4)", paddingTop: "8px", marginTop: "4px" }}>
-            <Text size="1" color="gray">Rel: <Text weight="bold" color="gray">{relativesPax}</Text></Text>
-            <Text size="1" color="gray">Fri: <Text weight="bold" color="gray">{friendsPax}</Text></Text>
-            <Text size="1" color="gray">Chr: <Text weight="bold" color="gray">{churchPax}</Text></Text>
+          
+          <Flex direction="column" align="end" gap="1" style={{ borderLeft: "1px solid var(--gray-4)", paddingLeft: "12px", minWidth: "50px" }}>
+            <Text style={{ fontSize: "11px", color: "var(--gray-11)", lineHeight: 1.2 }}>Rel: <strong style={{ color: "var(--gray-12)" }}>{relativesPax}</strong></Text>
+            <Text style={{ fontSize: "11px", color: "var(--gray-11)", lineHeight: 1.2 }}>Fri: <strong style={{ color: "var(--gray-12)" }}>{friendsPax}</strong></Text>
+            <Text style={{ fontSize: "11px", color: "var(--gray-11)", lineHeight: 1.2 }}>Chr: <strong style={{ color: "var(--gray-12)" }}>{churchPax}</strong></Text>
           </Flex>
         </Flex>
       </Card>

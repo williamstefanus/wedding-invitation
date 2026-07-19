@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CheckCircle2, UserCheck, Users, MapPin, FileText, Plus, Minus, Loader2 } from "lucide-react";
+import { Card, Flex, Box, Text, Heading, Badge, Button, IconButton } from "@radix-ui/themes";
 
 interface UsherGuestCardProps {
   invitation: any;
@@ -11,7 +12,7 @@ interface UsherGuestCardProps {
 }
 
 export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails, config = {} }: UsherGuestCardProps) {
-  const guest = invitation.guest || {};
+  const guest = Array.isArray(invitation.guest) ? invitation.guest[0] : (invitation.guest || {});
   const rsvp = Array.isArray(invitation.rsvp) ? invitation.rsvp[0] : invitation.rsvp;
   const assignment = Array.isArray(invitation.seating_assignment) ? invitation.seating_assignment[0] : invitation.seating_assignment;
 
@@ -32,129 +33,133 @@ export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails, con
   const isVip = !!guest.notes?.toLowerCase().includes("vip");
 
   return (
-    <div className={`rounded-2xl p-5 border transition-all duration-300 shadow-sm flex flex-col justify-between gap-4 ${
-      isCheckedIn 
-        ? "bg-emerald-50/70 border-emerald-300 shadow-emerald-500/5 opacity-85" 
-        : isVip 
-          ? "bg-gradient-to-br from-amber-50/60 via-white to-white border-amber-200/80 shadow-md" 
-          : "bg-white border-slate-200 hover:border-slate-300"
-    }`}>
-      
-      {/* Top Header */}
-      <div>
-        <div className="flex justify-between items-start gap-3 mb-2">
-          <div onClick={() => onOpenDetails(invitation)} className="cursor-pointer group flex-1">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <h3 className={`text-lg font-black tracking-tight group-hover:underline ${isCheckedIn ? "text-emerald-900" : "text-slate-900"}`}>
+    <Card 
+      size="3" 
+      style={{ 
+        display: "flex", 
+        flexDirection: "column",
+        justifyContent: "space-between",
+        backgroundColor: isCheckedIn ? "var(--emerald-2)" : isVip ? "var(--amber-2)" : undefined,
+        borderColor: isCheckedIn ? "var(--emerald-6)" : isVip ? "var(--amber-6)" : undefined,
+      }}
+    >
+      <Box>
+        <Flex justify="between" align="start" gap="3" mb="3">
+          <Box onClick={() => onOpenDetails(invitation)} style={{ cursor: "pointer", flex: 1 }} className="group">
+            <Flex align="center" gap="2" wrap="wrap" mb="1">
+              <Heading size="4" style={{ color: isCheckedIn ? "var(--emerald-11)" : "var(--gray-12)" }} className="group-hover:underline">
                 {guest.name || "Unnamed Guest"}
-              </h3>
-              {isVip && !isCheckedIn && (
-                <span className="px-2 py-0.5 rounded-md bg-amber-500 text-white font-extrabold text-[10px] uppercase tracking-wider shadow-sm">
-                  ★ VIP
-                </span>
+              </Heading>
+              {isVip && (
+                <Badge color="amber" variant="solid" size="1">★ VIP</Badge>
               )}
-            </div>
+            </Flex>
 
-            <div className="flex items-center gap-2 text-xs font-bold">
-              <span className={`px-2 py-0.5 rounded-md ${guest.owner === "groom" ? "bg-blue-100 text-blue-800" : "bg-pink-100 text-pink-800"}`}>
-                {guest.owner === "groom" ? (config.groomFirstName || "John") : (config.brideFirstName || "Jane")}
-              </span>
-              <span className="text-slate-400">•</span>
-              <span className="text-slate-600 font-semibold">{guest.category}</span>
-              <span className="text-amber-600 text-[10px] font-semibold underline opacity-0 group-hover:opacity-100 transition">View Details</span>
-            </div>
-          </div>
+            <Flex align="center" gap="2">
+              <Badge color={guest?.owner?.toLowerCase() === "groom" || guest?.owner?.toLowerCase() === "william" ? "blue" : "crimson"} variant="soft" size="1">
+                {guest?.owner?.toLowerCase() === "groom" || guest?.owner?.toLowerCase() === "william" ? (config.groomFirstName || "Groom") : (config.brideFirstName || "Bride")}
+              </Badge>
+              <Text size="1" color="gray">•</Text>
+              <Text size="1" weight="medium" color="gray">{guest.category}</Text>
+              <Text size="1" weight="bold" color="amber" style={{ textDecoration: "underline" }} className="opacity-0 group-hover:opacity-100 transition-opacity">
+                View Details
+              </Text>
+            </Flex>
+          </Box>
 
           {/* Table Badge */}
-          <div className={`px-3 py-2 rounded-xl border text-center flex flex-col items-center justify-center min-w-[85px] ${
-            assignment?.seating_table 
-              ? "bg-purple-50 border-purple-200 text-purple-900" 
-              : "bg-slate-100 border-slate-200 text-slate-500"
-          }`}>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-              <MapPin className="w-3 h-3" /> Table
-            </span>
-            <span className="text-sm font-black mt-0.5">
-              {assignment?.seating_table?.table_name || "Unassigned"}
-            </span>
-          </div>
-        </div>
+          <Flex direction="column" align="center" justify="center" px="3" py="2" style={{ borderRadius: "var(--radius-3)", minWidth: 85, backgroundColor: assignment?.seating_table ? "var(--purple-3)" : "var(--gray-3)", border: "1px solid", borderColor: assignment?.seating_table ? "var(--purple-5)" : "var(--gray-5)" }}>
+            <Flex align="center" gap="1">
+              <MapPin width={12} height={12} style={{ color: assignment?.seating_table ? "var(--purple-11)" : "var(--gray-11)" }} />
+              <Text size="1" weight="bold" style={{ textTransform: "uppercase", letterSpacing: "0.02em", color: assignment?.seating_table ? "var(--purple-11)" : "var(--gray-11)" }}>Table</Text>
+            </Flex>
+            <Text size="3" weight="bold" style={{ color: assignment?.seating_table ? "var(--purple-11)" : "var(--gray-11)" }}>
+              {assignment?.seating_table?.table_name || "None"}
+            </Text>
+          </Flex>
+        </Flex>
 
         {/* RSVP Info */}
-        <div className="flex items-center gap-3 text-xs text-slate-600 mt-3 pt-3 border-t border-slate-100/80">
-          <div className="flex items-center gap-1.5 font-medium">
-            <Users className="w-3.5 h-3.5 text-slate-400" />
-            <span>RSVP Status: <b className={`capitalize ${rsvp?.attendance_status === "attending" ? "text-emerald-600 font-bold" : "text-slate-700"}`}>{rsvp?.attendance_status || "Pending"}</b></span>
-          </div>
-          <span className="text-slate-300">|</span>
-          <div>
-            Expected: <b className="text-slate-800 font-bold">{defaultPax} Pax</b>
-          </div>
-        </div>
+        <Flex align="center" gap="3" mt="3" pt="3" style={{ borderTop: "1px solid var(--gray-4)" }}>
+          <Flex align="center" gap="2">
+            <Users width={14} height={14} style={{ color: "var(--gray-8)" }} />
+            <Text size="1" color="gray">
+              RSVP: <Text weight="bold" style={{ color: rsvp?.attendance_status === "attending" ? "var(--emerald-11)" : "var(--gray-11)", textTransform: "capitalize" }}>{rsvp?.attendance_status || "Pending"}</Text>
+            </Text>
+          </Flex>
+          <Text size="1" color="gray">|</Text>
+          <Text size="1" color="gray">
+            Expected: <Text weight="bold" color="gray">{defaultPax} Pax</Text>
+          </Text>
+        </Flex>
 
         {/* Notes */}
-        {guest.notes && (
-          <div onClick={() => onOpenDetails(invitation)} className="mt-2.5 p-2.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-amber-900 text-xs flex items-start gap-2 cursor-pointer hover:bg-amber-100/80 transition">
-            <FileText className="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5" />
-            <p className="font-medium line-clamp-2">{guest.notes}</p>
-          </div>
+        {guest.notes?.replace(/\[?vip\]?/gi, "").trim() && (
+          <Box onClick={() => onOpenDetails(invitation)} mt="3" p="2" style={{ backgroundColor: "var(--amber-3)", border: "1px solid var(--amber-5)", borderRadius: "var(--radius-3)", cursor: "pointer" }}>
+            <Flex align="start" gap="2">
+              <FileText width={14} height={14} style={{ color: "var(--amber-11)", marginTop: 2, flexShrink: 0 }} />
+              <Text size="1" color="amber" weight="medium" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                {guest.notes.replace(/\[?vip\]?/gi, "").trim()}
+              </Text>
+            </Flex>
+          </Box>
         )}
-      </div>
+      </Box>
 
       {/* Check-In Action Bar */}
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 mt-auto">
+      <Flex align="center" justify="between" gap="3" mt="4" pt="3" style={{ borderTop: "1px solid var(--gray-4)" }}>
         {/* Headcount Stepper */}
         {!isCheckedIn ? (
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
-            <button
-              type="button"
+          <Flex align="center" gap="2" p="1" style={{ backgroundColor: "var(--gray-2)", border: "1px solid var(--gray-5)", borderRadius: "var(--radius-3)" }}>
+            <IconButton 
+              variant="soft" 
+              color="gray" 
+              size="1" 
               onClick={() => setActualPax(Math.max(1, actualPax - 1))}
               disabled={loading || actualPax <= 1}
-              className="w-7 h-7 rounded-lg bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 shadow-sm disabled:opacity-30 transition"
+              style={{ cursor: "pointer" }}
             >
-              <Minus className="w-3.5 h-3.5" />
-            </button>
-            <span className="w-8 text-center font-black text-sm text-slate-800">
-              {actualPax}
-            </span>
-            <button
-              type="button"
+              <Minus width={14} height={14} />
+            </IconButton>
+            <Text size="2" weight="bold" align="center" style={{ width: 24 }}>{actualPax}</Text>
+            <IconButton 
+              variant="soft" 
+              color="gray" 
+              size="1" 
               onClick={() => setActualPax(actualPax + 1)}
               disabled={loading || actualPax >= defaultPax}
-              className="w-7 h-7 rounded-lg bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 shadow-sm disabled:opacity-30 transition"
+              style={{ cursor: "pointer" }}
             >
-              <Plus className="w-3.5 h-3.5" />
-            </button>
-          </div>
+              <Plus width={14} height={14} />
+            </IconButton>
+          </Flex>
         ) : (
-          <div className="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
-            <UserCheck className="w-4 h-4" /> Arrived: <b>{invitation.checked_in_pax || actualPax} Pax</b>
-          </div>
+          <Flex align="center" gap="2">
+            <UserCheck width={16} height={16} style={{ color: "var(--emerald-11)" }} />
+            <Text size="1" weight="bold" color="green">Arrived: {invitation.checked_in_pax || actualPax} Pax</Text>
+          </Flex>
         )}
 
         {/* Check In Button */}
-        <button
-          type="button"
+        <Button
+          variant={isCheckedIn ? "outline" : "solid"}
+          color={isCheckedIn ? "ruby" : "green"}
+          size="2"
           onClick={handleToggle}
           disabled={loading}
-          className={`flex-1 py-2.5 px-4 rounded-xl font-bold text-sm shadow-sm transition flex items-center justify-center gap-2 disabled:opacity-50 ${
-            isCheckedIn
-              ? "bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-300"
-              : "bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white shadow-emerald-600/20"
-          }`}
+          style={{ flex: 1 }}
         >
           {loading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 width={16} height={16} className="animate-spin" />
           ) : isCheckedIn ? (
             "Cancel Check-In"
           ) : (
             <>
-              <CheckCircle2 className="w-4 h-4" /> Check In
+              <CheckCircle2 width={16} height={16} /> Check In
             </>
           )}
-        </button>
-      </div>
-
-    </div>
+        </Button>
+      </Flex>
+    </Card>
   );
 }

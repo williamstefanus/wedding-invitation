@@ -291,9 +291,6 @@ export function GuestClient({
         <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "end" }} gap="4">
           <Box>
             <Heading size="8">Guest Management</Heading>
-            <Text color="gray" size="3" mt="2" as="p">
-              Total {total} guests found.
-            </Text>
           </Box>
           <RadixButton 
             onClick={openAddModal}

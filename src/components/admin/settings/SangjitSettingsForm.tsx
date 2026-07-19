@@ -180,21 +180,19 @@ export function SangjitSettingsForm({
               <ImageIcon className="w-5 h-5 text-ruby-600" />
               <Heading size="4">Image Gallery & Layout Preview</Heading>
             </Flex>
-            <Callout.Root color="ruby" mb="4" mt="2">
-              <Callout.Icon><CheckCircle2 className="w-4 h-4" /></Callout.Icon>
-              <Callout.Text>Sangjit settings updated successfully!</Callout.Text>
-            </Callout.Root>
             <Text as="p" size="2" color="gray" mt="1">
               Use arrow buttons to rearrange photos. The order below reflects the exact arrangement on the web invitation.
             </Text>
           </Box>
-          <label>
-            <Button type="button" color="ruby" disabled={uploading} style={{ cursor: "pointer" }}>
-              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
-              Upload Image
+          <Box>
+            <Button asChild color="ruby" disabled={uploading} style={{ cursor: "pointer" }}>
+              <label>
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                Upload Image
+                <input type="file" accept="image/*" onChange={handleSangjitImageUpload} style={{ display: "none" }} disabled={uploading} />
+              </label>
             </Button>
-            <input type="file" accept="image/*" onChange={handleSangjitImageUpload} style={{ display: "none" }} disabled={uploading} />
-          </label>
+          </Box>
         </Flex>
 
         <Flex direction="column" gap="5">

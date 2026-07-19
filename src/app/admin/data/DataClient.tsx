@@ -199,8 +199,7 @@ export function DataClient({ existingIdentifiers }: DataClientProps) {
       <Flex direction="column" gap="4" style={{ maxWidth: 1180, margin: "0 auto" }}>
         
         <Box mb="2">
-          <Heading size="7" weight="bold" color="gray" style={{ color: "var(--slate-12)" }}>Data Management</Heading>
-          <Text color="gray" size="2">Bulk import guests or export system data.</Text>
+          <Heading size="8">Data Management</Heading>
         </Box>
 
         {statusMsg && (

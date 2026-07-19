@@ -74,9 +74,6 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
             <Flex align="center" gap="3">
               <Heading size="8">Hello {config.groomFirstName || "William"} & {config.brideFirstName || "Aziel"}</Heading>
             </Flex>
-            <Text color="gray" size="3" mt="2" as="p">
-              Here's what's happening with your event today.
-            </Text>
           </Box>
 
           <Flex gap="4" align="center" direction={{ initial: "column-reverse", sm: "row" }}>

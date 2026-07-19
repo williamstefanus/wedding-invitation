@@ -1,6 +1,7 @@
 "use client";
 
-import { User, Phone, Gift, Lock, Globe, UploadCloud, Loader2, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { User, Phone, Gift, Lock, Globe, UploadCloud, Loader2, Trash2, Eye, EyeOff } from "lucide-react";
 import { Box, Flex, Grid, Card, Heading, Text, TextField, Select, Button, Avatar, IconButton } from "@radix-ui/themes";
 interface GeneralSettingsFormProps {
   config: any;
@@ -15,6 +16,9 @@ export function GeneralSettingsForm({
   uploadingFavicon,
   handleFaviconUpload,
 }: GeneralSettingsFormProps) {
+  const [showWoPin, setShowWoPin] = useState(false);
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
+
   return (
     <Flex direction="column" gap="6" className="animate-fade-up">
 
@@ -228,13 +232,32 @@ export function GeneralSettingsForm({
           <Lock className="w-5 h-5 text-emerald-600" />
           <Heading size="4">System Settings</Heading>
         </Flex>
-        <Grid columns={{ initial: "1", md: "2" }} gap="4">
+        <Grid columns="1" gap="4">
           <Box>
             <Flex align="center" gap="1" mb="1">
               <Lock className="w-3 h-3 text-gray-500" />
               <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Access PIN Code</Text>
             </Flex>
-            <TextField.Root size="3" placeholder="e.g. 123456" value={config.woPin || "123456"} onChange={e => setConfig({...config, woPin: e.target.value})} style={{ fontFamily: "monospace", letterSpacing: "0.1em" }} />
+            <TextField.Root 
+              type={showWoPin ? "text" : "password"}
+              size="3" 
+              placeholder="e.g. 123456" 
+              value={config.woPin || "123456"} 
+              onChange={e => setConfig({...config, woPin: e.target.value})} 
+              style={{ fontFamily: "monospace", letterSpacing: "0.1em" }} 
+            >
+              <TextField.Slot side="right">
+                <IconButton 
+                  size="1" 
+                  variant="ghost" 
+                  type="button"
+                  onClick={() => setShowWoPin(!showWoPin)}
+                  style={{ cursor: "pointer", color: "var(--gray-9)" }}
+                >
+                  {showWoPin ? <EyeOff width={16} height={16} /> : <Eye width={16} height={16} />}
+                </IconButton>
+              </TextField.Slot>
+            </TextField.Root>
             <Text as="p" size="1" color="gray" mt="2">
               PIN code used by Wedding Organizers and Ushers to access the reception check-in portal.
             </Text>

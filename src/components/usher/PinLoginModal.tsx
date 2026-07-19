@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { verifyWoPin } from "@/lib/actions/usher";
 import { Lock, Delete, Loader2, ShieldCheck } from "lucide-react";
+import { Box, Flex, Text, Heading, Button, Card, Grid } from "@radix-ui/themes";
 
 interface PinLoginModalProps {
   isOpen: boolean;
@@ -52,86 +53,98 @@ export function PinLoginModal({ isOpen, onSuccess }: PinLoginModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-[100] animate-fade-in">
-      <div className="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl p-8 flex flex-col items-center animate-fade-up border border-slate-100">
-        
-        <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 text-amber-600 shadow-inner">
-          <Lock className="w-8 h-8" />
-        </div>
+    <Box position="fixed" inset="0" style={{ backgroundColor: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <Card size="4" style={{ width: "100%", maxWidth: "380px" }}>
+        <Flex direction="column" align="center" gap="4">
+          <Flex align="center" justify="center" style={{ width: 64, height: 64, backgroundColor: "var(--amber-3)", color: "var(--amber-11)", borderRadius: "var(--radius-4)" }}>
+            <Lock width={32} height={32} />
+          </Flex>
 
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight">Usher Access</h1>
-        <p className="text-xs text-slate-500 text-center mt-1 mb-6 max-w-[240px]">
-          Enter the Wedding Organizer PIN code to access the check-in portal.
-        </p>
+          <Box>
+            <Heading size="6" align="center">Usher Access</Heading>
+            <Text size="2" color="gray" align="center" mt="1" style={{ maxWidth: 240, margin: "0 auto", display: "block" }}>
+              Enter the Wedding Organizer PIN code to access the check-in portal.
+            </Text>
+          </Box>
 
-        {/* PIN Display */}
-        <div className="w-full bg-slate-100 border border-slate-200 rounded-2xl h-14 flex items-center justify-center gap-3 mb-6 px-4 shadow-inner">
-          {pin ? (
-            Array.from({ length: pin.length }).map((_, i) => (
-              <div key={i} className="w-3.5 h-3.5 rounded-full bg-amber-500 animate-scale-up shadow-sm" />
-            ))
-          ) : (
-            <span className="text-sm font-semibold text-slate-400">Enter PIN code</span>
+          {/* PIN Display */}
+          <Flex align="center" justify="center" gap="3" style={{ width: "100%", height: 56, backgroundColor: "var(--gray-2)", border: "1px solid var(--gray-5)", borderRadius: "var(--radius-3)" }}>
+            {pin ? (
+              Array.from({ length: pin.length }).map((_, i) => (
+                <Box key={i} style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "var(--amber-9)" }} />
+              ))
+            ) : (
+              <Text size="2" weight="medium" color="gray">Enter PIN code</Text>
+            )}
+          </Flex>
+
+          {error && (
+            <Box style={{ width: "100%", padding: "12px", backgroundColor: "var(--crimson-3)", border: "1px solid var(--crimson-5)", borderRadius: "var(--radius-3)", textAlign: "center" }}>
+              <Text size="2" weight="bold" color="crimson">
+                ✕ {error}
+              </Text>
+            </Box>
           )}
-        </div>
 
-        {error && (
-          <div className="w-full p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-xs text-center font-bold mb-4 animate-shake">
-            ✕ {error}
-          </div>
-        )}
-
-        {/* Numeric Keypad */}
-        <div className="grid grid-cols-3 gap-3 w-full mb-6">
-          {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
-            <button
-              key={num}
-              type="button"
-              onClick={() => handleNumClick(num)}
+          {/* Numeric Keypad */}
+          <Grid columns="3" gap="3" style={{ width: "100%" }}>
+            {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
+              <Button
+                key={num}
+                variant="surface"
+                color="gray"
+                size="4"
+                onClick={() => handleNumClick(num)}
+                disabled={loading}
+                style={{ height: 56, fontSize: "20px", fontWeight: "bold" }}
+              >
+                {num}
+              </Button>
+            ))}
+            <Box /> {/* blank corner */}
+            <Button
+              variant="surface"
+              color="gray"
+              size="4"
+              onClick={() => handleNumClick("0")}
               disabled={loading}
-              className="h-14 bg-slate-50 hover:bg-slate-100 active:bg-amber-50 active:border-amber-300 border border-slate-200/80 rounded-2xl text-xl font-bold text-slate-800 transition shadow-sm flex items-center justify-center disabled:opacity-50"
+              style={{ height: 56, fontSize: "20px", fontWeight: "bold" }}
             >
-              {num}
-            </button>
-          ))}
-          <div /> {/* blank corner */}
-          <button
-            type="button"
-            onClick={() => handleNumClick("0")}
-            disabled={loading}
-            className="h-14 bg-slate-50 hover:bg-slate-100 active:bg-amber-50 active:border-amber-300 border border-slate-200/80 rounded-2xl text-xl font-bold text-slate-800 transition shadow-sm flex items-center justify-center disabled:opacity-50"
-          >
-            0
-          </button>
-          <button
-            type="button"
-            onClick={handleDelete}
+              0
+            </Button>
+            <Button
+              variant="soft"
+              color="crimson"
+              size="4"
+              onClick={handleDelete}
+              disabled={loading || !pin}
+              style={{ height: 56 }}
+            >
+              <Delete width={24} height={24} />
+            </Button>
+          </Grid>
+
+          {/* Submit */}
+          <Button
+            size="4"
+            color="amber"
+            variant="solid"
+            onClick={handleSubmit}
             disabled={loading || !pin}
-            className="h-14 bg-slate-50 hover:bg-rose-50 active:bg-rose-100 text-slate-500 hover:text-rose-600 border border-slate-200/80 rounded-2xl transition shadow-sm flex items-center justify-center disabled:opacity-30"
+            style={{ width: "100%", height: 56, marginTop: "8px" }}
           >
-            <Delete className="w-6 h-6" />
-          </button>
-        </div>
-
-        {/* Submit */}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={loading || !pin}
-          className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-base rounded-2xl shadow-lg shadow-amber-500/25 transition flex items-center justify-center gap-2 disabled:opacity-50"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" /> Verifying...
-            </>
-          ) : (
-            <>
-              <ShieldCheck className="w-5 h-5" /> Unlock Portal
-            </>
-          )}
-        </button>
-
-      </div>
-    </div>
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin" width={20} height={20} style={{ marginRight: 8 }} /> Verifying...
+              </>
+            ) : (
+              <>
+                <ShieldCheck width={20} height={20} style={{ marginRight: 8 }} /> Unlock Portal
+              </>
+            )}
+          </Button>
+        </Flex>
+      </Card>
+    </Box>
   );
 }

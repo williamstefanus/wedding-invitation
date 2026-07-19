@@ -126,7 +126,8 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
     countdownDate: "",
     galleryImages: [],
     sangjitGalleryImages: [],
-    faviconUrl: ""
+    faviconUrl: "",
+    adminPassword: ""
   });
 
   const [uploading, setUploading] = useState(false);
@@ -319,8 +320,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
         
         <Flex direction={{ initial: "column", sm: "row" }} justify="between" align={{ initial: "start", sm: "center" }} gap="4" mb="4">
           <Box>
-            <Heading size="7" weight="bold" color="gray" style={{ color: "var(--slate-12)" }}>Settings</Heading>
-            <Text color="gray" size="2">Manage public invitation content dynamically.</Text>
+            <Heading size="8">Settings</Heading>
           </Box>
           <Button 
             size="3"

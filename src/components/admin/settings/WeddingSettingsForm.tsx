@@ -233,13 +233,15 @@ export function WeddingSettingsForm({
               Use arrow buttons to rearrange photos. The order below reflects the exact arrangement on the web invitation.
             </Text>
           </Box>
-          <label>
-            <Button color="amber" disabled={uploading} style={{ cursor: "pointer" }}>
-              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
-              Upload Image
+          <Box>
+            <Button asChild color="amber" disabled={uploading} style={{ cursor: "pointer" }}>
+              <label>
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                Upload Image
+                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} disabled={uploading} />
+              </label>
             </Button>
-            <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} disabled={uploading} />
-          </label>
+          </Box>
         </Flex>
 
         <Flex direction="column" gap="5">

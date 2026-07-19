@@ -7,6 +7,7 @@ import { PinLoginModal } from "@/components/usher/PinLoginModal";
 import { UsherGuestCard } from "@/components/usher/UsherGuestCard";
 import { FloorPlanView } from "@/components/admin/seating/FloorPlanView";
 import { Search, LogOut, RefreshCw, Users, UserCheck, Map, List, X, FileText, MapPin, Check } from "lucide-react";
+import { Box, Flex, Text, Heading, Button, Card, Grid, SegmentedControl, TextField, Checkbox, Dialog, ScrollArea, Progress, Container, IconButton, Badge, TextArea, Spinner } from "@radix-ui/themes";
 
 interface UsherClientProps {
   initialWeddingRoster: any[];
@@ -36,8 +37,52 @@ export function UsherClient({
   const [detailsModalInv, setDetailsModalInv] = useState<any | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "vip" | "checked_in" | "pending">("all");
+  const [filterType, setFilterType] = useState<"all" | "vip" | "checked_in" | "pending" | "groom" | "bride">("all");
   const [isPending, startTransition] = useTransition();
+
+  const [editingNotes, setEditingNotes] = useState<string>("");
+  const [isVip, setIsVip] = useState<boolean>(false);
+
+  const handleOpenDetails = (inv: any | null) => {
+    // Save notes automatically when modal closes
+    if (inv === null && detailsModalInv) {
+      const g = Array.isArray(detailsModalInv.guest) ? detailsModalInv.guest[0] : detailsModalInv.guest;
+      const originalNotes = g?.notes || "";
+      const newNotesString = (isVip ? `[VIP] ${editingNotes}` : editingNotes).trim();
+
+      if (newNotesString !== originalNotes) {
+        const guestId = g?.id;
+        
+        // Optimistic update
+        setRoster(prev => prev.map(item => {
+          if (item.id === detailsModalInv.id) {
+            const itemGuest = Array.isArray(item.guest) ? item.guest[0] : item.guest;
+            return {
+              ...item,
+              guest: { ...itemGuest, notes: newNotesString }
+            };
+          }
+          return item;
+        }));
+
+        // Background save
+        if (guestId) {
+          updateGuestVipStatus(guestId, newNotesString).catch(err => console.error("Failed to save notes", err));
+        }
+      }
+    }
+
+    setDetailsModalInv(inv);
+    if (inv) {
+      const g = Array.isArray(inv.guest) ? inv.guest[0] : inv.guest;
+      const notes = g?.notes || "";
+      setIsVip(!!notes.toLowerCase().includes("vip"));
+      setEditingNotes(notes.replace(/\[?vip\]?/gi, "").trim());
+    } else {
+      setEditingNotes("");
+      setIsVip(false);
+    }
+  };
 
   useEffect(() => {
     const auth = localStorage.getItem("wo_authorized") === "true";
@@ -45,7 +90,8 @@ export function UsherClient({
     setAuthChecked(true);
   }, []);
 
-  const handleEventChange = (event: "wedding" | "sangjit") => {
+  const handleEventChange = (value: string) => {
+    const event = value as "wedding" | "sangjit";
     setCurrentEvent(event);
     setRoster(event === "wedding" ? initialWeddingRoster : initialSangjitRoster);
     setSearchQuery("");
@@ -92,7 +138,7 @@ export function UsherClient({
 
   const filteredRoster = useMemo(() => {
     return roster.filter(inv => {
-      const guest = inv.guest || {};
+      const guest = Array.isArray(inv.guest) ? inv.guest[0] : (inv.guest || {});
       const nameMatch = guest.name?.toLowerCase().includes(searchQuery.toLowerCase());
       const codeMatch = inv.invitation_code?.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesSearch = !searchQuery || nameMatch || codeMatch;
@@ -104,6 +150,8 @@ export function UsherClient({
       if (filterType === "vip") return isVip;
       if (filterType === "checked_in") return isCheckedIn;
       if (filterType === "pending") return !isCheckedIn;
+      if (filterType === "groom") return guest?.owner?.toLowerCase() === "groom" || guest?.owner?.toLowerCase() === "william";
+      if (filterType === "bride") return guest?.owner?.toLowerCase() === "bride" || guest?.owner?.toLowerCase() === "aziel";
       return true;
     });
   }, [roster, searchQuery, filterType]);
@@ -131,435 +179,396 @@ export function UsherClient({
     return currentTables.find(t => t.id === selectedTableId) || null;
   }, [currentTables, selectedTableId]);
 
-  const handleToggleVip = async (inv: any, currentNotes: string | null) => {
-    const isCurrentlyVip = !!currentNotes?.toLowerCase().includes("vip");
-    let newNotes = currentNotes || "";
-    if (!isCurrentlyVip) {
-      newNotes = newNotes ? `[VIP] ${newNotes}` : "[VIP]";
-    } else {
-      newNotes = newNotes.replace(/\[?vip\]?/gi, "").replace(/\s+/g, " ").trim();
-    }
 
-    // Optimistic update
-    setRoster(prev => prev.map(item => {
-      if (item.id === inv.id) {
-        return {
-          ...item,
-          guest: { ...item.guest, notes: newNotes }
-        };
-      }
-      return item;
-    }));
-    if (detailsModalInv && detailsModalInv.id === inv.id) {
-      setDetailsModalInv({
-        ...detailsModalInv,
-        guest: { ...detailsModalInv.guest, notes: newNotes }
-      });
-    }
-
-    await updateGuestVipStatus(inv.guest.id, newNotes);
-  };
 
   if (!authChecked) {
-    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-medium">Loading portal...</div>;
+    return (
+      <Flex align="center" justify="center" style={{ minHeight: "100vh", backgroundColor: "var(--gray-2)" }}>
+        <Text weight="medium" color="gray">Loading portal...</Text>
+      </Flex>
+    );
   }
 
+  const arrivalProgress = totalExpectedPax ? Math.min(100, Math.round((totalCheckedInPax / totalExpectedPax) * 100)) : 0;
+
   return (
-    <div className="min-h-screen bg-slate-100/80 text-slate-900 pb-20">
+    <Box style={{ minHeight: "100vh", backgroundColor: "var(--gray-2)", paddingBottom: "80px" }}>
       {!isAuthorized ? (
         <PinLoginModal isOpen={!isAuthorized} onSuccess={() => setIsAuthorized(true)} />
       ) : (
         <>
           {/* Header Bar */}
-          <header className="bg-slate-900 text-white sticky top-0 z-40 shadow-md border-b border-slate-800">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20 font-black text-slate-950 text-lg">
-                  W
-                </div>
-                <div>
-                  <h1 className="font-bold text-sm tracking-tight leading-none">Reception Portal</h1>
-                  <p className="text-[10px] text-amber-400 font-medium mt-0.5">Live Check-In &amp; Seating</p>
-                </div>
-              </div>
+          <Box style={{ position: "sticky", top: 0, zIndex: 40, backgroundColor: "white", borderBottom: "1px solid var(--gray-5)", boxShadow: "var(--shadow-2)" }}>
+            <Container size="4">
+              <Flex align="center" justify="between" px="4" py="3" wrap="wrap" gap="3">
+                <Flex align="center" gap="3">
+                  <img src="/images/logo_icon.png" alt="Logo" style={{ width: 36, height: 36, objectFit: "contain" }} />
+                  <Box>
+                    <Heading size="3" weight="bold">Reception Portal</Heading>
+                    <Text size="1" color="amber" weight="medium">Live Check-In & Seating</Text>
+                  </Box>
+                </Flex>
 
-              {/* Event Switcher */}
-              <div className="flex items-center bg-slate-800/80 p-1 rounded-xl border border-slate-700/60 w-full max-w-xs md:max-w-md">
-                <button
-                  type="button"
-                  onClick={() => handleEventChange("wedding")}
-                  className={`flex-1 px-4 py-1.5 rounded-lg font-bold text-xs transition ${
-                    currentEvent === "wedding" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-slate-300 hover:text-white"
-                  }`}
-                >
-                  Wedding
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleEventChange("sangjit")}
-                  className={`flex-1 px-4 py-1.5 rounded-lg font-bold text-xs transition ${
-                    currentEvent === "sangjit" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-slate-300 hover:text-white"
-                  }`}
-                >
-                  Sangjit
-                </button>
-              </div>
+                {/* Event Switcher */}
+                <Box style={{ flex: "1 1 200px", maxWidth: "400px" }}>
+                  <SegmentedControl.Root size="2" value={currentEvent} onValueChange={handleEventChange} style={{ width: "100%" }}>
+                    <SegmentedControl.Item value="wedding">Wedding</SegmentedControl.Item>
+                    <SegmentedControl.Item value="sangjit">Sangjit</SegmentedControl.Item>
+                  </SegmentedControl.Root>
+                </Box>
 
-              {/* Action buttons */}
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={handleRefresh} 
-                  disabled={isPending}
-                  className="p-2 md:px-3 md:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 disabled:opacity-50"
-                  title="Refresh Roster"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isPending ? "animate-spin" : ""}`} /> <span className="hidden md:inline">Refresh</span>
-                </button>
-                <button 
-                  onClick={handleLogout}
-                  className="p-2 md:px-3 md:py-2 rounded-xl bg-rose-950/50 hover:bg-rose-900/80 border border-rose-800/50 text-rose-300 text-xs font-bold transition flex items-center gap-1.5"
-                  title="Lock Portal"
-                >
-                  <LogOut className="w-3.5 h-3.5" /> <span className="hidden md:inline">Lock</span>
-                </button>
-              </div>
-            </div>
-          </header>
+                {/* Action buttons */}
+                <Flex align="center" gap="2">
+                  <Button variant="soft" color="gray" onClick={handleRefresh} disabled={isPending}>
+                    <RefreshCw width={14} height={14} className={isPending ? "animate-spin" : ""} />
+                    <Text className="hidden md:inline">Refresh</Text>
+                  </Button>
+                  <Button variant="soft" color="crimson" onClick={handleLogout}>
+                    <LogOut width={14} height={14} />
+                    <Text className="hidden md:inline">Lock</Text>
+                  </Button>
+                </Flex>
+              </Flex>
+            </Container>
+          </Box>
 
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <Container size="4" p="4" mt="4">
             
             {/* Live Arrival Counter Bar */}
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 mb-6 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-4 w-full md:w-auto">
-                <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100">
-                  <UserCheck className="w-7 h-7" />
-                </div>
-                <div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-black text-slate-900">{totalCheckedInPax}</span>
-                    <span className="text-sm font-bold text-slate-400">/ {totalExpectedPax} Expected Pax Arrived</span>
-                  </div>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    {checkedInCount} invitations currently checked in at reception
-                  </p>
-                </div>
-              </div>
+            <Card size="3" mb="5">
+              <Flex direction={{ initial: "column", md: "row" }} align={{ initial: "start", md: "center" }} justify="between" gap="5">
+                <Flex align="center" gap="4">
+                  <Flex align="center" justify="center" style={{ width: 56, height: 56, backgroundColor: "var(--emerald-3)", color: "var(--emerald-11)", borderRadius: "var(--radius-4)" }}>
+                    <UserCheck width={28} height={28} />
+                  </Flex>
+                  <Box>
+                    <Flex align="baseline" gap="2">
+                      <Heading size="8">{totalCheckedInPax}</Heading>
+                      <Text size="3" weight="bold" color="gray">/ {totalExpectedPax} Expected Pax Arrived</Text>
+                    </Flex>
+                    <Text size="2" color="gray" weight="medium">
+                      {checkedInCount} invitations currently checked in at reception
+                    </Text>
+                  </Box>
+                </Flex>
 
-              {/* Progress Bar */}
-              <div className="w-full md:w-64">
-                <div className="flex justify-between text-xs font-bold text-slate-600 mb-1.5">
-                  <span>Arrival Rate</span>
-                  <span>{totalExpectedPax ? Math.round((totalCheckedInPax / totalExpectedPax) * 100) : 0}%</span>
-                </div>
-                <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200/60 p-0.5">
-                  <div 
-                    className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full rounded-full transition-all duration-500 shadow-sm"
-                    style={{ width: `${Math.min(100, totalExpectedPax ? (totalCheckedInPax / totalExpectedPax) * 100 : 0)}%` }}
-                  />
-                </div>
-              </div>
-            </div>
+                {/* Progress Bar */}
+                <Box style={{ width: "100%", maxWidth: "260px" }}>
+                  <Flex justify="between" mb="2">
+                    <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Arrival Progress</Text>
+                    <Text size="1" weight="bold" color="gray">{arrivalProgress}%</Text>
+                  </Flex>
+                  <Progress value={arrivalProgress} color="green" size="3" />
+                </Box>
+              </Flex>
+            </Card>
 
-            {/* View Mode & Search Controls Bar */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 mb-6 flex flex-col lg:flex-row items-center gap-4 justify-between">
-              {/* View Mode Switcher */}
-              <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/80 w-full lg:w-auto">
-                <button
-                  type="button"
-                  onClick={() => setViewMode("guests")}
-                  className={`flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
-                    viewMode === "guests" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                  }`}
-                >
-                  <Users className="w-3.5 h-3.5 text-amber-600" /> Guest List
-                </button>
+            {/* View Mode Switcher */}
+            <Box mb="4">
+              <SegmentedControl.Root size="2" value={viewMode} onValueChange={(val: any) => setViewMode(val)} style={{ width: "100%", maxWidth: "400px" }}>
+                <SegmentedControl.Item value="guests">
+                  <Flex align="center" gap="2"><Users width={14} height={14} style={{ color: "var(--amber-11)" }} /> Guest List</Flex>
+                </SegmentedControl.Item>
                 {currentEvent === "wedding" && (
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("map")}
-                    className={`flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
-                      viewMode === "map" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                    }`}
-                  >
-                    <Map className="w-3.5 h-3.5 text-blue-600" /> Table Map
-                  </button>
+                  <SegmentedControl.Item value="map">
+                    <Flex align="center" gap="2"><Map width={14} height={14} style={{ color: "var(--blue-11)" }} /> Table Map</Flex>
+                  </SegmentedControl.Item>
                 )}
-                <button
-                  type="button"
-                  onClick={() => setViewMode("list")}
-                  className={`flex-1 lg:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
-                    viewMode === "list" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                  }`}
-                >
-                  <List className="w-3.5 h-3.5 text-purple-600" /> Table List
-                </button>
-              </div>
+                <SegmentedControl.Item value="list">
+                  <Flex align="center" gap="2"><List width={14} height={14} style={{ color: "var(--purple-11)" }} /> Table List</Flex>
+                </SegmentedControl.Item>
+              </SegmentedControl.Root>
+            </Box>
 
-              {viewMode === "guests" && (
-                <>
-                  <div className="relative w-full lg:max-w-md">
-                    <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search guest name or code..."
-                      value={searchQuery}
-                      onChange={e => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition font-medium"
-                    />
-                  </div>
-
-                  {/* Filter Tabs */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto w-full lg:w-auto pb-1 lg:pb-0 no-scrollbar">
-                    {[
-                      { id: "all", label: "All Guests", count: roster.length },
-                      { id: "vip", label: "★ VIP Only", count: roster.filter(i => !!i.guest?.notes?.toLowerCase().includes("vip")).length },
-                      { id: "pending", label: "Waiting Check-in", count: roster.filter(i => !i.checked_in_at).length },
-                      { id: "checked_in", label: "Checked In", count: roster.filter(i => !!i.checked_in_at).length },
-                    ].map(tab => (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setFilterType(tab.id as any)}
-                        className={`px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 border ${
-                          filterType === tab.id
-                            ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
-                        }`}
+            {/* Search Controls Bar */}
+            {viewMode === "guests" && (
+              <Card size="2" mb="5">
+                <Flex direction={{ initial: "column", md: "row" }} align={{ initial: "stretch", md: "center" }} gap="4" style={{ flex: 1, width: "100%" }}>
+                    <Box style={{ flex: 1, maxWidth: "400px" }}>
+                      <TextField.Root 
+                        placeholder="Search guest name or code..."
+                        size="3"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
                       >
-                        <span>{tab.label}</span>
-                        <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${filterType === tab.id ? "bg-slate-800 text-amber-400" : "bg-slate-200 text-slate-600"}`}>
-                          {tab.count}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+                        <TextField.Slot>
+                          <Search width={16} height={16} />
+                        </TextField.Slot>
+                      </TextField.Root>
+                    </Box>
+
+                    {/* Filter Tabs */}
+                    <Flex align="center" gap="2" style={{ overflowX: "auto", paddingBottom: "4px" }}>
+                      {[
+                        { id: "all", label: "All Guests", count: roster.length },
+                        { id: "groom", label: `${config.groomFirstName || "Groom"}'s`, count: roster.filter(i => {
+                            const g = Array.isArray(i.guest) ? i.guest[0] : i.guest;
+                            return g?.owner?.toLowerCase() === "groom" || g?.owner?.toLowerCase() === "william";
+                          }).length },
+                        { id: "bride", label: `${config.brideFirstName || "Bride"}'s`, count: roster.filter(i => {
+                            const g = Array.isArray(i.guest) ? i.guest[0] : i.guest;
+                            return g?.owner?.toLowerCase() === "bride" || g?.owner?.toLowerCase() === "aziel";
+                          }).length },
+                        { id: "vip", label: "★ VIP Only", count: roster.filter(i => {
+                            const g = Array.isArray(i.guest) ? i.guest[0] : i.guest;
+                            return !!g?.notes?.toLowerCase().includes("vip");
+                          }).length },
+                        { id: "pending", label: "Waiting Check-in", count: roster.filter(i => !i.checked_in_at).length },
+                        { id: "checked_in", label: "Checked In", count: roster.filter(i => !!i.checked_in_at).length },
+                      ].map(tab => (
+                        <Button
+                          key={tab.id}
+                          variant={filterType === tab.id ? "solid" : "surface"}
+                          color={filterType === tab.id ? "gray" : "gray"}
+                          size="2"
+                          onClick={() => setFilterType(tab.id as any)}
+                          style={{ whiteSpace: "nowrap" }}
+                        >
+                          {tab.label}
+                          <Badge color={filterType === tab.id ? "amber" : "gray"} variant="solid" size="1">
+                            {tab.count}
+                          </Badge>
+                        </Button>
+                      ))}
+                    </Flex>
+                  </Flex>
+              </Card>
+            )}
 
             {/* View Mode 1: Guest List */}
             {viewMode === "guests" && (
               filteredRoster.length === 0 ? (
-                <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center my-8 max-w-md mx-auto">
-                  <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                  <h3 className="text-base font-bold text-slate-700">No matching guests found</h3>
-                  <p className="text-xs text-slate-400 mt-1">Try adjusting your search terms or filter selection.</p>
-                </div>
+                <Card size="4" style={{ textAlign: "center", borderStyle: "dashed" }}>
+                  <Flex direction="column" align="center" py="6">
+                    <Users width={48} height={48} style={{ color: "var(--gray-6)", marginBottom: "16px" }} />
+                    <Heading size="4">No matching guests found</Heading>
+                    <Text size="2" color="gray" mt="1">Try adjusting your search terms or filter selection.</Text>
+                  </Flex>
+                </Card>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Grid columns={{ initial: "1", md: "2", lg: "3" }} gap="4">
                   {filteredRoster.map(inv => (
                     <UsherGuestCard
                       key={inv.id}
                       invitation={inv}
                       onToggleCheckIn={handleToggleCheckIn}
-                      onOpenDetails={setDetailsModalInv}
+                      onOpenDetails={handleOpenDetails}
                       config={config}
                     />
                   ))}
-                </div>
+                </Grid>
               )
             )}
 
             {/* View Mode 2: Table Map (Read-Only) */}
             {viewMode === "map" && currentEvent === "wedding" && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 animate-fadeIn">
+              <Card size="4">
                 <FloorPlanView
                   tables={currentTables}
                   selectedTableId={selectedTableId}
                   setSelectedTableId={setSelectedTableId}
                   readOnly={true}
                 />
-              </div>
+              </Card>
             )}
 
             {/* View Mode 3: Table List (Read-Only Grid) */}
             {viewMode === "list" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fadeIn">
+              <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4">
                 {currentTables.length === 0 ? (
-                  <div className="col-span-full bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center text-slate-500">
-                    No tables initialized for {currentEvent}.
-                  </div>
+                  <Card size="4" style={{ textAlign: "center", borderStyle: "dashed", gridColumn: "1 / -1" }}>
+                    <Text color="gray">No tables initialized for {currentEvent}.</Text>
+                  </Card>
                 ) : (
                   currentTables.map(table => {
                     const occ = (table.assignments || []).reduce((sum: number, a: any) => sum + (a.assigned_pax || 0), 0);
                     return (
-                      <div
+                      <Card
                         key={table.id}
+                        size="2"
+                        style={{ cursor: "pointer", transition: "border-color 0.2s" }}
                         onClick={() => setSelectedTableId(table.id)}
-                        className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-400 shadow-sm cursor-pointer transition flex flex-col justify-between gap-4"
+                        className="hover:border-amber-400"
                       >
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-bold text-slate-800">{table.table_name}</h3>
-                          <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-extrabold text-xs">
+                        <Flex align="center" justify="between" mb="4">
+                          <Heading size="4">{table.table_name}</Heading>
+                          <Badge color="gray" variant="surface" size="2">
                             {occ} / {table.capacity} Pax
-                          </span>
-                        </div>
-                        <div className="text-xs text-slate-500 border-t border-slate-100 pt-3">
-                          <p className="font-semibold text-slate-700 mb-1.5">Assigned Guests ({table.assignments?.length || 0}):</p>
+                          </Badge>
+                        </Flex>
+                        <Box mt="3" style={{ borderTop: "1px solid var(--gray-4)", paddingTop: "12px" }}>
+                          <Text size="2" weight="bold" color="gray" mb="2" as="div">Assigned Guests ({table.assignments?.length || 0})</Text>
                           {table.assignments?.length ? (
-                            <ul className="space-y-1">
+                            <Flex direction="column" gap="2">
                               {table.assignments.slice(0, 4).map((a: any) => (
-                                <li key={a.id} className="flex justify-between text-slate-600">
-                                  <span className="truncate pr-2">• {a.invitation?.guest?.name || "Guest"}</span>
-                                  <span className="font-bold text-slate-400">{a.assigned_pax}p</span>
-                                </li>
+                                <Flex key={a.id} justify="between" align="center">
+                                  <Text size="2" color="gray" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", paddingRight: 8 }}>
+                                    • {a.invitation?.guest?.name || "Guest"}
+                                  </Text>
+                                  <Text size="2" weight="bold" color="gray" style={{ flexShrink: 0 }}>{a.assigned_pax}p</Text>
+                                </Flex>
                               ))}
                               {table.assignments.length > 4 && (
-                                <li className="text-[11px] text-amber-600 font-bold">+ {table.assignments.length - 4} more</li>
+                                <Text size="1" weight="bold" color="amber">+ {table.assignments.length - 4} more</Text>
                               )}
-                            </ul>
+                            </Flex>
                           ) : (
-                            <p className="italic text-slate-400">Empty table</p>
+                            <Text size="2" color="gray" style={{ fontStyle: "italic" }}>Empty table</Text>
                           )}
-                        </div>
-                      </div>
+                        </Box>
+                      </Card>
                     );
                   })
                 )}
-              </div>
+              </Grid>
             )}
 
             {/* Read-Only Table Details Modal (when a table is clicked in Map or List) */}
-            {selectedTable && (
-              <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-                <div className="bg-white rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl animate-scaleUp p-6">
-                  <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Read-Only Roster</span>
-                      <h3 className="text-xl font-black text-slate-900 mt-1">{selectedTable.table_name}</h3>
-                    </div>
-                    <button onClick={() => setSelectedTableId(null)} className="p-2 text-slate-400 hover:text-slate-600 rounded-lg">
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
+            <Dialog.Root open={!!selectedTable} onOpenChange={(open) => !open && setSelectedTableId(null)}>
+              <Dialog.Content style={{ maxWidth: 450 }}>
+                {selectedTable && (
+                  <>
+                    <Flex align="start" justify="between" mb="4">
+                      <Box>
+                        <Badge color="amber" variant="soft" size="1">Read-Only Roster</Badge>
+                        <Dialog.Title mt="2">{selectedTable.table_name}</Dialog.Title>
+                      </Box>
+                      <Dialog.Close>
+                        <IconButton variant="ghost" color="gray">
+                          <X width={20} height={20} />
+                        </IconButton>
+                      </Dialog.Close>
+                    </Flex>
 
-                  <div className="py-4 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                      <span>Occupancy</span>
-                      <span className="text-slate-900">
+                    <Flex align="center" justify="between" p="3" mb="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--gray-4)" }}>
+                      <Text size="2" weight="bold" color="gray">Occupancy</Text>
+                      <Text size="2" weight="bold">
                         {(selectedTable.assignments || []).reduce((sum: number, a: any) => sum + (a.assigned_pax || 0), 0)} / {selectedTable.capacity} Pax
-                      </span>
-                    </div>
+                      </Text>
+                    </Flex>
 
-                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider pt-2">Seated Guests</h4>
-                    {!(selectedTable.assignments?.length) ? (
-                      <p className="text-sm text-slate-400 italic py-4 text-center">No guests currently assigned to this table.</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {selectedTable.assignments.map((a: any) => {
-                          const inv = a.invitation || {};
-                          const guest = inv.guest || {};
-                          const isCheck = !!inv.checked_in_at;
-                          return (
-                            <div key={a.id} className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-white shadow-2xs">
-                              <div>
-                                <p className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                                  {guest.name}
-                                  {isCheck && <span title="Checked In"><Check className="w-3.5 h-3.5 text-emerald-600" /></span>}
-                                </p>
-                                <p className="text-[11px] text-slate-400">{guest.owner} • {guest.category}</p>
-                              </div>
-                              <div className="text-right">
-                                <span className="px-2.5 py-1 rounded-lg bg-slate-100 font-extrabold text-xs text-slate-700">
-                                  {a.assigned_pax} Pax
-                                </span>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                    <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }}>Seated Guests</Text>
+                    
+                    <Box mt="2" mb="5">
+                      {!(selectedTable.assignments?.length) ? (
+                        <Text size="2" color="gray" style={{ fontStyle: "italic", textAlign: "center", display: "block", padding: "16px 0" }}>No guests currently assigned to this table.</Text>
+                      ) : (
+                        <Flex direction="column" gap="2">
+                          {selectedTable.assignments.map((a: any) => {
+                            const inv = a.invitation || {};
+                            const guest = inv.guest || {};
+                            const isCheck = !!inv.checked_in_at;
+                            return (
+                              <Card key={a.id} size="1" variant="surface">
+                                <Flex justify="between" align="center">
+                                  <Box>
+                                    <Flex align="center" gap="2">
+                                      <Text size="2" weight="bold">{guest.name}</Text>
+                                      {isCheck && <Check width={14} height={14} style={{ color: "var(--emerald-11)" }} />}
+                                    </Flex>
+                                    <Text size="1" color="gray">{guest.owner} • {guest.category}</Text>
+                                  </Box>
+                                  <Badge color="gray" variant="surface" size="2">
+                                    {a.assigned_pax} Pax
+                                  </Badge>
+                                </Flex>
+                              </Card>
+                            );
+                          })}
+                        </Flex>
+                      )}
+                    </Box>
 
-                  <div className="pt-4 border-t border-slate-100">
-                    <button
-                      onClick={() => setSelectedTableId(null)}
-                      className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl transition"
-                    >
-                      Close View
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+                    <Flex justify="end">
+                      <Dialog.Close>
+                        <Button variant="solid" color="gray" size="3">Close View</Button>
+                      </Dialog.Close>
+                    </Flex>
+                  </>
+                )}
+              </Dialog.Content>
+            </Dialog.Root>
 
             {/* Guest Details & VIP Pop Up */}
-            {detailsModalInv && (
-              <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-                <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl animate-scaleUp p-6">
-                  <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Guest Details Pop Up</span>
-                      <h3 className="text-xl font-black text-slate-900 mt-0.5">{detailsModalInv.guest?.name}</h3>
-                    </div>
-                    <button onClick={() => setDetailsModalInv(null)} className="p-2 text-slate-400 hover:text-slate-600 rounded-lg">
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
+            <Dialog.Root open={!!detailsModalInv} onOpenChange={(open) => !open && handleOpenDetails(null)}>
+              <Dialog.Content style={{ maxWidth: 450 }}>
+                {detailsModalInv && (
+                  <>
+                    <Flex align="start" justify="between" mb="4">
+                      <Box>
+                        <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }}>Guest Details</Text>
+                        <Dialog.Title mt="1">{detailsModalInv.guest?.name}</Dialog.Title>
+                      </Box>
+                      <Dialog.Close>
+                        <IconButton variant="ghost" color="gray">
+                          <X width={20} height={20} />
+                        </IconButton>
+                      </Dialog.Close>
+                    </Flex>
 
-                  <div className="py-5 space-y-4 text-sm">
-                    <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
-                      <div>
-                        <span className="text-slate-400 font-medium block">Owner</span>
-                        <strong className="text-slate-800 font-bold">{detailsModalInv.guest?.owner}</strong>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 font-medium block">Category</span>
-                        <strong className="text-slate-800 font-bold">{detailsModalInv.guest?.category}</strong>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 font-medium block">Expected Pax</span>
-                        <strong className="text-slate-800 font-bold">{detailsModalInv.max_pax} Pax</strong>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 font-medium block">Table Assigned</span>
-                        <strong className="text-purple-700 font-bold">{detailsModalInv.seating_assignment?.[0]?.seating_table?.table_name || "Unassigned"}</strong>
-                      </div>
-                    </div>
+                    <Grid columns="2" gap="3" p="3" mb="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)", border: "1px solid var(--gray-4)" }}>
+                      <Box>
+                        <Text size="1" color="gray" weight="medium" as="div">Owner</Text>
+                        <Text size="2" weight="bold">{detailsModalInv.guest?.owner}</Text>
+                      </Box>
+                      <Box>
+                        <Text size="1" color="gray" weight="medium" as="div">Category</Text>
+                        <Text size="2" weight="bold">{detailsModalInv.guest?.category}</Text>
+                      </Box>
+                      <Box>
+                        <Text size="1" color="gray" weight="medium" as="div">Expected Pax</Text>
+                        <Text size="2" weight="bold">{detailsModalInv.max_pax} Pax</Text>
+                      </Box>
+                      <Box>
+                        <Text size="1" color="gray" weight="medium" as="div">Table Assigned</Text>
+                        <Text size="2" weight="bold" style={{ color: "var(--purple-11)" }}>
+                          {detailsModalInv.seating_assignment?.[0]?.seating_table?.table_name || "Unassigned"}
+                        </Text>
+                      </Box>
+                    </Grid>
 
                     {/* VIP Checkbox Option */}
-                    <div className="bg-amber-50/80 border border-amber-200 p-3.5 rounded-xl">
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={!!detailsModalInv.guest?.notes?.toLowerCase().includes("vip")}
-                          onChange={() => handleToggleVip(detailsModalInv, detailsModalInv.guest?.notes)}
-                          className="w-5 h-5 rounded border-amber-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
-                        />
-                        <div>
-                          <span className="text-sm font-black text-amber-950 block">★ Mark as VIP Guest</span>
-                          <span className="text-[11px] text-amber-800/80 font-medium leading-tight block">
-                            Adds VIP tag so the guest appears highlighted on usher screens.
-                          </span>
-                        </div>
-                      </label>
-                    </div>
+                    <Box p="3" mb="4" style={{ backgroundColor: "var(--amber-3)", border: "1px solid var(--amber-5)", borderRadius: "var(--radius-3)" }}>
+                      <Text as="label" size="2">
+                        <Flex gap="3" align="center">
+                          <Checkbox 
+                            size="2" 
+                            color="amber"
+                            checked={isVip}
+                            onCheckedChange={(checked) => setIsVip(!!checked)}
+                          />
+                          <Text size="2" weight="bold" style={{ color: "var(--amber-12)" }}>★ Mark as VIP Guest</Text>
+                        </Flex>
+                      </Text>
+                    </Box>
 
                     {/* Notes display */}
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Notes</label>
-                      <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-700 min-h-[50px] text-xs font-medium">
-                        {detailsModalInv.guest?.notes || <span className="text-slate-400 italic">No notes recorded</span>}
-                      </div>
-                    </div>
-                  </div>
+                    <Box mb="5">
+                      <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.02em" }} as="div" mb="2">
+                        Notes
+                      </Text>
+                      <TextArea 
+                        size="2" 
+                        placeholder="Add a note for this guest..."
+                        value={editingNotes}
+                        onChange={(e) => setEditingNotes(e.target.value)}
+                        style={{ minHeight: "80px", backgroundColor: "var(--gray-2)" }}
+                      />
+                    </Box>
 
-                  <div className="pt-4 border-t border-slate-100 flex justify-end">
-                    <button
-                      onClick={() => setDetailsModalInv(null)}
-                      className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl transition"
-                    >
-                      Done
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+                    <Flex justify="end">
+                      <Dialog.Close>
+                        <Button variant="solid" color="gray" size="3">Done</Button>
+                      </Dialog.Close>
+                    </Flex>
+                  </>
+                )}
+              </Dialog.Content>
+            </Dialog.Root>
 
-          </main>
+          </Container>
         </>
       )}
-
-    </div>
+    </Box>
   );
 }

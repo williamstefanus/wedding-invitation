@@ -172,8 +172,8 @@ export function GuestTable({
                     </Table.RowHeaderCell>
                     <Table.Cell>
                       <Flex align="center" gap="2">
-                        <Badge color={guest.owner === "groom" ? "blue" : "pink"} variant="soft">
-                          {guest.owner === "groom" ? groomName : brideName}
+                        <Badge color={guest.owner?.toLowerCase() === "groom" || guest.owner?.toLowerCase() === "william" ? "blue" : "pink"} variant="soft">
+                          {guest.owner?.toLowerCase() === "groom" || guest.owner?.toLowerCase() === "william" ? groomName : brideName}
                         </Badge>
                         <Text size="1" color="gray">{guest.category}</Text>
                       </Flex>

@@ -66,8 +66,7 @@ export function SeatingVisualizer({
         {/* ─── Header ─── */}
         <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "center" }} mb="6" gap="4">
           <Box>
-            <Heading size="7" weight="bold" style={{ letterSpacing: "-0.025em" }}>Seating Assignment</Heading>
-            <Text as="p" size="3" color="gray" mt="1">Design and manage table layouts.</Text>
+            <Heading size="8">Seating Assignment</Heading>
           </Box>
 
           <Flex align="center" gap="3" wrap="wrap">
@@ -87,7 +86,7 @@ export function SeatingVisualizer({
 
             {/* Add Table (grid mode only) */}
             {handleAddTable && viewMode === "grid" && (
-              <Button onClick={handleAddTable} color="crimson" variant="solid" style={{ cursor: "pointer" }}>
+              <Button onClick={handleAddTable} color="crimson" variant="solid" size="3" style={{ fontWeight: 600, cursor: "pointer" }}>
                 <Plus className="w-4 h-4" /> Add Table
               </Button>
             )}
