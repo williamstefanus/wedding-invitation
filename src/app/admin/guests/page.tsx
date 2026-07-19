@@ -21,31 +21,30 @@ export default async function GuestsPage({
   const sort = typeof resolvedParams.sort === "string" ? resolvedParams.sort as "az" | "za" | "default" : "default";
   const limit = 10;
 
-  const { data: guests, total, totalPages } = await getGuests({
-    search,
-    owner,
-    category,
-    tab,
-    sort,
-    page,
-    limit
-  });
-
   const supabase = await createClient();
-  const { data: eventTypes } = await supabase.from("event_types").select("*");
-  
-  const { data: allInvitations } = await supabase
-    .from("invitations")
-    .select(`
+
+  const [
+    guestsRes,
+    eventTypesRes,
+    invitationsRes,
+    settingsRes
+  ] = await Promise.all([
+    getGuests({ search, owner, category, tab, sort, page, limit }),
+    supabase.from("event_types").select("*"),
+    supabase.from("invitations").select(`
       id,
       max_pax,
       is_sent,
       event_type:event_types!inner(slug, name),
       guest:guests!inner(owner, category),
       rsvp:rsvps(attendance_status, confirmed_pax)
-    `);
+    `),
+    getSettings()
+  ]);
 
-  const settingsRes = await getSettings();
+  const { data: guests, total, totalPages } = guestsRes;
+  const { data: eventTypes } = eventTypesRes;
+  const { data: allInvitations } = invitationsRes;
   const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (

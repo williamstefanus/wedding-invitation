@@ -17,25 +17,25 @@ export default async function SeatingPage({
   const guestOwner = typeof resolvedParams.guestOwner === "string" ? resolvedParams.guestOwner : "All";
   const guestCategory = typeof resolvedParams.guestCategory === "string" ? resolvedParams.guestCategory : "All";
 
-  // Fetch tables and assignments
-  const { data: tables } = await getSeatingData(event);
-
-  // Fetch eligible guests
-  const { data: eligibleGuests } = await getEligibleGuests(event, {
-    search: guestSearch,
-    owner: guestOwner,
-    category: guestCategory
-  });
-
   const supabase = await createClient();
-  const { data: eventInvitations } = await supabase
-    .from("invitations")
-    .select(`
+
+  const [
+    tablesRes,
+    eligibleGuestsRes,
+    invitationsRes
+  ] = await Promise.all([
+    getSeatingData(event),
+    getEligibleGuests(event, { search: guestSearch, owner: guestOwner, category: guestCategory }),
+    supabase.from("invitations").select(`
       max_pax,
       event_type:event_types!inner(slug),
       rsvp:rsvps(attendance_status, confirmed_pax)
-    `)
-    .eq("event_type.slug", event);
+    `).eq("event_type.slug", event)
+  ]);
+
+  const { data: tables } = tablesRes;
+  const { data: eligibleGuests } = eligibleGuestsRes;
+  const { data: eventInvitations } = invitationsRes;
 
   const totalAttendingPax = (eventInvitations || []).reduce((sum: number, inv: any) => {
     const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;

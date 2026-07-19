@@ -25,42 +25,32 @@ export default async function RsvpPage({
   // Map tab to eventType filter
   const eventType = tab === "all" ? "All" : tab;
 
-  // Fetch paginated RSVPs
-  const { data: invitations, total, totalPages } = await getAdminRsvps({
-    search,
-    eventType,
-    owner,
-    category,
-    status,
-    sort,
-    page,
-    limit
-  });
-
   const supabase = await createClient();
 
-  // Fetch event types for tabs
-  const { data: eventTypes } = await supabase
-    .from("event_types")
-    .select("id, name, slug");
-
-  // Fetch all event sessions to populate Edit Modal
-  const { data: eventSessions } = await supabase
-    .from("event_sessions")
-    .select("id, name, event_type_id")
-    .order("sort_order");
-
-  const { data: allInvitations } = await supabase
-    .from("invitations")
-    .select(`
+  const [
+    rsvpsRes,
+    eventTypesRes,
+    eventSessionsRes,
+    allInvitationsRes,
+    settingsRes
+  ] = await Promise.all([
+    getAdminRsvps({ search, eventType, owner, category, status, sort, page, limit }),
+    supabase.from("event_types").select("id, name, slug"),
+    supabase.from("event_sessions").select("id, name, event_type_id").order("sort_order"),
+    supabase.from("invitations").select(`
       id,
       max_pax,
       event_type:event_types!inner(slug, name),
       guest:guests!inner(owner),
       rsvp:rsvps(attendance_status, confirmed_pax)
-    `);
+    `),
+    getSettings()
+  ]);
 
-  const settingsRes = await getSettings();
+  const { data: invitations, total, totalPages } = rsvpsRes;
+  const { data: eventTypes } = eventTypesRes;
+  const { data: eventSessions } = eventSessionsRes;
+  const { data: allInvitations } = allInvitationsRes;
   const config = settingsRes.success ? settingsRes.data?.config : {};
 
   return (
