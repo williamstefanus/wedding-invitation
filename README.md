@@ -127,4 +127,3 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 The following features are slated for future development:
 - **Add full RSVP history/audit log**: Track exactly when and how guests modified their RSVPs.
-- **Add final Sangjit visual design**: Update the Sangjit public invitation page once final assets and design files are provided.
