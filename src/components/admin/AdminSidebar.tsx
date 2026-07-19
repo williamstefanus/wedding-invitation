@@ -134,14 +134,10 @@ export function AdminSidebar() {
       {/* Mobile Topbar */}
       <Flex display={{ initial: "flex", md: "none" }} align="center" justify="between" px="4" py="3" style={{ borderBottom: "1px solid var(--gray-6)" }}>
         <Box>
-          <img 
-            src="/images/logo_horizontal.png" 
-            alt="Knotice" 
+          <KnoticeLogo 
             style={{ 
-              height: "50px", 
-              width: "144px", 
-              objectFit: "cover", 
-              objectPosition: "left center",
+              height: "40px", 
+              width: "115px",
             }} 
           />
         </Box>
