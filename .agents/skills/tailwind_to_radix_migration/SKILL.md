@@ -35,3 +35,10 @@ When inline styling is unavoidable via the `style` prop, leverage Radix UI's inj
 - **Example**: `backgroundColor: "var(--crimson-3)"`
 - **Example**: `color: "var(--gray-11)"`
 - **Example**: `borderTop: "1px solid var(--gray-4)"`
+
+## 6. Dark Mode and Theme Cleanup
+When setting up dark mode with Radix UI, be vigilant about lingering Tailwind classes and global CSS overrides:
+- **Use `next-themes`**: Wrap the Radix `<Theme>` in `next-themes` `<ThemeProvider>` and bind `appearance={resolvedTheme}`.
+- **Clean up hardcoded backgrounds**: Ensure layout files and page wrappers do not contain `bg-white`, `bg-slate-50`, or hardcoded style props like `backgroundColor: "white"`. Rely entirely on Radix UI's `hasBackground={true}` on the `<Theme>` tag to set the root background, or use `var(--color-surface)` / `var(--color-panel-solid)`.
+- **Avoid Global CSS overriding `color-scheme`**: Never hardcode `color-scheme: light;` in global `.radix-themes` classes.
+- **Avoid Hardcoding Theme Palettes**: Do not override Radix native scale variables (like `--crimson-1: #ffffff;`) in global CSS unless you are providing matching variables for dark mode (`.dark` or `.dark-theme`). Using Radix's native palettes ensures automatic light/dark switching out of the box.
