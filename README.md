@@ -15,11 +15,11 @@ This is a comprehensive wedding invitation platform featuring dynamic public inv
 
 ## Architecture & Project Structure
 
-- **Modular UI Pattern**: The Admin dashboard UI uses a stateful orchestrator pattern (e.g. `GuestClient.tsx`) that acts as a container for smaller pure UI components located in `src/components/admin/[module]/`.
+- **Modular UI Pattern**: The Admin dashboard UI uses a stateful orchestrator pattern (e.g. `GuestClient.tsx`) acting as a container for smaller pure UI components built using **Radix UI Themes**, located in `src/components/admin/[module]/`.
 - **Dedicated Usher Application**: The `/usher` portal operates independently with dedicated server actions (`src/lib/actions/usher.ts`) and touch-optimized components (`UsherClient.tsx`, `UsherGuestCard.tsx`).
-- **Centralized Constants**: All application constants and asset mapping references are grouped neatly inside `src/lib/constants/` (`index.ts`, `sangjitInvitationAssets.ts`, `sangjitScreenReferences.ts`).
+- **Centralized Constants**: All application constants and asset mapping references are grouped neatly inside `src/lib/constants/`.
 - **Utility Scripts**: Standalone maintenance and data inspection scripts live in `scripts/` (e.g. `testCheck.mjs`).
-- **Next.js 16 Proxy Layer**: Request interceptors are handled via Next.js 16 Proxy conventions (`src/proxy.ts` re-exporting from `src/lib/supabase/proxy.ts`), enforcing HTTP Basic Auth on `/admin` routes while refreshing Supabase session cookies.
+- **Authentication**: Admin route protection is handled via Next.js Proxy (`src/lib/supabase/proxy.ts`), which validates JWT cookies (`admin_auth_token`). Admin credentials and roles are configured via the database in the `settings` table (under `wedding_config` -> `adminUsers`).
 - **Data Model Invariants**:
   - A **Guest** is the master record.
   - A guest **must** have at least one invitation (wedding, sangjit, or both). Standalone guests are strictly prohibited.
@@ -44,8 +44,7 @@ Create a `.env.local` file in the root directory and add the following keys:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key # For admin actions bypassing RLS
-ADMIN_USERNAME=admin # HTTP Basic Auth username for /admin routes
-ADMIN_PASSWORD=your_secure_password # HTTP Basic Auth password for /admin routes
+JWT_SECRET=your_secure_random_string # Used for signing admin JWT cookies
 ```
 
 ### 3. Supabase Setup & Database Initialization
@@ -114,20 +113,18 @@ The application will be available at [http://localhost:3000](http://localhost:30
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY`
-   - `ADMIN_USERNAME`
-   - `ADMIN_PASSWORD`
+   - `JWT_SECRET`
 4. Click **Deploy**. Vercel will automatically run `npm run build` and launch the application.
 
 ---
 
 ## Known Limitations and MVP Scope
 
-- **Basic Auth Guard**: The admin dashboard (`/admin`) currently relies on HTTP Basic Auth enforced via Next.js Proxy (`src/proxy.ts`). For multi-user role-based access, full integration with Supabase Auth session cookies can be adapted inside `src/lib/supabase/proxy.ts`.
+- **Basic JWT Auth**: The admin dashboard (`/admin`) currently relies on JWT cookies evaluated in the Next.js Middleware proxy (`src/lib/supabase/proxy.ts`). Admin users are stored in the `settings` JSON blob rather than a dedicated RBAC relational table to minimize setup friction for short-lived events.
 - **Local Media Storage constraints**: The gallery image uploader requires a pre-existing `gallery` public bucket.
 
 ## Future Scope
 
 The following features are slated for future development:
-- **Add authentication**: Secure the admin dashboard with Supabase Auth.
 - **Add full RSVP history/audit log**: Track exactly when and how guests modified their RSVPs.
 - **Add final Sangjit visual design**: Update the Sangjit public invitation page once final assets and design files are provided.
