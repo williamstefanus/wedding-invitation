@@ -31,7 +31,7 @@ export function GeneralSettingsForm({
         <Text as="p" size="2" color="gray" mb="4">
           Upload a PNG, SVG, or ICO file. This icon will be displayed in the browser tab when guests visit your invitation.
         </Text>
-        <Flex align="center" gap="5">
+        <Flex direction={{ initial: "column", sm: "row" }} align={{ initial: "start", sm: "center" }} gap="5">
           <Box style={{ width: 64, height: 64, borderRadius: "var(--radius-3)", border: "2px dashed var(--gray-5)", display: "flex", alignItems: "center", justifyItems: "center", backgroundColor: "var(--gray-2)", overflow: "hidden", flexShrink: 0 }}>
             {config.faviconUrl ? (
               <img src={config.faviconUrl} alt="Favicon preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
@@ -40,7 +40,7 @@ export function GeneralSettingsForm({
             )}
           </Box>
           <Flex direction="column" gap="2">
-            <Flex align="center" gap="2">
+            <Flex align="center" wrap="wrap" gap="2">
               <Button asChild color="green" disabled={uploadingFavicon} style={{ cursor: "pointer" }}>
                 <label>
                   {uploadingFavicon ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}

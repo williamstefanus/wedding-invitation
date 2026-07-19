@@ -26,7 +26,10 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
     { key: "groom", displayName: groomName },
     { key: "bride", displayName: brideName }
   ].map(({ key, displayName }) => {
-    const ownerInvs = invitations.filter(inv => inv.guest?.owner === key);
+    const ownerInvs = invitations.filter(inv => {
+      const owner = inv.guest?.owner?.toLowerCase() || "";
+      return owner === key || owner === displayName.toLowerCase();
+    });
     const invitedPax = ownerInvs.reduce((s, inv) => s + (inv.max_pax || 0), 0);
     const attendingPax = ownerInvs.reduce((s, inv) => {
       if (getAttendanceStatus(inv) === "attending") return s + getConfirmedPax(inv);
