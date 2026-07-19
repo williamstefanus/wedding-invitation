@@ -29,9 +29,12 @@ export function SeatingSidebar({
 }: SeatingSidebarProps) {
   return (
     <div 
-      className={`fixed top-0 md:top-[64px] right-0 h-full md:h-[calc(100vh-64px)] w-full sm:w-96 bg-white border-l border-slate-200 shadow-2xl transition-transform duration-300 ease-in-out z-50 xl:z-20 flex flex-col
-      ${selectedTableId ? 'translate-x-0' : 'translate-x-full'}`}
-    >
+      className={`fixed top-0 md:top-[64px] right-0 h-full md:h-[calc(100vh-64px)] w-full sm:w-96 shadow-2xl transition-transform duration-300 ease-in-out z-50 xl:z-20 flex flex-col`}
+      style={{
+        transform: selectedTableId ? "translateX(0)" : "translateX(100%)",
+        backgroundColor: "var(--color-panel-solid)",
+        borderLeft: "1px solid var(--gray-5)"
+      }}>
       {selectedTable && (
         <Flex direction="column" height="100%">
           {/* Sidebar Header */}

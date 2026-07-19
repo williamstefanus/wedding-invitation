@@ -1,11 +1,15 @@
+import { Card, Text, Flex, Heading } from "@radix-ui/themes";
+
 export function MetricCard({ title, value, subtitle }: { title: string; value: string | number; subtitle?: string }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex flex-col">
-      <h3 className="text-slate-500 text-sm font-medium tracking-wide mb-2 uppercase">{title}</h3>
-      <div className="flex items-baseline gap-2">
-        <span className="text-4xl font-bold text-slate-800">{value}</span>
-        {subtitle && <span className="text-slate-400 text-sm font-medium">{subtitle}</span>}
-      </div>
-    </div>
+    <Card size="3" variant="surface">
+      <Text as="div" size="2" weight="medium" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>
+        {title}
+      </Text>
+      <Flex align="baseline" gap="2">
+        <Heading size="8" weight="bold">{value}</Heading>
+        {subtitle && <Text size="2" weight="medium" color="gray">{subtitle}</Text>}
+      </Flex>
+    </Card>
   );
 }

@@ -17,11 +17,7 @@
 }
 
 .radix-themes {
-  color-scheme: light;
-
-  --color-background: #ffffff;
-  --color-panel-solid: #ffffff;
-  --color-surface: #ffffff;
+  /* No hardcoded color-scheme or background overrides */
 
   --default-font-family:
     Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
@@ -29,38 +25,7 @@
   --heading-font-family: var(--default-font-family);
   --strong-font-family: var(--default-font-family);
 
-  /* Knotice brand mapped to Radix crimson.
-     Keep native Radix red free for destructive/error states. */
-  --crimson-1: #fcf5f4;
-  --crimson-2: #faebe9;
-  --crimson-3: #f5d8d6;
-  --crimson-4: #f1c8c5;
-  --crimson-5: #edb7b4;
-  --crimson-6: #e7a09d;
-  --crimson-7: #e28c8a;
-  --crimson-8: #d97272;
-  --crimson-9: #d36060;
-  --crimson-10: #bd4147;
-  --crimson-11: #9f3139;
-  --crimson-12: #3f1217;
-
-  --crimson-a1: color-mix(in srgb, #d36060 4%, transparent);
-  --crimson-a2: color-mix(in srgb, #d36060 8%, transparent);
-  --crimson-a3: color-mix(in srgb, #d36060 13%, transparent);
-  --crimson-a4: color-mix(in srgb, #d36060 18%, transparent);
-  --crimson-a5: color-mix(in srgb, #d36060 25%, transparent);
-  --crimson-a6: color-mix(in srgb, #d36060 33%, transparent);
-  --crimson-a7: color-mix(in srgb, #d36060 43%, transparent);
-  --crimson-a8: color-mix(in srgb, #d36060 56%, transparent);
-  --crimson-a9: #d36060;
-  --crimson-a10: #bd4147;
-  --crimson-a11: #9f3139;
-  --crimson-a12: #3f1217;
-
-  --crimson-surface: color-mix(in srgb, #d36060 10%, white);
-  --crimson-indicator: #d36060;
-  --crimson-track: #d36060;
-  --crimson-contrast: #ffffff;
+  /* Use native Radix crimson for light/dark support */
 }
 
 /* Optional app-shell helpers. Radix components should remain the main UI layer. */
@@ -73,7 +38,7 @@
 }
 
 .knotice-topbar {
-  background: color-mix(in srgb, white 94%, transparent);
+  background: color-mix(in srgb, var(--color-panel-solid) 94%, transparent);
   border-bottom: 1px solid var(--gray-6);
   backdrop-filter: blur(14px);
 }

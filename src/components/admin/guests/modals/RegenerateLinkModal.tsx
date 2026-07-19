@@ -17,7 +17,7 @@ export function RegenerateLinkModal({
 
   return (
     <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl animate-fade-up p-6 text-center">
+      <div className="rounded-2xl w-full max-w-sm overflow-hidden shadow-xl animate-fade-up p-6 text-center" style={{ backgroundColor: "var(--color-panel-solid)" }}>
         <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
           <RefreshCw className="w-6 h-6 text-amber-600" />
         </div>

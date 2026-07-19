@@ -21,7 +21,7 @@ export function EditPaxModal({
 
   return (
     <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl animate-fade-up">
+      <div className="rounded-2xl w-full max-w-sm overflow-hidden shadow-xl animate-fade-up" style={{ backgroundColor: "var(--color-panel-solid)" }}>
         <div className="flex justify-between items-center p-6 border-b border-slate-100">
           <h2 className="text-xl font-bold text-slate-800">Edit Max Pax</h2>
           <button onClick={() => setIsEditPaxOpen(false)} className="text-slate-400 hover:text-slate-600 transition">
