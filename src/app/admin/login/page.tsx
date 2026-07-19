@@ -61,16 +61,14 @@ export default function AdminLoginPage() {
         <form onSubmit={handleSubmit}>
           <Flex direction="column" align="center" gap="5">
             <img 
-              src="/images/logo_horizontal.png" 
+              src="/assets/logo_horizontal.png" 
               alt="Knotice" 
               style={{ 
                 width: "180px",
                 height: "auto",
                 objectFit: "contain",
                 marginTop: "-20px",
-                marginBottom: "-25px",
-                filter: isDark ? "invert(1) brightness(100)" : "none",
-                transition: "filter 0.2s ease"
+                marginBottom: "-25px"
               }} 
             />
             <Box style={{ textAlign: "center" }}>

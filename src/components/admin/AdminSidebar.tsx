@@ -48,16 +48,14 @@ export function AdminSidebar() {
       {/* Logo */}
       <Flex px="4" pt={isMobileOverlay ? "5" : "5"} pb={isMobileOverlay ? "1" : "3"} align="center" justify="between">
         <img 
-          src="/images/logo_horizontal.png" 
+          src="/assets/logo_horizontal.png" 
           alt="Knotice" 
           style={{ 
             height: isMobileOverlay ? "45px" : "70px", 
             width: isMobileOverlay ? "130px" : "200px", 
             objectFit: "cover", 
             objectPosition: "left center",
-            marginLeft: "4px",
-            filter: isDark ? "invert(1) brightness(100)" : "none",
-            transition: "filter 0.2s ease"
+            marginLeft: "4px"
           }} 
         />
         {isMobileOverlay && (
