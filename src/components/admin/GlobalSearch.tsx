@@ -17,6 +17,8 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
+import { TextField, Card, Flex, Text, IconButton, Box, Badge, Spinner } from "@radix-ui/themes";
+
 export function GlobalSearch() {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -69,87 +71,112 @@ export function GlobalSearch() {
   };
 
   return (
-    <div className="relative w-full max-w-md" ref={searchRef}>
+    <Box position="relative" width="100%" maxWidth="400px" ref={searchRef}>
       
       {/* Search Bar */}
-      <div className="relative flex items-center">
-        <Search className="absolute left-3 w-4 h-4 text-slate-400" />
-        <input 
-          type="text"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setIsOpen(true);
-          }}
-          onFocus={() => setIsOpen(true)}
-          placeholder="Search by Name, Phone, or Code..."
-          className="w-full pl-9 pr-10 py-2 bg-slate-100 border-none rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all placeholder:text-slate-400"
-        />
+      <TextField.Root 
+        size="3" 
+        placeholder="Search by Name, Phone, or Code..."
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setIsOpen(true);
+        }}
+        onFocus={() => setIsOpen(true)}
+      >
+        <TextField.Slot>
+          <Search width={16} height={16} />
+        </TextField.Slot>
         {query && (
-          <button 
-            onClick={() => { setQuery(""); setResults([]); }}
-            className="absolute right-3 p-0.5 bg-slate-200 hover:bg-slate-300 text-slate-500 rounded-full transition"
-          >
-            <X className="w-3 h-3" />
-          </button>
+          <TextField.Slot>
+            <IconButton size="1" variant="ghost" radius="full" onClick={() => { setQuery(""); setResults([]); }}>
+              <X width={14} height={14} />
+            </IconButton>
+          </TextField.Slot>
         )}
-      </div>
+      </TextField.Root>
 
       {/* Results Dropdown */}
       {isOpen && query.trim() && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-[100] max-h-96 flex flex-col animate-fade-down">
+        <Card 
+          size="2"
+          variant="classic"
+          style={{ 
+            position: "absolute", 
+            top: "calc(100% + 8px)", 
+            left: 0, 
+            right: 0, 
+            zIndex: 100, 
+            maxHeight: "400px", 
+            overflowY: "auto",
+            boxShadow: "var(--shadow-5)"
+          }}
+        >
           {isSearching ? (
-            <div className="flex flex-col items-center justify-center p-8 text-slate-500">
-              <Loader2 className="w-6 h-6 animate-spin mb-2 text-amber-500" />
-              <p className="text-sm">Searching...</p>
-            </div>
+            <Flex direction="column" align="center" justify="center" py="6" gap="2">
+              <Spinner size="3" />
+              <Text size="2" color="gray">Searching...</Text>
+            </Flex>
           ) : results.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">
-              <p className="text-sm">No results found for "{query}".</p>
-            </div>
+            <Flex direction="column" align="center" justify="center" py="6">
+              <Text size="2" color="gray">No results found for "{query}".</Text>
+            </Flex>
           ) : (
-            <div className="overflow-y-auto p-2 flex flex-col gap-1">
+            <Flex direction="column" gap="2">
               {results.map((res, idx) => (
-                <div 
+                <Flex 
                   key={`${res.guest_id}-${res.event_slug}-${idx}`}
                   onClick={() => handleResultClick(res.guest_id)}
-                  className="flex items-start gap-3 p-3 hover:bg-slate-50 rounded-xl cursor-pointer transition border border-transparent hover:border-slate-100 group"
+                  direction="column"
+                  p="3"
+                  gap="2"
+                  style={{ 
+                    cursor: "pointer", 
+                    borderRadius: "var(--radius-3)",
+                    backgroundColor: "var(--color-surface)",
+                    transition: "background-color 0.15s ease"
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--gray-3)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--color-surface)")}
                 >
-                  {/* Event Badge */}
-                  <div className={`mt-0.5 shrink-0 px-2 py-1 text-[10px] font-bold rounded ${res.event_slug === 'wedding' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
-                    {res.event_name.toUpperCase()}
-                  </div>
+                  <Flex justify="between" align="center">
+                    <Flex align="center" gap="2">
+                      <Badge size="1" color={res.event_slug === 'wedding' ? 'ruby' : 'pink'} variant="soft">
+                        {res.event_name.toUpperCase()}
+                      </Badge>
+                      <Text size="3" weight="bold">{res.name}</Text>
+                    </Flex>
+                    <Badge size="1" color="gray" variant="surface" style={{ fontFamily: "monospace" }}>
+                      {res.invitation_code}
+                    </Badge>
+                  </Flex>
                   
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-center mb-1">
-                      <p className="font-bold text-slate-800 text-sm truncate group-hover:text-amber-600 transition">
-                        {res.name}
-                      </p>
-                      <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
-                        {res.invitation_code}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 text-xs text-slate-500">
-                      <span className="flex items-center gap-1">
-                        <User className="w-3 h-3" /> {res.status === 'attending' ? res.confirmed_pax : res.max_pax} pax
-                      </span>
-                      <span className={`font-medium ${res.status === 'attending' ? 'text-green-600' : res.status === 'not_attending' ? 'text-rose-500' : 'text-slate-400'}`}>
-                        {res.status === 'attending' ? 'Attending' : res.status === 'not_attending' ? 'Declined' : 'Pending'}
-                      </span>
-                      {res.table && (
-                        <span className="font-medium text-blue-600 bg-blue-50 px-1.5 rounded">
-                          {res.table}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                  <Flex align="center" gap="4">
+                    <Flex align="center" gap="1">
+                      <User width={12} height={12} style={{ color: "var(--gray-9)" }} />
+                      <Text size="2" color="gray">
+                        {res.status === 'attending' ? res.confirmed_pax : res.max_pax} pax
+                      </Text>
+                    </Flex>
+                    <Text 
+                      size="2" 
+                      weight="medium" 
+                      color={res.status === 'attending' ? 'green' : res.status === 'not_attending' ? 'ruby' : 'gray'}
+                    >
+                      {res.status === 'attending' ? 'Attending' : res.status === 'not_attending' ? 'Declined' : 'Pending'}
+                    </Text>
+                    {res.table && (
+                      <Badge size="1" color="blue" variant="soft">
+                        {res.table}
+                      </Badge>
+                    )}
+                  </Flex>
+                </Flex>
               ))}
-            </div>
+            </Flex>
           )}
-        </div>
+        </Card>
       )}
-    </div>
+    </Box>
   );
 }
