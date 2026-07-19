@@ -1,19 +1,21 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getSettings } from "@/lib/actions/settings";
 import { DashboardClient } from "./DashboardClient";
+import { Box, Flex, Spinner, Text } from "@radix-ui/themes";
 
 export const revalidate = 0;
 
-export default async function AdminPage() {
+async function DashboardFetcher() {
   const supabase = await createClient();
 
-  const settingsRes = await getSettings();
-  const config = settingsRes.success ? settingsRes.data?.config : {};
-
-  // Fetch invitations with guest owner, confirmed pax, and selected sessions for breakdown
-  const { data: invitations } = await supabase
-    .from("invitations")
-    .select(`
+  const [
+    settingsRes,
+    invitationsRes,
+    guestsCountRes
+  ] = await Promise.all([
+    getSettings(),
+    supabase.from("invitations").select(`
       id,
       max_pax,
       invitation_code,
@@ -26,20 +28,38 @@ export default async function AdminPage() {
           event_session:event_sessions(name, slug)
         )
       )
-    `);
+    `),
+    supabase.from("guests").select("*", { count: "exact", head: true })
+  ]);
 
-  // Fetch raw guests count
-  const { count: totalGuestsCount } = await supabase
-    .from("guests")
-    .select("*", { count: "exact", head: true });
+  const config = settingsRes.success ? settingsRes.data?.config : {};
+  const { data: invitations } = invitationsRes;
+  const { count: totalGuestsCount } = guestsCountRes;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
-      <DashboardClient 
-        invitations={invitations || []} 
-        totalGuestsCount={totalGuestsCount || 0} 
-        config={config || {}}
-      />
-    </div>
+    <DashboardClient 
+      invitations={invitations || []} 
+      totalGuestsCount={totalGuestsCount || 0} 
+      config={config || {}}
+    />
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <Flex align="center" justify="center" style={{ height: '50vh' }} direction="column" gap="4">
+      <Spinner size="3" />
+      <Text color="gray">Loading overview data...</Text>
+    </Flex>
+  );
+}
+
+export default async function AdminPage() {
+  return (
+    <Box className="min-h-screen pb-20">
+      <Suspense fallback={<LoadingSkeleton />}>
+        <DashboardFetcher />
+      </Suspense>
+    </Box>
   );
 }

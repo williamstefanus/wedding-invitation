@@ -93,7 +93,7 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${cormorant.variable} ${alegreya.variable} ${justWrite.variable} ${egizio.variable} ${montserrat.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-white text-slate-900 antialiased">
+      <body className="min-h-full antialiased">
         <KnoticeTheme>
           {children}
         </KnoticeTheme>

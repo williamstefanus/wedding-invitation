@@ -74,7 +74,7 @@ export default async function SeatingPage({
   const resolvedParams = await searchParams;
   
   return (
-    <Box className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <Box className="min-h-screen pb-20">
       <Suspense fallback={<LoadingSkeleton />}>
         <SeatingFetcher resolvedParams={resolvedParams} />
       </Suspense>

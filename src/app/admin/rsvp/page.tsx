@@ -85,7 +85,7 @@ export default async function RsvpPage({
   const resolvedParams = await searchParams;
   
   return (
-    <Box style={{ minHeight: "100vh", backgroundColor: "var(--gray-1)", paddingBottom: "80px" }}>
+    <Box className="min-h-screen pb-20">
       <Suspense fallback={<LoadingSkeleton />}>
         <RsvpFetcher resolvedParams={resolvedParams} />
       </Suspense>

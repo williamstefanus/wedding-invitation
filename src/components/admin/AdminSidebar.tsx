@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Box, Flex, Text, Button, IconButton, Card, Heading } from "@radix-ui/themes";
 import { GlobalSearch } from "./GlobalSearch";
+import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_ITEMS = [
   { label: "Overview",        href: "/admin",             icon: Home },
@@ -37,7 +38,7 @@ export function AdminSidebar() {
   }, [pathname]);
 
   const SidebarContent = ({ isMobileOverlay }: { isMobileOverlay?: boolean } = {}) => (
-    <Flex direction="column" className="knotice-sidebar" style={{ height: "100%", width: "100%", backgroundColor: "white" }}>
+    <Flex direction="column" className="knotice-sidebar" style={{ height: "100%", width: "100%", backgroundColor: "var(--color-panel-solid)" }}>
       {/* Logo */}
       <Flex px="4" pt={isMobileOverlay ? "5" : "5"} pb={isMobileOverlay ? "1" : "3"} align="center" justify="between">
         <img 
@@ -98,11 +99,31 @@ export function AdminSidebar() {
 
       </Box>
 
-      {/* Footer */}
-      <Box px="4" py="4" style={{ borderTop: "1px solid var(--gray-6)" }}>
-        <Text size="1" color="gray">
-          © 2026 - Knotice by William & Aziel
-        </Text>
+      {/* User / Settings Footer */}
+      <Box p="4" style={{ borderTop: "1px solid var(--gray-5)" }}>
+        <Flex align="center" gap="3">
+          <Box
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              backgroundColor: "var(--crimson-4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--crimson-11)",
+              fontWeight: "bold",
+              fontSize: "14px"
+            }}
+          >
+            A
+          </Box>
+          <Box style={{ flex: 1 }}>
+            <Text size="2" weight="bold" style={{ display: "block", color: "var(--gray-12)" }}>Admin</Text>
+            <Text size="1" color="gray">System Manager</Text>
+          </Box>
+          <ThemeToggle />
+        </Flex>
       </Box>
     </Flex>
   );
@@ -110,7 +131,7 @@ export function AdminSidebar() {
   return (
     <>
       {/* Mobile Topbar */}
-      <Flex display={{ initial: "flex", md: "none" }} align="center" justify="between" px="4" py="3" style={{ borderBottom: "1px solid var(--gray-6)", backgroundColor: "white" }}>
+      <Flex display={{ initial: "flex", md: "none" }} align="center" justify="between" px="4" py="3" style={{ borderBottom: "1px solid var(--gray-6)" }}>
         <Box>
           <img 
             src="/images/logo_horizontal.png" 

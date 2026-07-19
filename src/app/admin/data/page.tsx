@@ -8,7 +8,7 @@ export default async function DataPage() {
   const { data: identifiers } = await fetchExistingIdentifiers();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <div className="min-h-screen pb-20">
       <DataClient existingIdentifiers={identifiers || []} />
     </div>
   );
