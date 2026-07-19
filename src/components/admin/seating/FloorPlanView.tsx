@@ -56,7 +56,7 @@ const SLOTS: { id: number; cx: number; cy: number }[] = [
 
 const LEGEND_ITEMS = [
   { fill: "var(--gray-2)", stroke: "var(--gray-8)", dash: true,  label: "Empty Slot (Click to assign)" },
-  { fill: "white",   stroke: "var(--gray-6)", dash: false, label: "Assigned (Empty seats)"       },
+  { fill: "var(--color-panel-solid)", stroke: "var(--gray-6)", dash: false, label: "Assigned (Empty seats)"       },
   { fill: "var(--yellow-3)", stroke: "var(--yellow-9)", dash: false, label: "Partially filled"             },
   { fill: "var(--green-3)", stroke: "var(--green-9)", dash: false, label: "Full"                         },
   { fill: "var(--red-3)", stroke: "var(--red-9)", dash: false, label: "Over capacity"                },
@@ -175,7 +175,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
           {/* ── Room Perimeter Polygon matching User Red Line Outline ── */}
           <polygon
             points="35,20 485,20 485,415 245,415 245,430 195,430 195,430 35,430"
-            fill="white"
+            fill="var(--color-panel-solid)"
             stroke="var(--gray-8)"
             strokeWidth="3"
             strokeLinejoin="round"
@@ -215,7 +215,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
               if (isOver)             { fill = "var(--red-3)"; stroke = "var(--red-9)"; sw = 2.2; }
               else if (isFull)        { fill = "var(--green-3)"; stroke = "var(--green-9)"; sw = 2.2; }
               else if (occupancy > 0) { fill = "var(--yellow-3)"; stroke = "var(--yellow-9)"; sw = 2.2; }
-              else                    { fill = "white";   stroke = "var(--gray-8)"; sw = 1.8; }
+              else                    { fill = "var(--color-panel-solid)"; stroke = "var(--gray-8)"; sw = 1.8; }
             }
             if (isSelected) { stroke = "var(--crimson-9)"; sw = 3.5; }
 
@@ -299,7 +299,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
 
             return (
               <g pointerEvents="none" filter="url(#fp-shadow)">
-                <rect x={tx} y={ty} width={160} height={tipH} rx={6} fill="white" stroke="var(--gray-7)" strokeWidth={1.5} />
+                <rect x={tx} y={ty} width={160} height={tipH} rx={6} fill="var(--color-panel-solid)" stroke="var(--gray-7)" strokeWidth={1.5} />
                 <text x={tx + 12} y={ty + 18} fontSize="10" fontWeight="800" fill="var(--gray-12)">Table #{table.sort_order || 1}: {table.table_name} (Slot #{hoveredSlot.id})</text>
                 <text x={tx + 12} y={ty + 32} fontSize={8} fontWeight="600" fill="var(--gray-10)">{occ} / {table.capacity} pax assigned</text>
                 <line x1={tx + 12} y1={ty + 38} x2={tx + 148} y2={ty + 38} stroke="var(--gray-4)" strokeWidth={1} />
@@ -374,7 +374,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                       style={{ 
                         width: "100%", padding: "12px", borderRadius: "var(--radius-3)", 
                         border: isCurrentSlot ? "1px solid var(--amber-7)" : "1px solid var(--gray-5)", 
-                        backgroundColor: isCurrentSlot ? "var(--amber-3)" : "white",
+                        backgroundColor: isCurrentSlot ? "var(--amber-3)" : "var(--color-panel-solid)",
                         cursor: isCurrentSlot || isUpdating ? "default" : "pointer",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                         textAlign: "left"

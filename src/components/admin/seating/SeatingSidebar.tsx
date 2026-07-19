@@ -86,7 +86,7 @@ export function SeatingSidebar({
             ) : (
               <Flex direction="column" gap="3">
                 {selectedTable.assignments.map((assignment: any) => (
-                  <Box key={assignment.id} p="3" style={{ backgroundColor: "white", border: "1px solid var(--gray-5)", borderRadius: "var(--radius-3)", boxShadow: "var(--shadow-1)" }} className="group hover:border-amber-200 transition">
+                  <Box key={assignment.id} p="3" style={{ backgroundColor: "var(--color-panel-solid)", border: "1px solid var(--gray-5)", borderRadius: "var(--radius-3)", boxShadow: "var(--shadow-1)" }} className="group hover:border-amber-200 transition">
                     <Flex justify="between" align="start">
                       <Box>
                         <Text as="div" weight="bold" size="2" style={{ lineHeight: 1.2 }}>{assignment.invitation.guest.name}</Text>
@@ -108,7 +108,7 @@ export function SeatingSidebar({
           </ScrollArea>
 
           {/* Sidebar Footer */}
-          <Box p="5" style={{ borderTop: "1px solid var(--gray-5)", backgroundColor: "white" }}>
+          <Box p="5" style={{ borderTop: "1px solid var(--gray-5)", backgroundColor: "var(--color-panel-solid)" }}>
             <Flex direction="column" gap="3">
               <Button size="3" variant="solid" color="gray" highContrast onClick={() => setIsSearchModalOpen(true)} style={{ width: "100%", cursor: "pointer" }}>
                 <Plus className="w-4 h-4" /> Add Guest to Table
