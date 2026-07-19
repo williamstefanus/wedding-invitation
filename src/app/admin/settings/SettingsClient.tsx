@@ -293,7 +293,6 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
         .upload(filePath, file, {
           cacheControl: '31536000',
           contentType: file.type || 'image/png',
-          upsert: true,
         });
 
       if (uploadError) throw uploadError;
