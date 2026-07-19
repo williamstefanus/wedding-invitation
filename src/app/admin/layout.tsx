@@ -6,6 +6,9 @@ export const metadata: Metadata = {
     default: "Admin Dashboard",
     template: "%s | Admin — Wedding Platform",
   },
+  icons: {
+    icon: "/assets/logo_icononly.png",
+  },
   robots: { index: false, follow: false },
 };
 
