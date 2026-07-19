@@ -17,6 +17,7 @@ import {
 import { Box, Flex, Text, Button, IconButton, Card, Heading } from "@radix-ui/themes";
 import { GlobalSearch } from "./GlobalSearch";
 import { useTheme } from "next-themes";
+import { KnoticeLogo } from "./KnoticeLogo";
 import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_ITEMS = [
@@ -41,20 +42,14 @@ export function AdminSidebar() {
     setMounted(true);
   }, [pathname]);
 
-  const isDark = mounted && resolvedTheme === "dark";
-
   const SidebarContent = ({ isMobileOverlay }: { isMobileOverlay?: boolean } = {}) => (
     <Flex direction="column" className="knotice-sidebar" style={{ height: "100%", width: "100%", backgroundColor: "var(--color-panel-solid)" }}>
       {/* Logo */}
       <Flex px="4" pt={isMobileOverlay ? "5" : "5"} pb={isMobileOverlay ? "1" : "3"} align="center" justify="between">
-        <img 
-          src="/assets/logo_horizontal.png" 
-          alt="Knotice" 
+        <KnoticeLogo 
           style={{ 
             height: isMobileOverlay ? "45px" : "70px", 
-            width: isMobileOverlay ? "130px" : "200px", 
-            objectFit: "cover", 
-            objectPosition: "left center",
+            width: isMobileOverlay ? "130px" : "200px",
             marginLeft: "4px"
           }} 
         />

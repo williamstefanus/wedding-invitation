@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { verifyAdminLogin } from "@/lib/actions/auth";
 import { Lock, Loader2, Eye, EyeOff } from "lucide-react";
 import { Box, Flex, Heading, Button, Card, TextField, Text, IconButton } from "@radix-ui/themes";
+import { KnoticeLogo } from "@/components/admin/KnoticeLogo";
 
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
@@ -60,13 +61,10 @@ export default function AdminLoginPage() {
       <Card size="4" style={{ width: "100%", maxWidth: "400px" }}>
         <form onSubmit={handleSubmit}>
           <Flex direction="column" align="center" gap="5">
-            <img 
-              src="/assets/logo_horizontal.png" 
-              alt="Knotice" 
+            <KnoticeLogo 
               style={{ 
                 width: "180px",
                 height: "auto",
-                objectFit: "contain",
                 marginTop: "-20px",
                 marginBottom: "-25px"
               }} 
