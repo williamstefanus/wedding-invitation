@@ -19,7 +19,7 @@ This is a comprehensive wedding invitation platform featuring dynamic public inv
 - **Dedicated Usher Application**: The `/usher` portal operates independently with dedicated server actions (`src/lib/actions/usher.ts`) and touch-optimized components (`UsherClient.tsx`, `UsherGuestCard.tsx`).
 - **Centralized Constants**: All application constants and asset mapping references are grouped neatly inside `src/lib/constants/`.
 - **Utility Scripts**: Standalone maintenance and data inspection scripts live in `scripts/` (e.g. `testCheck.mjs`).
-- **Authentication**: Admin route protection is handled via Next.js Proxy (`src/lib/supabase/proxy.ts`), which validates JWT cookies (`admin_auth_token`). Admin credentials and roles are configured via the database in the `settings` table (under `wedding_config` -> `adminUsers`).
+- **Authentication**: Admin route protection is handled via Next.js Proxy (`src/proxy.ts`), which validates JWT cookies (`admin_auth_token`). Admin credentials and roles are configured via the database in the `settings` table (under `wedding_config` -> `adminUsers`).
 - **Data Model Invariants**:
   - A **Guest** is the master record.
   - A guest **must** have at least one invitation (wedding, sangjit, or both). Standalone guests are strictly prohibited.
@@ -120,7 +120,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ## Known Limitations and MVP Scope
 
-- **Basic JWT Auth**: The admin dashboard (`/admin`) currently relies on JWT cookies evaluated in the Next.js Middleware proxy (`src/lib/supabase/proxy.ts`). Admin users are stored in the `settings` JSON blob rather than a dedicated RBAC relational table to minimize setup friction for short-lived events.
+- **Basic JWT Auth**: The admin dashboard (`/admin`) currently relies on JWT cookies evaluated in the Next.js Middleware proxy (`src/proxy.ts`). Admin users are stored in the `settings` JSON blob rather than a dedicated RBAC relational table to minimize setup friction for short-lived events.
 - **Local Media Storage constraints**: The gallery image uploader requires a pre-existing `gallery` public bucket.
 
 ## Future Scope

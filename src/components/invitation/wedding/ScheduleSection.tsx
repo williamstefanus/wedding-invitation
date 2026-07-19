@@ -98,7 +98,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
             transition={{ duration: 0.8 }}
             className="absolute right-2 top-1/2 -translate-y-1/2 w-[220px] aspect-[241/82] flex items-center justify-center z-10"
           >
-            <Image src="/images/torn-date-paper.png" fill className="object-contain" alt="Torn Paper" />
+            <Image src="/images/wedding/torn-date-paper.png" fill className="object-contain" alt="Torn Paper" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-[#3A592F] pl-8 pr-2 text-center">
               <span className="text-[19px] sm:text-[20px] font-medium leading-[1.2]" style={{ fontFamily: "var(--font-alegreya)" }}>{weekdayStr},</span>
               <span className="text-[18px] sm:text-[19px] font-medium leading-[1.2]" style={{ fontFamily: "var(--font-alegreya)" }}>{dayMonthYearStr}</span>
@@ -111,7 +111,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute left-2 top-1/2 -translate-y-1/2 w-[160px] aspect-[196/235] flex items-center justify-center z-20"
           >
-            <Image src="/images/save-date-gold-badge.png" fill className="object-contain drop-shadow-lg" alt="Gold Badge" />
+            <Image src="/images/wedding/save-date-gold-badge.png" fill className="object-contain drop-shadow-lg" alt="Gold Badge" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-[#faf9f0] text-center pt-2">
               <span className="text-4xl leading-none" style={{ fontFamily: "var(--font-justwrite)" }}>SAVE</span>
               <span className="text-xl my-1" style={{ fontFamily: "var(--font-justwrite)" }}>- the -</span>
@@ -149,7 +149,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
                 </p>
               </div>
               <div className="relative w-[120px] aspect-square shrink-0">
-                <Image src="/images/holy-matrimony-illustration.png" fill className="object-contain object-bottom" alt="Holy Matrimony" />
+                <Image src="/images/wedding/holy-matrimony-illustration.png" fill className="object-contain object-bottom" alt="Holy Matrimony" />
               </div>
             </div>
 
@@ -176,7 +176,7 @@ export function ScheduleSection({ sessions = [] }: ScheduleSectionProps) {
           >
             <div className="flex w-full items-end justify-between mb-6">
               <div className="relative w-[140px] aspect-[360/360] shrink-0 -ml-2">
-                <Image src="/images/reception-dinner-illustration.png" fill className="object-contain object-bottom" alt="Reception Dinner" />
+                <Image src="/images/wedding/reception-dinner-illustration.png" fill className="object-contain object-bottom" alt="Reception Dinner" />
               </div>
               <div className="flex flex-col text-left items-start flex-1 pl-4">
                 <h3 className="flex flex-col text-5xl text-[#faf9f0] mb-3 leading-[0.8]" style={{ fontFamily: "var(--font-justwrite)" }}>
