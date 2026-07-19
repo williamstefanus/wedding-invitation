@@ -41,13 +41,13 @@ export function GeneralSettingsForm({
           </Box>
           <Flex direction="column" gap="2">
             <Flex align="center" gap="2">
-              <label>
-                <Button type="button" color="green" disabled={uploadingFavicon} style={{ cursor: "pointer" }}>
+              <Button asChild color="green" disabled={uploadingFavicon} style={{ cursor: "pointer" }}>
+                <label>
                   {uploadingFavicon ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
                   {config.faviconUrl ? 'Replace' : 'Upload'} Favicon
-                </Button>
-                <input type="file" accept="image/png,image/svg+xml,image/x-icon,image/ico,image/vnd.microsoft.icon" onChange={handleFaviconUpload} style={{ display: "none" }} disabled={uploadingFavicon} />
-              </label>
+                  <input type="file" accept="image/png,image/svg+xml,image/x-icon,image/ico,image/vnd.microsoft.icon" onChange={handleFaviconUpload} style={{ display: "none" }} disabled={uploadingFavicon} />
+                </label>
+              </Button>
               {config.faviconUrl && (
                 <Button
                   color="red"
