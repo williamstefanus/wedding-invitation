@@ -60,10 +60,7 @@ export function AdminSidebar() {
         )}
       </Flex>
 
-      {/* Mobile Search */}
-      <Box display={{ initial: "block", md: "none" }} px="4" pb="4" pt="2" style={{ borderBottom: "1px solid var(--gray-6)" }}>
-        <GlobalSearch />
-      </Box>
+
 
       {/* Navigation */}
       <Box style={{ flex: 1, overflowY: "auto" }} px="3" py="4">

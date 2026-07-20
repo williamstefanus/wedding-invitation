@@ -20,7 +20,7 @@ const readSettings = cache(async () => {
     // 2. Fetch Event Sessions (for venues, dates, maps)
     const { data: sessions, error: sesError } = await supabase
       .from("event_sessions")
-      .select("id, slug, event_type_id, date, start_time, end_time, venue_name, address, google_maps_url")
+      .select("id, name, slug, event_type_id, date, start_time, end_time, venue_name, address, google_maps_url")
       .order("sort_order");
     if (sesError) throw sesError;
 

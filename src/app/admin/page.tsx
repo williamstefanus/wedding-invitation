@@ -33,6 +33,7 @@ async function DashboardFetcher() {
   ]);
 
   const config = settingsRes.success ? settingsRes.data?.config : {};
+  const sessions = settingsRes.success ? settingsRes.data?.sessions : {};
   const { data: invitations } = invitationsRes;
   const { count: totalGuestsCount } = guestsCountRes;
 
@@ -41,6 +42,7 @@ async function DashboardFetcher() {
       invitations={invitations || []} 
       totalGuestsCount={totalGuestsCount || 0} 
       config={config || {}}
+      sessions={sessions || {}}
     />
   );
 }

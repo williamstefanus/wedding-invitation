@@ -65,6 +65,11 @@ export function AdminLayoutWrapper({ children, session }: { children: React.Reac
           </Flex>
         </Flex>
 
+        {/* Mobile Search Bar (Right above content) */}
+        <Box display={{ initial: "block", md: "none" }} px="4" py="3" style={{ borderBottom: "1px solid var(--gray-5)", backgroundColor: "var(--color-panel-solid)" }}>
+          <GlobalSearch />
+        </Box>
+
         {/* Page Content */}
         <Box style={{ flex: 1, overflowY: "auto" }}>
           {children}

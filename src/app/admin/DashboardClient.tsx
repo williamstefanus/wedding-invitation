@@ -2,18 +2,19 @@
 
 import { useState } from "react";
 import { OverviewMetrics } from "@/components/admin/OverviewMetrics";
-import { Mail, Users, UserCheck, Clock } from "lucide-react";
+import { Mail, Users, UserCheck, Clock, MapPin, CalendarDays } from "lucide-react";
 import { Box, Flex, Grid, Card, Heading, Text, Button, Progress, SegmentedControl, Badge } from "@radix-ui/themes";
 
 interface DashboardClientProps {
   invitations: any[];
   totalGuestsCount: number;
   config?: any;
+  sessions?: any;
 }
 
 type FilterOption = "all" | "wedding" | "sangjit";
 
-export function DashboardClient({ invitations, totalGuestsCount, config = {} }: DashboardClientProps) {
+export function DashboardClient({ invitations, totalGuestsCount, config = {}, sessions = {} }: DashboardClientProps) {
   const [filter, setFilter] = useState<FilterOption>("all");
 
   // Filter invitations based on the active tab
@@ -68,32 +69,88 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
     <Box className="knotice-app" p={{ initial: "4", md: "7" }}>
       <Flex direction="column" gap="6" style={{ maxWidth: 1180, margin: "0 auto" }}>
         
-        {/* Header & Filters */}
-        <Flex direction={{ initial: "column", md: "row" }} justify="between" align={{ initial: "start", md: "end" }} gap="4">
-          <Box>
-            <Flex align="center" gap="3">
-              <Heading size="8">Hello {config.groomFirstName || "William"} & {config.brideFirstName || "Aziel"}</Heading>
-            </Flex>
-          </Box>
+        {/* Header */}
+        <Box>
+          <Heading size="8">Hello {config.groomFirstName || "William"} & {config.brideFirstName || "Aziel"}</Heading>
+        </Box>
 
-          <Flex gap="4" align="center" direction={{ initial: "column-reverse", sm: "row" }}>
-            <SegmentedControl.Root value={filter} onValueChange={(v) => setFilter(v as FilterOption)} size="2">
-              <SegmentedControl.Item value="all">All Events</SegmentedControl.Item>
-              <SegmentedControl.Item value="wedding">Wedding</SegmentedControl.Item>
-              <SegmentedControl.Item value="sangjit">Sangjit</SegmentedControl.Item>
-            </SegmentedControl.Root>
+        {/* Filters - Full Width */}
+        <Box>
+          <SegmentedControl.Root value={filter} onValueChange={(v) => setFilter(v as FilterOption)} size="2" style={{ width: "100%" }}>
+            <SegmentedControl.Item value="all">All Events</SegmentedControl.Item>
+            <SegmentedControl.Item value="wedding">Wedding</SegmentedControl.Item>
+            <SegmentedControl.Item value="sangjit">Sangjit</SegmentedControl.Item>
+          </SegmentedControl.Root>
+        </Box>
 
-            {/* Dynamic Event Date Display */}
-            {filter !== "all" && (
-              <Badge variant="surface" color="gray" size="2" style={{ background: "var(--color-panel-solid)", padding: "6px 12px", fontWeight: 500, fontSize: "13px" }}>
-                {filter === "wedding" 
-                  ? (config.countdownDate ? new Date(config.countdownDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Oct 23, 2026")
-                  : (config.sangjitCountdownDate ? new Date(config.sangjitCountdownDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Oct 17, 2026")
-                }
-              </Badge>
-            )}
-          </Flex>
-        </Flex>
+        {/* Event Details Cards (if specific event selected) */}
+        {filter !== "all" && (
+          <Grid columns={{ initial: "1", lg: (filter === "wedding" ? "2" : "1") }} gap="4">
+            {(filter === "wedding" ? [sessions.holyMatrimony, sessions.reception] : [sessions.sangjit]).map((session, i) => {
+              if (!session) return null;
+              
+              // Fallback default dates if DB dates are missing
+              let defaultDateStr = filter === "wedding" 
+                ? (config.countdownDate ? config.countdownDate : "2026-10-23")
+                : (config.sangjitCountdownDate ? config.sangjitCountdownDate : "2026-10-17");
+              
+              const dateToDisplay = session.date || defaultDateStr;
+              
+              return (
+                <Card key={i} size="2" style={{ background: "var(--color-panel-solid)", border: "1px solid var(--gray-5)" }}>
+                  <Flex direction={{ initial: "column", sm: "row", lg: "column", xl: "row" }} gap="4" align={{ initial: "start", sm: "center", lg: "start", xl: "center" }} justify="between">
+                    <Box>
+                      <Heading size="4" mb="1" style={{ color: "var(--gray-12)" }}>
+                        {session.name || (filter === "wedding" ? (i === 0 ? "Holy Matrimony" : "Reception") : "Sangjit")}
+                      </Heading>
+                      <Text size="2" color="gray">
+                        {filter === "wedding" ? "Wedding Day Event" : "Engagement Ceremony"}
+                      </Text>
+                    </Box>
+                    
+                    <Flex gap="4" direction={{ initial: "column", sm: "row", lg: "column", xl: "row" }}>
+                      <Flex align="center" gap="2">
+                        <Box style={{ padding: "6px", background: "var(--red-3)", borderRadius: "var(--radius-2)" }}>
+                          <CalendarDays className="w-4 h-4" style={{ color: "var(--red-11)" }} />
+                        </Box>
+                        <Box>
+                          <Text as="div" size="1" color="gray" weight="medium">Date</Text>
+                          <Text as="div" size="2" weight="bold">
+                            {new Date(dateToDisplay).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                          </Text>
+                        </Box>
+                      </Flex>
+
+                      <Flex align="center" gap="2">
+                        <Box style={{ padding: "6px", background: "var(--red-3)", borderRadius: "var(--radius-2)" }}>
+                          <Clock className="w-4 h-4" style={{ color: "var(--red-11)" }} />
+                        </Box>
+                        <Box>
+                          <Text as="div" size="1" color="gray" weight="medium">Time</Text>
+                          <Text as="div" size="2" weight="bold">
+                            {session.start_time?.substring(0, 5) || "TBA"}
+                          </Text>
+                        </Box>
+                      </Flex>
+                      
+                      <Flex align="center" gap="2">
+                        <Box style={{ padding: "6px", background: "var(--red-3)", borderRadius: "var(--radius-2)" }}>
+                          <MapPin className="w-4 h-4" style={{ color: "var(--red-11)" }} />
+                        </Box>
+                        <Box>
+                          <Text as="div" size="1" color="gray" weight="medium">Venue</Text>
+                          <Text as="div" size="2" weight="bold" style={{ maxWidth: "160px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={session.venue_name}>
+                            {session.venue_name || "TBA"}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                </Card>
+              );
+            })}
+          </Grid>
+        )}
 
         {/* Main Metric Cards */}
         <Grid columns={{ initial: "2", md: "4" }} gap="3">
