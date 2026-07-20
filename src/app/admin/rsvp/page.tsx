@@ -10,7 +10,7 @@ export const revalidate = 0;
 async function RsvpFetcher({ resolvedParams }: { resolvedParams: any }) {
   const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
   const search = typeof resolvedParams.search === "string" ? resolvedParams.search : "";
-  const tab = typeof resolvedParams.tab === "string" ? resolvedParams.tab : "all";
+  const tab = typeof resolvedParams.tab === "string" ? resolvedParams.tab : "wedding";
   const owner = typeof resolvedParams.owner === "string" ? resolvedParams.owner : "All";
   const category = typeof resolvedParams.category === "string" ? resolvedParams.category : "All";
   const status = typeof resolvedParams.status === "string" ? resolvedParams.status : "All";

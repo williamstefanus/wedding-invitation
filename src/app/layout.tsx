@@ -61,7 +61,8 @@ export async function generateMetadata(): Promise<Metadata> {
     const settingsRes = await getSettings();
     const config = settingsRes.success ? (settingsRes.data?.config as any) : null;
     if (config?.faviconUrl) {
-      faviconUrl = config.faviconUrl;
+      // Append a cache-buster to force Safari to fetch the new favicon
+      faviconUrl = `${config.faviconUrl}?v=${new Date().getTime()}`;
     }
     if (config?.groomFirstName && config?.brideFirstName) {
       coupleName = `${config.groomFirstName} & ${config.brideFirstName}`;

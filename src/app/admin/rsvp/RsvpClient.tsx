@@ -38,8 +38,9 @@ export function RsvpClient({
 
   const filteredOverviewInvitations = useMemo(() => {
     if (!allInvitations) return [];
-    if (!currentTab || currentTab === "all") return allInvitations;
-    return allInvitations.filter((inv: any) => inv.event_type?.slug === currentTab);
+    const activeTab = currentTab || "wedding";
+    if (activeTab === "all") return allInvitations; // Fallback just in case
+    return allInvitations.filter((inv: any) => inv.event_type?.slug === activeTab);
   }, [allInvitations, currentTab]);
 
   // Modals state
@@ -195,9 +196,8 @@ export function RsvpClient({
 
         {/* Tabs */}
         <Box mb="4">
-          <Tabs.Root value={currentTab || "all"} onValueChange={(val) => updateUrl({ tab: val })}>
+          <Tabs.Root value={currentTab || "wedding"} onValueChange={(val) => updateUrl({ tab: val })}>
             <Tabs.List size="2">
-              <Tabs.Trigger value="all">All RSVPs</Tabs.Trigger>
               {eventTypes.map((et: any) => (
                 <Tabs.Trigger key={et.id} value={et.slug}>{et.name}</Tabs.Trigger>
               ))}
