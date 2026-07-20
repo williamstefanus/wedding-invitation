@@ -7,6 +7,7 @@ import { PinLoginModal } from "@/components/usher/PinLoginModal";
 import { UsherGuestCard } from "@/components/usher/UsherGuestCard";
 import { FloorPlanView } from "@/components/admin/seating/FloorPlanView";
 import { ThemeToggle } from "@/components/admin/ThemeToggle";
+import { KnoticeLogo } from "@/components/admin/KnoticeLogo";
 import { Search, LogOut, RefreshCw, Users, UserCheck, Map, List, X, FileText, MapPin, Check } from "lucide-react";
 import { Box, Flex, Text, Heading, Button, Card, Grid, SegmentedControl, TextField, Checkbox, Dialog, ScrollArea, Progress, Container, IconButton, Badge, TextArea, Spinner } from "@radix-ui/themes";
 
@@ -184,7 +185,7 @@ export function UsherClient({
 
   if (!authChecked) {
     return (
-      <Flex align="center" justify="center" style={{ minHeight: "100vh", backgroundColor: "var(--gray-2)" }}>
+      <Flex className="knotice-app" align="center" justify="center" style={{ minHeight: "100vh" }}>
         <Text weight="medium" color="gray">Loading portal...</Text>
       </Flex>
     );
@@ -193,7 +194,7 @@ export function UsherClient({
   const arrivalProgress = totalExpectedPax ? Math.min(100, Math.round((totalCheckedInPax / totalExpectedPax) * 100)) : 0;
 
   return (
-    <Box style={{ minHeight: "100vh", backgroundColor: "var(--gray-2)", paddingBottom: "80px" }}>
+    <Box className="knotice-app" style={{ minHeight: "100vh", paddingBottom: "80px" }}>
       {!isAuthorized ? (
         <PinLoginModal isOpen={!isAuthorized} onSuccess={() => setIsAuthorized(true)} />
       ) : (
@@ -203,7 +204,7 @@ export function UsherClient({
             <Container size="4">
               <Flex align="center" justify="between" px="4" py="3" wrap="wrap" gap="3">
                 <Flex align="center" gap="3">
-                  <img src="/images/logo_icon.png" alt="Logo" style={{ width: 36, height: 36, objectFit: "contain" }} />
+                  <KnoticeLogo style={{ height: "40px", width: "115px" }} />
                   <Box>
                     <Heading size="3" weight="bold">Reception Portal</Heading>
                     <Text size="1" color="amber" weight="medium">Live Check-In & Seating</Text>
