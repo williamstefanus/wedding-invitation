@@ -76,7 +76,7 @@ export function AssignGuestModal({
         <Box p="4" style={{ backgroundColor: "var(--gray-2)", maxHeight: "50vh", overflowY: "auto" }}>
           {initialEligibleGuests.length === 0 ? (
             <Box py="9" style={{ textAlign: "center" }}>
-              <Flex align="center" justify="center" style={{ width: "64px", height: "64px", backgroundColor: "white", borderRadius: "50%", margin: "0 auto 16px", border: "1px solid var(--gray-5)" }}>
+              <Flex align="center" justify="center" style={{ width: "64px", height: "64px", background: "var(--color-panel-solid)", borderRadius: "50%", margin: "0 auto 16px", border: "1px solid var(--gray-5)" }}>
                 <Search className="w-6 h-6 text-slate-300" />
               </Flex>
               <Text as="div" weight="medium" size="3" mb="2">No eligible guests found.</Text>

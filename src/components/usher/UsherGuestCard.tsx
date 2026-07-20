@@ -56,7 +56,7 @@ export function UsherGuestCard({ invitation, onToggleCheckIn, onOpenDetails, con
             </Flex>
 
             <Flex align="center" gap="2">
-              <Badge color={guest?.owner?.toLowerCase() === "groom" || guest?.owner?.toLowerCase() === "william" ? "blue" : "crimson"} variant="soft" size="1">
+              <Badge color={guest?.owner?.toLowerCase() === "groom" || guest?.owner?.toLowerCase() === "william" ? "blue" : "red"} variant="soft" size="1">
                 {guest?.owner?.toLowerCase() === "groom" || guest?.owner?.toLowerCase() === "william" ? (config.groomFirstName || "Groom") : (config.brideFirstName || "Bride")}
               </Badge>
               <Text size="1" color="gray">•</Text>

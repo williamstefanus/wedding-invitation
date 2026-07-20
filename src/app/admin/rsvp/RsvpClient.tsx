@@ -174,7 +174,7 @@ export function RsvpClient({
           </Box>
           <RadixButton 
             onClick={handleExport}
-            color="crimson"
+            color="red"
             size="3"
             style={{ fontWeight: 600, cursor: "pointer" }}
           >

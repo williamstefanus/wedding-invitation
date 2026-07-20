@@ -84,7 +84,7 @@ export function AddTableModal({ isOpen, onClose, onAdd }: AddTableModalProps) {
             <Button variant="soft" color="gray" onClick={onClose} disabled={loading} style={{ cursor: "pointer" }}>
               Cancel
             </Button>
-            <Button type="submit" color="crimson" disabled={loading} style={{ cursor: "pointer" }}>
+            <Button type="submit" color="red" disabled={loading} style={{ cursor: "pointer" }}>
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Create Table
             </Button>

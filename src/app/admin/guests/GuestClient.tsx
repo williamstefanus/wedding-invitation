@@ -274,6 +274,7 @@ export function GuestClient({
   };
 
   const hasRsvpData = (guest: any) => {
+    if (!guest) return false;
     return guest.invitations?.some((inv: any) => {
       const rsvp = Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp;
       return !!rsvp;
@@ -281,6 +282,7 @@ export function GuestClient({
   };
 
   const hasInvRsvpData = (inv: any) => {
+    if (!inv) return false;
     return !!(Array.isArray(inv.rsvp) ? inv.rsvp[0] : inv.rsvp) || (inv.seating_assignment?.length > 0);
   };
 
@@ -294,7 +296,7 @@ export function GuestClient({
           </Box>
           <RadixButton 
             onClick={openAddModal}
-            color="crimson"
+            color="red"
             size="3"
             style={{ fontWeight: 600, cursor: "pointer" }}
           >
@@ -318,8 +320,8 @@ export function GuestClient({
               cursor: "pointer",
               background: "none",
               border: "none",
-              borderBottom: currentTab === "all" ? "2px solid var(--crimson-9)" : "2px solid transparent",
-              color: currentTab === "all" ? "var(--crimson-11)" : "var(--gray-11)",
+              borderBottom: currentTab === "all" ? "2px solid var(--red-9)" : "2px solid transparent",
+              color: currentTab === "all" ? "var(--red-11)" : "var(--gray-11)",
               whiteSpace: "nowrap"
             }}
           >
@@ -336,8 +338,8 @@ export function GuestClient({
                 cursor: "pointer",
                 background: "none",
                 border: "none",
-                borderBottom: currentTab === et.slug ? "2px solid var(--crimson-9)" : "2px solid transparent",
-                color: currentTab === et.slug ? "var(--crimson-11)" : "var(--gray-11)",
+                borderBottom: currentTab === et.slug ? "2px solid var(--red-9)" : "2px solid transparent",
+                color: currentTab === et.slug ? "var(--red-11)" : "var(--gray-11)",
                 whiteSpace: "nowrap"
               }}
             >

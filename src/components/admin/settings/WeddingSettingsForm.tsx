@@ -280,7 +280,7 @@ export function WeddingSettingsForm({
                 {config.galleryImages.slice(1, 6).map((url: string, subIdx: number) => {
                   const actualIdx = subIdx + 1;
                   return (
-                    <Box key={actualIdx} className="group" style={{ position: "relative", aspectRatio: "1", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--gray-5)", backgroundColor: "white" }}>
+                    <Box key={actualIdx} className="group" style={{ position: "relative", aspectRatio: "1", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--gray-5)", background: "var(--color-panel-solid)" }}>
                       <img src={url} alt="Bento item" style={{ objectFit: "cover", width: "100%", height: "100%" }} />
                       <Box className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
                         <Flex gap="1">
@@ -311,7 +311,7 @@ export function WeddingSettingsForm({
                 {config.galleryImages.slice(6).map((url: string, subIdx: number) => {
                   const actualIdx = subIdx + 6;
                   return (
-                    <Box key={actualIdx} className="group" style={{ position: "relative", aspectRatio: "1", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--gray-5)", backgroundColor: "white" }}>
+                    <Box key={actualIdx} className="group" style={{ position: "relative", aspectRatio: "1", borderRadius: "var(--radius-3)", overflow: "hidden", border: "1px solid var(--gray-5)", background: "var(--color-panel-solid)" }}>
                       <img src={url} alt="Bento item" style={{ objectFit: "cover", width: "100%", height: "100%" }} />
                       <Box className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px" }}>
                         <Flex gap="1">

@@ -30,15 +30,15 @@ export function RsvpMetrics({ invitations = [], config = {} }: RsvpMetricsProps)
 
   return (
     <Grid columns={{ initial: "1", md: "4" }} gap="4" mb="2">
-      <Card size="2" style={{ backgroundColor: "var(--crimson-2)", border: "1px solid var(--crimson-5)" }}>
+      <Card size="2" style={{ backgroundColor: "var(--red-2)", border: "1px solid var(--red-5)" }}>
         <Flex align="center" gap="3">
-          <Flex align="center" justify="center" style={{ width: 48, height: 48, backgroundColor: "var(--crimson-4)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+          <Flex align="center" justify="center" style={{ width: 48, height: 48, backgroundColor: "var(--red-4)", color: "var(--red-11)", borderRadius: "var(--radius-3)" }}>
             <UserCheck width={24} height={24} />
           </Flex>
           <Box>
-            <Text size="1" weight="bold" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>Expected Attendance</Text>
-            <Heading size="7" mt="1" style={{ color: "var(--crimson-12)" }}>
-              {expectedAttendance} <Text size="2" weight="medium" style={{ color: "var(--crimson-11)" }}>pax</Text>
+            <Text size="1" weight="bold" style={{ color: "var(--red-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>Expected Attendance</Text>
+            <Heading size="7" mt="1" style={{ color: "var(--red-12)" }}>
+              {expectedAttendance} <Text size="2" weight="medium" style={{ color: "var(--red-11)" }}>pax</Text>
             </Heading>
           </Box>
         </Flex>

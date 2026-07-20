@@ -323,7 +323,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
           </Box>
           <Button 
             size="3"
-            color="crimson"
+            color="red"
             variant="solid"
             onClick={handleSave}
             disabled={isSaving}

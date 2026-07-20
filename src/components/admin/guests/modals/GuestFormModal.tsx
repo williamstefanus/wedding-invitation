@@ -158,9 +158,9 @@ export function GuestFormModal({
                           <Checkbox 
                             checked={isSelected}
                             onCheckedChange={(c) => setInvitationsForm({...invitationsForm, [et.id]: {...invitationsForm[et.id], is_selected: c === true}})}
-                            color="crimson"
+                            color="red"
                           />
-                          <Text weight="medium" style={{ color: isSelected ? "var(--crimson-11)" : "var(--gray-11)" }}>
+                          <Text weight="medium" style={{ color: isSelected ? "var(--red-11)" : "var(--gray-11)" }}>
                             {et.name}
                           </Text>
                         </Text>
@@ -193,7 +193,7 @@ export function GuestFormModal({
           <Button variant="soft" color="gray" onClick={() => setIsModalOpen(false)}>
             Cancel
           </Button>
-          <Button type="submit" form="guest-form" color="crimson">
+          <Button type="submit" form="guest-form" color="red">
             Save
           </Button>
         </Flex>

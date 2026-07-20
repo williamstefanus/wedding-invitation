@@ -2,10 +2,14 @@
 
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createPublicClient } from "@supabase/supabase-js";
 
 const readSettings = cache(async () => {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
     // 1. Fetch Event Types (for deadlines)
     const { data: eventTypes, error: etError } = await supabase

@@ -84,8 +84,8 @@ export function AdminSidebar() {
                   width: "100%",
                   padding: "12px 16px",
                   borderRadius: "10px",
-                  backgroundColor: isActive ? "var(--crimson-3)" : "transparent",
-                  color: isActive ? "var(--crimson-11)" : "var(--gray-11)",
+                  backgroundColor: isActive ? "var(--red-3)" : "transparent",
+                  color: isActive ? "var(--red-11)" : "var(--gray-11)",
                   fontWeight: isActive ? 600 : 500,
                   textDecoration: "none",
                   transition: "background-color 0.2s"
@@ -108,11 +108,11 @@ export function AdminSidebar() {
               width: 32,
               height: 32,
               borderRadius: "50%",
-              backgroundColor: "var(--crimson-4)",
+              backgroundColor: "var(--red-4)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "var(--crimson-11)",
+              color: "var(--red-11)",
               fontWeight: "bold",
               fontSize: "14px"
             }}

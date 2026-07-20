@@ -143,7 +143,7 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
     <>
       {/* Guest Info Card */}
       <Box style={{ gridColumn: "span 1" }}>
-        <Card size="3" style={{ padding: "24px", backgroundColor: "white" }}>
+        <Card size="3" style={{ padding: "24px", background: "var(--color-panel-solid)" }}>
           <Heading size="5" mb="6">Contact Info</Heading>
           
           <Flex direction="column" gap="4">
@@ -202,19 +202,19 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
               const assignment = Array.isArray(inv.seating_assignment) ? inv.seating_assignment[0] : inv.seating_assignment;
 
               const isWedding = inv.event_type.slug === 'wedding';
-              const headerTextColor = isWedding ? "var(--amber-11)" : "var(--crimson-11)";
-              const headerBgColor = isWedding ? "var(--amber-2)" : "var(--crimson-2)";
-              const headerBorderColor = isWedding ? "var(--amber-4)" : "var(--crimson-4)";
+              const headerTextColor = isWedding ? "var(--amber-11)" : "var(--red-11)";
+              const headerBgColor = isWedding ? "var(--amber-2)" : "var(--red-2)";
+              const headerBorderColor = isWedding ? "var(--amber-4)" : "var(--red-4)";
               
               return (
-                <Card key={inv.id} size="3" style={{ padding: 0, overflow: "hidden", backgroundColor: "white" }}>
+                <Card key={inv.id} size="3" style={{ padding: 0, overflow: "hidden", background: "var(--color-panel-solid)" }}>
                   {/* Card Header */}
                   <Box px="5" py="4" style={{ borderBottom: `1px solid ${headerBorderColor}`, backgroundColor: headerBgColor }}>
                     <Flex justify="between" align="center">
                       <Heading size="4" weight="bold" style={{ color: headerTextColor, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                         {inv.event_type.name}
                       </Heading>
-                      <Badge size="2" style={{ fontFamily: "var(--font-mono)", fontWeight: "bold", backgroundColor: "white", color: headerTextColor, border: `1px solid ${headerBorderColor}` }}>
+                      <Badge size="2" style={{ fontFamily: "var(--font-mono)", fontWeight: "bold", background: "var(--color-panel-solid)", color: headerTextColor, border: `1px solid ${headerBorderColor}` }}>
                         {inv.invitation_code}
                       </Badge>
                     </Flex>
@@ -231,7 +231,7 @@ export function GuestDetailClient({ guest, eventTypes, config }: GuestDetailClie
                       <Box>
                         <Text size="1" weight="bold" color="gray" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">RSVP Status</Text>
                         {rsvp ? (
-                          <Text size="5" weight="bold" color={rsvp.attendance_status === 'attending' ? 'green' : 'crimson'} as="div">
+                          <Text size="5" weight="bold" color={rsvp.attendance_status === 'attending' ? 'green' : 'red'} as="div">
                             {rsvp.attendance_status === 'attending' ? `Attending (${rsvp.confirmed_pax} pax)` : 'Declined'}
                           </Text>
                         ) : (

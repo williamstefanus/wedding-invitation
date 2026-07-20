@@ -165,7 +165,7 @@ export function GuestTable({
                       <Checkbox checked={isChecked} onCheckedChange={(c: boolean) => toggleRow(c)} />
                     </Table.Cell>
                     <Table.RowHeaderCell>
-                      <Link href={`/admin/guests/${guest.id}`} style={{ fontWeight: 500, color: "var(--crimson-11)", textDecoration: "none" }}>
+                      <Link href={`/admin/guests/${guest.id}`} style={{ fontWeight: 500, color: "var(--red-11)", textDecoration: "none" }}>
                         {guest.name}
                       </Link>
                       {guest.phone && <Text as="div" size="1" color="gray" mt="1">{guest.phone}</Text>}

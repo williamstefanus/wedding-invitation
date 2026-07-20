@@ -91,7 +91,7 @@ export function EditRsvpModal({
                               setEditSelectedSessions(editSelectedSessions.filter(id => id !== session.id));
                             }
                           }}
-                          color="crimson"
+                          color="red"
                         />
                         {session.name}
                       </Text>
@@ -113,7 +113,7 @@ export function EditRsvpModal({
               <Button type="button" variant="soft" color="gray" onClick={() => setIsEditOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" color="crimson">
+              <Button type="submit" color="red">
                 Save Changes
               </Button>
             </Flex>

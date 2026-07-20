@@ -85,7 +85,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
 
             {/* Dynamic Event Date Display */}
             {filter !== "all" && (
-              <Badge variant="surface" color="gray" size="2" style={{ backgroundColor: "white", padding: "6px 12px", fontWeight: 500, fontSize: "13px" }}>
+              <Badge variant="surface" color="gray" size="2" style={{ background: "var(--color-panel-solid)", padding: "6px 12px", fontWeight: 500, fontSize: "13px" }}>
                 {filter === "wedding" 
                   ? (config.countdownDate ? new Date(config.countdownDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Oct 23, 2026")
                   : (config.sangjitCountdownDate ? new Date(config.sangjitCountdownDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Oct 17, 2026")
@@ -97,10 +97,10 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
 
         {/* Main Metric Cards */}
         <Grid columns={{ initial: "2", md: "4" }} gap="3">
-          <Card size="2" style={{ backgroundColor: "white" }}>
+          <Card size="2" style={{ background: "var(--color-panel-solid)" }}>
             <Flex align="start" gap="3">
-              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
-                <Mail className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              <Box style={{ padding: "8px", background: "var(--red-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Mail className="w-5 h-5" style={{ color: "var(--red-10)" }} />
               </Box>
               <Box>
                 <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Invitations</Text>
@@ -109,10 +109,10 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
               </Box>
             </Flex>
           </Card>
-          <Card size="2" style={{ backgroundColor: "white" }}>
+          <Card size="2" style={{ background: "var(--color-panel-solid)" }}>
             <Flex align="start" gap="3">
-              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
-                <Users className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              <Box style={{ padding: "8px", background: "var(--red-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Users className="w-5 h-5" style={{ color: "var(--red-10)" }} />
               </Box>
               <Box>
                 <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Total Invited Pax</Text>
@@ -121,10 +121,10 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
               </Box>
             </Flex>
           </Card>
-          <Card size="2" style={{ backgroundColor: "white" }}>
+          <Card size="2" style={{ background: "var(--color-panel-solid)" }}>
             <Flex align="start" gap="3">
-              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
-                <UserCheck className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              <Box style={{ padding: "8px", background: "var(--red-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <UserCheck className="w-5 h-5" style={{ color: "var(--red-10)" }} />
               </Box>
               <Box>
                 <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Expected Attendance</Text>
@@ -133,10 +133,10 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
               </Box>
             </Flex>
           </Card>
-          <Card size="2" style={{ backgroundColor: "white" }}>
+          <Card size="2" style={{ background: "var(--color-panel-solid)" }}>
             <Flex align="start" gap="3">
-              <Box style={{ padding: "8px", background: "var(--crimson-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
-                <Clock className="w-5 h-5" style={{ color: "var(--crimson-10)" }} />
+              <Box style={{ padding: "8px", background: "var(--red-3)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Clock className="w-5 h-5" style={{ color: "var(--red-10)" }} />
               </Box>
               <Box>
                 <Text size="1" weight="bold" style={{ color: "var(--gray-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Pending RSVP</Text>
@@ -148,7 +148,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
         </Grid>
 
         {/* Attendance Projection */}
-        <Card size="3" style={{ backgroundColor: "white" }}>
+        <Card size="3" style={{ background: "var(--color-panel-solid)" }}>
           <Heading size="4" mb="5">Attendance Projection (Pax)</Heading>
           <Flex direction={{ initial: "column", md: "row" }} align="center" gap="6">
             <Box style={{ flex: 1, width: "100%" }}>
@@ -158,7 +158,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
               </Flex>
               <Progress 
                 value={totalInvitedPax > 0 ? (expectedAttendance / totalInvitedPax) * 100 : 0} 
-                color="crimson"
+                color="red"
                 style={{ height: "12px", backgroundColor: "var(--gray-3)" }}
               />
             </Box>
@@ -182,10 +182,10 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
 
         {/* Attending by Event Session */}
         {sessionBreakdown.length > 0 && (
-          <Card size="3" style={{ backgroundColor: "white" }}>
+          <Card size="3" style={{ background: "var(--color-panel-solid)" }}>
             <Flex align="center" gap="3" mb="5">
-              <Box style={{ padding: "6px", background: "var(--crimson-3)", borderRadius: "var(--radius-full)" }}>
-                <Users className="w-4 h-4" style={{ color: "var(--crimson-10)" }} />
+              <Box style={{ padding: "6px", background: "var(--red-3)", borderRadius: "var(--radius-full)" }}>
+                <Users className="w-4 h-4" style={{ color: "var(--red-10)" }} />
               </Box>
               <Heading size="4">Attending by Event Session (Pax)</Heading>
             </Flex>
@@ -196,7 +196,7 @@ export function DashboardClient({ invitations, totalGuestsCount, config = {} }: 
                   <Box style={{ flex: 1 }}>
                     <Progress 
                       value={expectedAttendance > 0 ? (pax / expectedAttendance) * 100 : 0} 
-                      color="crimson"
+                      color="red"
                       style={{ height: "12px", backgroundColor: "var(--gray-3)" }}
                     />
                   </Box>

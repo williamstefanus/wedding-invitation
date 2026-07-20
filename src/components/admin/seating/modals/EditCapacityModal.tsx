@@ -68,7 +68,7 @@ export function EditCapacityModal({
             <Button type="button" variant="soft" color="gray" onClick={() => setIsCapacityModalOpen(false)} style={{ cursor: "pointer" }}>
               Cancel
             </Button>
-            <Button type="submit" color="crimson" style={{ cursor: "pointer" }}>
+            <Button type="submit" color="red" style={{ cursor: "pointer" }}>
               Save Changes
             </Button>
           </Flex>

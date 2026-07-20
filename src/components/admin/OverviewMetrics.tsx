@@ -57,17 +57,17 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
     <Grid columns={{ initial: "1", md: "2" }} gap="4" mt="4">
       {ownerStats.map(stat => {
         return (
-          <Card key={stat.owner} size="3" style={{ padding: 0, overflow: "hidden", backgroundColor: "white" }}>
+          <Card key={stat.owner} size="3" style={{ padding: 0, overflow: "hidden", background: "var(--color-panel-solid)" }}>
             {/* Owner Header */}
-            <Flex justify="between" align="center" style={{ backgroundColor: "var(--crimson-2)", borderBottom: "1px solid var(--crimson-4)", padding: "16px 24px" }}>
+            <Flex justify="between" align="center" style={{ backgroundColor: "var(--red-2)", borderBottom: "1px solid var(--red-4)", padding: "16px 24px" }}>
               <Box>
-                <Heading size="4" weight="bold" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <Heading size="4" weight="bold" style={{ color: "var(--red-11)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   {stat.displayName}
                 </Heading>
-                <Text size="1" style={{ color: "var(--crimson-11)", opacity: 0.8 }}>{stat.invitations} Total Invitations</Text>
+                <Text size="1" style={{ color: "var(--red-11)", opacity: 0.8 }}>{stat.invitations} Total Invitations</Text>
               </Box>
-              <Box style={{ padding: "6px", backgroundColor: "white", borderRadius: "var(--radius-3)", border: "1px solid var(--crimson-4)" }}>
-                <Users className="w-4 h-4" style={{ color: "var(--crimson-10)" }} />
+              <Box style={{ padding: "6px", background: "var(--color-panel-solid)", borderRadius: "var(--radius-3)", border: "1px solid var(--red-4)" }}>
+                <Users className="w-4 h-4" style={{ color: "var(--red-10)" }} />
               </Box>
             </Flex>
 
@@ -94,7 +94,7 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
                 </Flex>
                 <Progress 
                   value={stat.invitedPax > 0 ? (stat.attendingPax / stat.invitedPax) * 100 : 0} 
-                  color="crimson" 
+                  color="red" 
                   style={{ height: "6px", backgroundColor: "var(--gray-3)" }} 
                 />
               </Box>
@@ -125,7 +125,7 @@ export function OverviewMetrics({ invitations = [], config = {} }: OverviewMetri
                 </Flex>
                 <Progress 
                   value={stat.invitations > 0 ? (stat.respondedInvs / stat.invitations) * 100 : 0} 
-                  color="crimson" 
+                  color="red" 
                   style={{ height: "6px", backgroundColor: "var(--gray-3)" }} 
                 />
               </Box>

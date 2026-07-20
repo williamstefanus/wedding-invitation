@@ -140,7 +140,7 @@ export function RsvpTable({
                     <Table.RowHeaderCell>
                       <button 
                         onClick={() => openViewModal(inv)}
-                        className="font-medium text-[var(--crimson-11)] hover:underline text-left bg-transparent border-none p-0 cursor-pointer"
+                        className="font-medium text-[var(--red-11)] hover:underline text-left bg-transparent border-none p-0 cursor-pointer"
                         style={{ fontSize: "var(--font-size-2)" }}
                       >
                         {inv.guest.name}

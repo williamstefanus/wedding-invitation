@@ -65,7 +65,7 @@ export function UsersClient({ initialUsers, sessionRole }: { initialUsers: any[]
         {sessionRole === "superadmin" && (
           <Dialog.Root open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
             <Dialog.Trigger>
-              <Button style={{ cursor: "pointer" }} color="crimson">
+              <Button style={{ cursor: "pointer" }} color="red">
                 <UserPlus width={16} height={16} /> Add User
               </Button>
             </Dialog.Trigger>
@@ -129,7 +129,7 @@ export function UsersClient({ initialUsers, sessionRole }: { initialUsers: any[]
                         Cancel
                       </Button>
                     </Dialog.Close>
-                    <Button type="submit" disabled={addLoading || !newUsername || !newPassword} color="crimson" style={{ cursor: "pointer" }}>
+                    <Button type="submit" disabled={addLoading || !newUsername || !newPassword} color="red" style={{ cursor: "pointer" }}>
                       {addLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save User"}
                     </Button>
                   </Flex>
@@ -157,8 +157,8 @@ export function UsersClient({ initialUsers, sessionRole }: { initialUsers: any[]
                     style={{ 
                       width: 32, height: 32, 
                       borderRadius: "50%", 
-                      backgroundColor: "var(--crimson-3)", 
-                      color: "var(--crimson-11)",
+                      backgroundColor: "var(--red-3)", 
+                      color: "var(--red-11)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontWeight: "bold",
                       textTransform: "uppercase"

@@ -198,7 +198,7 @@ export function UsherClient({
       ) : (
         <>
           {/* Header Bar */}
-          <Box style={{ position: "sticky", top: 0, zIndex: 40, backgroundColor: "white", borderBottom: "1px solid var(--gray-5)", boxShadow: "var(--shadow-2)" }}>
+          <Box style={{ position: "sticky", top: 0, zIndex: 40, background: "var(--color-panel-solid)", borderBottom: "1px solid var(--gray-5)", boxShadow: "var(--shadow-2)" }}>
             <Container size="4">
               <Flex align="center" justify="between" px="4" py="3" wrap="wrap" gap="3">
                 <Flex align="center" gap="3">
@@ -223,7 +223,7 @@ export function UsherClient({
                     <RefreshCw width={14} height={14} className={isPending ? "animate-spin" : ""} />
                     <Text className="hidden md:inline">Refresh</Text>
                   </Button>
-                  <Button variant="soft" color="crimson" onClick={handleLogout}>
+                  <Button variant="soft" color="red" onClick={handleLogout}>
                     <LogOut width={14} height={14} />
                     <Text className="hidden md:inline">Lock</Text>
                   </Button>

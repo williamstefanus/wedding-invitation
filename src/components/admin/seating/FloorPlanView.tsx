@@ -165,7 +165,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
               <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" floodOpacity="0.10" />
             </filter>
             <pattern id="diagonalHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="0" x2="0" y2="8" stroke="var(--crimson-7)" strokeWidth="1.5" opacity="0.4" />
+              <line x1="0" y1="0" x2="0" y2="8" stroke="var(--red-7)" strokeWidth="1.5" opacity="0.4" />
             </pattern>
           </defs>
 
@@ -184,12 +184,12 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
 
           {/* ── Stage / Pelaminan (Top Right inside ballroom) ── */}
           <rect x="235" y="20" width="250" height="115" rx="2"
-            fill="var(--crimson-2)" stroke="var(--crimson-8)" strokeWidth="2" strokeDasharray="6 3" />
+            fill="var(--red-2)" stroke="var(--red-8)" strokeWidth="2" strokeDasharray="6 3" />
           <rect x="235" y="20" width="250" height="115" rx="2" fill="url(#diagonalHatch)" />
-          <text x="360" y="70" textAnchor="middle" fontSize="12" fontWeight="800" fill="var(--crimson-11)" letterSpacing="0.5">
+          <text x="360" y="70" textAnchor="middle" fontSize="12" fontWeight="800" fill="var(--red-11)" letterSpacing="0.5">
             STAGE / PELAMINAN
           </text>
-          <text x="360" y="88" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="var(--crimson-9)" opacity="0.75">
+          <text x="360" y="88" textAnchor="middle" fontSize="9.5" fontWeight="600" fill="var(--red-9)" opacity="0.75">
             (Dance Floor Area)
           </text>
 
@@ -217,9 +217,9 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
               else if (occupancy > 0) { fill = "var(--yellow-3)"; stroke = "var(--yellow-9)"; sw = 2.2; }
               else                    { fill = "var(--color-panel-solid)"; stroke = "var(--gray-8)"; sw = 1.8; }
             }
-            if (isSelected) { stroke = "var(--crimson-9)"; sw = 3.5; }
+            if (isSelected) { stroke = "var(--red-9)"; sw = 3.5; }
 
-            const textFill = isOver ? "var(--red-11)" : isFull ? "var(--green-11)" : isSelected ? "var(--crimson-11)" : "var(--gray-12)";
+            const textFill = isOver ? "var(--red-11)" : isFull ? "var(--green-11)" : isSelected ? "var(--red-11)" : "var(--gray-12)";
             const label    = hasTable
               ? (table.table_name || "").replace(/^table\s*/i, "T")
               : `+`;
@@ -235,13 +235,13 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                 {/* Selection Highlight Ring */}
                 {isSelected && (
                   <circle cx={slot.cx} cy={slot.cy} r={R + 7}
-                    fill="none" stroke="var(--crimson-9)" strokeWidth="2.5" opacity="0.4" />
+                    fill="none" stroke="var(--red-9)" strokeWidth="2.5" opacity="0.4" />
                 )}
 
                 {/* Hover Ring for empty slots */}
                 {!hasTable && hoveredId === slot.id && (
                   <circle cx={slot.cx} cy={slot.cy} r={R + 6}
-                    fill="none" stroke="var(--crimson-9)" strokeWidth="2" opacity="0.5" />
+                    fill="none" stroke="var(--red-9)" strokeWidth="2" opacity="0.5" />
                 )}
 
                 {/* Table Circle */}
@@ -284,7 +284,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                 <g pointerEvents="none" filter="url(#fp-shadow)">
                   <rect x={tx} y={ty} width={160} height={46} rx={6} fill="white" stroke="var(--gray-7)" strokeWidth={1.5} strokeDasharray="3 3" />
                   <text x={tx + 12} y={ty + 18} fontSize="9.5" fontWeight="800" fill="var(--gray-12)">Slot #{hoveredSlot.id}</text>
-                  <text x={tx + 12} y={ty + 32} fontSize={8} fontWeight="600" fill="var(--crimson-9)">💡 Click to assign a table</text>
+                  <text x={tx + 12} y={ty + 32} fontSize={8} fontWeight="600" fill="var(--red-9)">💡 Click to assign a table</text>
                 </g>
               );
             }
@@ -323,7 +323,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
       <Dialog.Root open={activeSlotModal != null} onOpenChange={(open) => !open && setActiveSlotModal(null)}>
         <Dialog.Content size="3" maxWidth="450px" className="animate-fade-up">
           <Box mb="4">
-            <Text size="1" weight="bold" color="crimson" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Map Positioning</Text>
+            <Text size="1" weight="bold" color="red" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>Map Positioning</Text>
             <Dialog.Title mt="1">
               Configure Slot #{activeSlotModal}
             </Dialog.Title>
@@ -348,7 +348,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                 </Button>
               </Flex>
             ) : (
-              <Callout.Root color="crimson" variant="surface" mb="4">
+              <Callout.Root color="red" variant="surface" mb="4">
                 <Callout.Icon><MapPin className="w-4 h-4" /></Callout.Icon>
                 <Callout.Text size="2">Select which table number should appear at physical position #{activeSlotModal}.</Callout.Text>
               </Callout.Root>
@@ -379,7 +379,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                         textAlign: "left"
                       }}
-                      className={!isCurrentSlot ? "hover:bg-slate-50 hover:border-crimson-400 transition" : ""}
+                      className={!isCurrentSlot ? "hover:bg-slate-50 hover:border-red-400 transition" : ""}
                     >
                       <Box>
                         <Flex align="center" gap="2">
@@ -391,7 +391,7 @@ export function FloorPlanView({ tables, selectedTableId, setSelectedTableId, rea
                       </Box>
 
                       {!isCurrentSlot && (
-                        <Flex align="center" gap="1" style={{ color: "var(--crimson-9)" }}>
+                        <Flex align="center" gap="1" style={{ color: "var(--red-9)" }}>
                           <Text size="1" weight="bold">{isOtherSlot ? "Swap Here" : "Assign"}</Text>
                           {isOtherSlot ? <ArrowRightLeft className="w-3 h-3" /> : <Check className="w-4 h-4" />}
                         </Flex>

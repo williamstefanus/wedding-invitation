@@ -19,7 +19,7 @@ function RadixThemeWrapper({ children }: PropsWithChildren) {
   return (
     <Theme
       appearance={mounted && resolvedTheme === "dark" ? "dark" : "light"}
-      accentColor="crimson"
+      accentColor="red"
       grayColor="mauve"
       panelBackground="solid"
       radius="large"

@@ -86,7 +86,7 @@ export function SeatingVisualizer({
 
             {/* Add Table (grid mode only) */}
             {handleAddTable && viewMode === "grid" && (
-              <Button onClick={handleAddTable} color="crimson" variant="solid" size="3" style={{ fontWeight: 600, cursor: "pointer" }}>
+              <Button onClick={handleAddTable} color="red" variant="solid" size="3" style={{ fontWeight: 600, cursor: "pointer" }}>
                 <Plus className="w-4 h-4" /> Add Table
               </Button>
             )}
@@ -98,7 +98,7 @@ export function SeatingVisualizer({
           <Grid columns={{ initial: "1", sm: "2", lg: "4" }} gap="4" mb="6">
             <Card size="2">
               <Flex align="center" gap="4">
-                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Box p="2" style={{ backgroundColor: "var(--red-3)", color: "var(--red-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
                   <LayoutDashboard className="w-5 h-5" />
                 </Box>
                 <Box>
@@ -109,7 +109,7 @@ export function SeatingVisualizer({
             </Card>
             <Card size="2">
               <Flex align="center" gap="4">
-                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Box p="2" style={{ backgroundColor: "var(--red-3)", color: "var(--red-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
                   <Users className="w-5 h-5" />
                 </Box>
                 <Box>
@@ -120,18 +120,18 @@ export function SeatingVisualizer({
             </Card>
             <Card size="2">
               <Flex align="center" gap="4">
-                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Box p="2" style={{ backgroundColor: "var(--red-3)", color: "var(--red-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
                   <Users className="w-5 h-5" />
                 </Box>
                 <Box>
-                  <Text size="1" weight="bold" color="crimson" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Assigned Pax</Text>
+                  <Text size="1" weight="bold" color="red" style={{ textTransform: "uppercase", letterSpacing: "0.05em" }} mb="1" as="div">Assigned Pax</Text>
                   <Text as="div" size="6" weight="bold">{occupiedSeats} <Text size="2" color="gray" weight="medium">/ {allPax}</Text></Text>
                 </Box>
               </Flex>
             </Card>
             <Card size="2">
               <Flex align="center" gap="4">
-                <Box p="2" style={{ backgroundColor: "var(--crimson-3)", color: "var(--crimson-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+                <Box p="2" style={{ backgroundColor: "var(--red-3)", color: "var(--red-10)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
                   <Users className="w-5 h-5" />
                 </Box>
                 <Box>
@@ -145,13 +145,13 @@ export function SeatingVisualizer({
 
         {/* ─── Content: Empty state / Map / Grid ─── */}
         {initialTables.length === 0 ? (
-          <Box p="9" style={{ textAlign: "center", border: "1px dashed var(--gray-5)", borderRadius: "var(--radius-4)", backgroundColor: "white", minHeight: "250px" }} className="flex flex-col items-center justify-center">
+          <Box p="9" style={{ textAlign: "center", border: "1px dashed var(--gray-5)", borderRadius: "var(--radius-4)", background: "var(--color-panel-solid)", minHeight: "250px" }} className="flex flex-col items-center justify-center">
             <LayoutDashboard className="w-12 h-12 mb-4" style={{ color: "var(--gray-8)" }} />
             <Heading size="5" mb="2">No Tables Found</Heading>
             <Text as="p" size="2" color="gray" mb="5" style={{ maxWidth: "400px" }}>
               There are currently no tables initialized for the {currentEvent} event.
             </Text>
-            <Button size="3" color="crimson" onClick={handleInitialize} style={{ cursor: "pointer" }}>
+            <Button size="3" color="red" onClick={handleInitialize} style={{ cursor: "pointer" }}>
               Initialize Default Tables
             </Button>
           </Box>
@@ -255,7 +255,7 @@ export function SeatingVisualizer({
                   alignItems: "center",
                   justifyContent: "center"
                 }}
-                className="transition group hover:border-[var(--crimson-7)] hover:bg-[var(--crimson-2)]"
+                className="transition group hover:border-[var(--red-7)] hover:bg-[var(--red-2)]"
               >
                 <div 
                   style={{ 
@@ -263,11 +263,11 @@ export function SeatingVisualizer({
                     backgroundColor: "var(--gray-4)",
                     display: "flex", alignItems: "center", justifyContent: "center" 
                   }}
-                  className="group-hover:bg-[var(--crimson-4)] group-hover:text-[var(--crimson-11)] transition mb-2 text-slate-500"
+                  className="group-hover:bg-[var(--red-4)] group-hover:text-[var(--red-11)] transition mb-2 text-slate-500"
                 >
                   <Plus className="w-5 h-5" />
                 </div>
-                <Text size="1" weight="bold" color="gray" className="group-hover:text-[var(--crimson-11)]">Add Table</Text>
+                <Text size="1" weight="bold" color="gray" className="group-hover:text-[var(--red-11)]">Add Table</Text>
               </button>
             )}
           </Grid>

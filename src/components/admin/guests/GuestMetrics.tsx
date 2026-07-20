@@ -40,7 +40,7 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
     <Grid columns={{ initial: "2", md: "5" }} gap="4" mb="2">
       <Card size="2">
         <Flex align="center" gap="3">
-          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--red-3)", color: "var(--red-11)", borderRadius: "var(--radius-3)" }}>
             <Mail width={20} height={20} />
           </Flex>
           <Box>
@@ -53,7 +53,7 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
       <Card size="2">
         <Flex align="center" justify="between" gap="2" style={{ height: "100%" }}>
           <Flex align="center" gap="3">
-            <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
+            <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--red-3)", color: "var(--red-11)", borderRadius: "var(--radius-3)", flexShrink: 0 }}>
               <Users width={20} height={20} />
             </Flex>
             <Box>
@@ -72,11 +72,11 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
 
       <Card size="2">
         <Flex align="center" gap="3">
-          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-4)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--red-4)", color: "var(--red-11)", borderRadius: "var(--radius-3)" }}>
             <Text weight="bold">{groomName.charAt(0)}</Text>
           </Flex>
           <Box>
-            <Text size="1" weight="medium" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>{groomName}'s Pax</Text>
+            <Text size="1" weight="medium" style={{ color: "var(--red-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>{groomName}'s Pax</Text>
             <Heading size="6" mt="1">{groomPax}</Heading>
           </Box>
         </Flex>
@@ -84,11 +84,11 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
 
       <Card size="2">
         <Flex align="center" gap="3">
-          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-4)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--red-4)", color: "var(--red-11)", borderRadius: "var(--radius-3)" }}>
             <Text weight="bold">{brideName.charAt(0)}</Text>
           </Flex>
           <Box>
-            <Text size="1" weight="medium" style={{ color: "var(--crimson-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>{brideName}'s Pax</Text>
+            <Text size="1" weight="medium" style={{ color: "var(--red-11)", textTransform: "uppercase", letterSpacing: "0.02em" }}>{brideName}'s Pax</Text>
             <Heading size="6" mt="1">{bridePax}</Heading>
           </Box>
         </Flex>
@@ -96,7 +96,7 @@ export function GuestMetrics({ invitations = [], config = {} }: GuestMetricsProp
 
       <Card size="2">
         <Flex align="center" gap="3">
-          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--crimson-3)", color: "var(--crimson-11)", borderRadius: "var(--radius-3)" }}>
+          <Flex align="center" justify="center" style={{ width: 40, height: 40, backgroundColor: "var(--red-3)", color: "var(--red-11)", borderRadius: "var(--radius-3)" }}>
             <UserCheck width={20} height={20} />
           </Flex>
           <Box>

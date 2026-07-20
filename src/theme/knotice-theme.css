@@ -1,17 +1,17 @@
 /* Load after @radix-ui/themes/styles.css */
 
 :root {
-  --knotice-chestnut-rose-50: #fcf5f4;
-  --knotice-chestnut-rose-100: #faebe9;
-  --knotice-chestnut-rose-200: #f5d8d6;
-  --knotice-chestnut-rose-300: #edb7b4;
-  --knotice-chestnut-rose-400: #e28c8a;
-  --knotice-chestnut-rose-500: #d36060;
-  --knotice-chestnut-rose-600: #bd4147;
-  --knotice-chestnut-rose-700: #9f3139;
-  --knotice-chestnut-rose-800: #852c35;
-  --knotice-chestnut-rose-900: #732832;
-  --knotice-chestnut-rose-950: #3f1217;
+  --knotice-red-50: #fffcfc;
+  --knotice-red-100: #fef8f7;
+  --knotice-red-200: #fdece9;
+  --knotice-red-300: #ffddd8;
+  --knotice-red-400: #ffcfc8;
+  --knotice-red-500: #fabfb8;
+  --knotice-red-600: #f1aba3;
+  --knotice-red-700: #e79288;
+  --knotice-red-800: #ec5e55;
+  --knotice-red-900: #df5049;
+  --knotice-red-950: #c83c37;
   --knotice-ink: #1a1a1a;
   --knotice-white: #ffffff;
 }
@@ -25,14 +25,14 @@
   --heading-font-family: var(--default-font-family);
   --strong-font-family: var(--default-font-family);
 
-  /* Use native Radix crimson for light/dark support */
+  /* Use native Radix red for light/dark support */
 }
 
 /* Optional app-shell helpers. Radix components should remain the main UI layer. */
 .knotice-app {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 10% 0%, var(--crimson-a2), transparent 28rem),
+    radial-gradient(circle at 10% 0%, var(--red-a2), transparent 28rem),
     var(--color-background);
   color: var(--gray-12);
 }
@@ -58,4 +58,148 @@
   display: block;
   width: 36px;
   height: 36px;
+}
+
+/* Custom Radix Red Palette Overrides */
+/* ------------------------------------- */
+/* Light Theme Base */
+:root .radix-themes[data-accent-color="red"], .light .radix-themes[data-accent-color="red"], .radix-themes.light-theme[data-accent-color="red"] {
+  --red-1: #fffcfc !important;
+  --red-2: #fef8f7 !important;
+  --red-3: #fdece9 !important;
+  --red-4: #ffddd8 !important;
+  --red-5: #ffcfc8 !important;
+  --red-6: #fabfb8 !important;
+  --red-7: #f1aba3 !important;
+  --red-8: #e79288 !important;
+  --red-9: #ec5e55 !important;
+  --red-10: #df5049 !important;
+  --red-11: #c83c37 !important;
+  --red-12: #5f221e !important;
+
+  --red-a1: #ff000003 !important;
+  --red-a2: #e0200008 !important;
+  --red-a3: #e8230016 !important;
+  --red-a4: #ff210027 !important;
+  --red-a5: #ff210037 !important;
+  --red-a6: #ee1a0047 !important;
+  --red-a7: #d917005c !important;
+  --red-a8: #cc160077 !important;
+  --red-a9: #e30e00aa !important;
+  --red-a10: #d20a00b6 !important;
+  --red-a11: #b90700c8 !important;
+  --red-a12: #4a0500e1 !important;
+
+  --red-contrast: #fff !important;
+  --red-surface: #fef6f5cc !important;
+  --red-indicator: #ec5e55 !important;
+  --red-track: #ec5e55 !important;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    :root .radix-themes[data-accent-color="red"], .light .radix-themes[data-accent-color="red"], .radix-themes.light-theme[data-accent-color="red"] {
+      --red-1: oklch(99.4% 0.0029 26.64) !important;
+      --red-2: oklch(98.4% 0.0072 26.64) !important;
+      --red-3: oklch(95.6% 0.0195 26.64) !important;
+      --red-4: oklch(92.7% 0.0431 26.64) !important;
+      --red-5: oklch(89.5% 0.0568 26.64) !important;
+      --red-6: oklch(85.5% 0.0689 26.64) !important;
+      --red-7: oklch(80.6% 0.0833 26.64) !important;
+      --red-8: oklch(74.4% 0.1052 26.64) !important;
+      --red-9: oklch(66.3% 0.1776 26.64) !important;
+      --red-10: oklch(62.4% 0.1792 26.64) !important;
+      --red-11: oklch(56% 0.1776 26.64) !important;
+      --red-12: oklch(34.2% 0.0903 26.64) !important;
+
+      --red-a1: color(display-p3 0.6745 0.0235 0.0235 / 0.012) !important;
+      --red-a2: color(display-p3 0.7569 0.1451 0.0196 / 0.032) !important;
+      --red-a3: color(display-p3 0.7647 0.1529 0.0078 / 0.083) !important;
+      --red-a4: color(display-p3 0.8431 0.1373 0.0078 / 0.15) !important;
+      --red-a5: color(display-p3 0.851 0.1333 0.0039 / 0.208) !important;
+      --red-a6: color(display-p3 0.8 0.1059 0.0039 / 0.271) !important;
+      --red-a7: color(display-p3 0.7373 0.102 0.0039 / 0.353) !important;
+      --red-a8: color(display-p3 0.6902 0.098 0.0039 / 0.455) !important;
+      --red-a9: color(display-p3 0.7804 0.0745 0 / 0.644) !important;
+      --red-a10: color(display-p3 0.7255 0.0627 0 / 0.691) !important;
+      --red-a11: color(display-p3 0.6392 0.0471 0 / 0.757) !important;
+      --red-a12: color(display-p3 0.2471 0.0235 0 / 0.871) !important;
+
+      --red-contrast: #fff !important;
+      --red-surface: color(display-p3 0.9922 0.9647 0.9608 / 0.8) !important;
+      --red-indicator: oklch(66.3% 0.1776 26.64) !important;
+      --red-track: oklch(66.3% 0.1776 26.64) !important;
+    }
+  }
+}
+
+/* Dark Theme Overrides */
+.dark .radix-themes[data-accent-color="red"], .radix-themes.dark-theme[data-accent-color="red"] {
+  --red-1: #1b1312 !important;
+  --red-2: #211513 !important;
+  --red-3: #3b1412 !important;
+  --red-4: #501210 !important;
+  --red-5: #611916 !important;
+  --red-6: #722622 !important;
+  --red-7: #8b3630 !important;
+  --red-8: #b34740 !important;
+  --red-9: #ec5e55 !important;
+  --red-10: #de5149 !important;
+  --red-11: #ff9084 !important;
+  --red-12: #ffd2cd !important;
+
+  --red-a1: #f800000a !important;
+  --red-a2: #f3070011 !important;
+  --red-a3: #fb0b002d !important;
+  --red-a4: #fe070043 !important;
+  --red-a5: #ff1f1055 !important;
+  --red-a6: #fd3e2f68 !important;
+  --red-a7: #fe544683 !important;
+  --red-a8: #fe5e52ae !important;
+  --red-a9: #ff645aeb !important;
+  --red-a10: #ff5a51dc !important;
+  --red-a11: #ff9084 !important;
+  --red-a12: #ffd2cd !important;
+
+  --red-contrast: #fff !important;
+  --red-surface: #30150e80 !important;
+  --red-indicator: #ec5e55 !important;
+  --red-track: #ec5e55 !important;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    .dark .radix-themes[data-accent-color="red"], .radix-themes.dark-theme[data-accent-color="red"] {
+      --red-1: oklch(19.7% 0.013 26.64) !important;
+      --red-2: oklch(21% 0.0202 26.64) !important;
+      --red-3: oklch(25.3% 0.0617 26.64) !important;
+      --red-4: oklch(29% 0.0935 26.64) !important;
+      --red-5: oklch(33.2% 0.1041 26.64) !important;
+      --red-6: oklch(38.2% 0.1083 26.64) !important;
+      --red-7: oklch(45% 0.1171 26.64) !important;
+      --red-8: oklch(54.2% 0.1424 26.64) !important;
+      --red-9: oklch(66.3% 0.1776 26.64) !important;
+      --red-10: oklch(62.4% 0.1776 26.64) !important;
+      --red-11: oklch(78.4% 0.1618 26.64) !important;
+      --red-12: oklch(90.1% 0.0507 26.64) !important;
+
+      --red-a1: color(display-p3 0.9922 0 0 / 0.03) !important;
+      --red-a2: color(display-p3 1 0.0118 0 / 0.051) !important;
+      --red-a3: color(display-p3 0.9961 0.0863 0 / 0.149) !important;
+      --red-a4: color(display-p3 1 0.1059 0 / 0.229) !important;
+      --red-a5: color(display-p3 1 0.2078 0.1098 / 0.297) !important;
+      --red-a6: color(display-p3 1 0.3137 0.2275 / 0.365) !important;
+      --red-a7: color(display-p3 1 0.3961 0.3255 / 0.467) !important;
+      --red-a8: color(display-p3 1 0.4392 0.3765 / 0.623) !important;
+      --red-a9: color(display-p3 1 0.4627 0.4039 / 0.848) !important;
+      --red-a10: color(display-p3 1 0.4275 0.3647 / 0.793) !important;
+      --red-a11: color(display-p3 1 0.6235 0.5608 / 0.937) !important;
+      --red-a12: color(display-p3 0.9961 0.851 0.8275 / 0.971) !important;
+
+      --red-contrast: #fff !important;
+      --red-surface: color(display-p3 0.1647 0.0784 0.0588 / 0.5) !important;
+      --red-indicator: oklch(66.3% 0.1776 26.64) !important;
+      --red-track: oklch(66.3% 0.1776 26.64) !important;
+    }
+  }
 }

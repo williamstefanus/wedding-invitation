@@ -79,8 +79,8 @@ export function PinLoginModal({ isOpen, onSuccess }: PinLoginModalProps) {
           </Flex>
 
           {error && (
-            <Box style={{ width: "100%", padding: "12px", backgroundColor: "var(--crimson-3)", border: "1px solid var(--crimson-5)", borderRadius: "var(--radius-3)", textAlign: "center" }}>
-              <Text size="2" weight="bold" color="crimson">
+            <Box style={{ width: "100%", padding: "12px", backgroundColor: "var(--red-3)", border: "1px solid var(--red-5)", borderRadius: "var(--radius-3)", textAlign: "center" }}>
+              <Text size="2" weight="bold" color="red">
                 ✕ {error}
               </Text>
             </Box>
@@ -114,7 +114,7 @@ export function PinLoginModal({ isOpen, onSuccess }: PinLoginModalProps) {
             </Button>
             <Button
               variant="soft"
-              color="crimson"
+              color="red"
               size="4"
               onClick={handleDelete}
               disabled={loading || !pin}

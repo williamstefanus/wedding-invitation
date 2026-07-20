@@ -115,7 +115,7 @@ export default function AdminLoginPage() {
 
             <Button 
               size="3" 
-              color="crimson" 
+              color="red" 
               style={{ width: "100%", cursor: "pointer", fontWeight: 600 }}
               disabled={loading || !password}
             >

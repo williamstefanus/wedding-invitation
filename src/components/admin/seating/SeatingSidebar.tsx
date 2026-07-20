@@ -114,7 +114,7 @@ export function SeatingSidebar({
                 <Plus className="w-4 h-4" /> Add Guest to Table
               </Button>
               {selectedTable.sort_order >= 1 && selectedTable.sort_order <= 26 && (
-                <Button size="3" variant="outline" color="crimson" onClick={async () => {
+                <Button size="3" variant="outline" color="red" onClick={async () => {
                   if (!confirm(`Remove ${selectedTable.table_name} from the floor plan map? (Guests will remain assigned to the table)`)) return;
                   await unassignTableMapPosition(selectedTable.id);
                   setSelectedTableId(null);

@@ -50,7 +50,7 @@ export function AdminLayoutWrapper({ children, session }: { children: React.Reac
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <Button variant="ghost" style={{ cursor: "pointer", padding: "8px", borderRadius: "20px" }}>
-                  <Avatar fallback={session?.username?.charAt(0).toUpperCase() || "A"} size="2" color="crimson" radius="full" />
+                  <Avatar fallback={session?.username?.charAt(0).toUpperCase() || "A"} size="2" color="red" radius="full" />
                   <span style={{ fontWeight: 600, marginLeft: "8px", textTransform: "capitalize", color: "var(--gray-11)" }}>
                     {session?.username || "Admin"}
                   </span>
