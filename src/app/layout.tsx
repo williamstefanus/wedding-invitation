@@ -81,6 +81,8 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: { index: false, follow: false },
     icons: {
       icon: faviconUrl,
+      shortcut: faviconUrl,
+      apple: faviconUrl,
     },
   };
 }
