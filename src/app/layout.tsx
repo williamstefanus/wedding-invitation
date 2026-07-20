@@ -62,9 +62,10 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const settingsRes = await getSettings();
     const config = settingsRes.success ? (settingsRes.data?.config as any) : null;
-    if (config?.faviconUrl) {
-      faviconUrl = config.faviconUrl;
-    }
+    
+    // Favicon URL is handled dynamically by /api/favicon route for Safari compatibility
+    // We don't override faviconUrl here anymore, it just defaults to /api/favicon
+    
     if (config?.groomFirstName && config?.brideFirstName) {
       coupleName = `${config.groomFirstName} & ${config.brideFirstName}`;
     }
@@ -81,9 +82,9 @@ export async function generateMetadata(): Promise<Metadata> {
       `A private digital wedding invitation and guest management platform for ${coupleName}'s celebration.`,
     robots: { index: false, follow: false },
     icons: {
-      icon: { url: faviconUrl, type: faviconUrl.endsWith('.svg') ? 'image/svg+xml' : faviconUrl.endsWith('.ico') ? 'image/x-icon' : 'image/png' },
-      shortcut: { url: faviconUrl, type: faviconUrl.endsWith('.svg') ? 'image/svg+xml' : faviconUrl.endsWith('.ico') ? 'image/x-icon' : 'image/png' },
-      apple: { url: faviconUrl, type: faviconUrl.endsWith('.svg') ? 'image/svg+xml' : faviconUrl.endsWith('.ico') ? 'image/x-icon' : 'image/png' },
+      icon: { url: '/api/favicon', type: 'image/png' },
+      shortcut: { url: '/api/favicon', type: 'image/png' },
+      apple: { url: '/api/favicon', type: 'image/png' },
     },
   };
 }
