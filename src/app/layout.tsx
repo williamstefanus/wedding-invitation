@@ -63,8 +63,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const settingsRes = await getSettings();
     const config = settingsRes.success ? (settingsRes.data?.config as any) : null;
     if (config?.faviconUrl) {
-      // Append a cache-buster to force Safari to fetch the new favicon
-      faviconUrl = `${config.faviconUrl}?v=${new Date().getTime()}`;
+      faviconUrl = config.faviconUrl;
     }
     if (config?.groomFirstName && config?.brideFirstName) {
       coupleName = `${config.groomFirstName} & ${config.brideFirstName}`;
@@ -82,9 +81,9 @@ export async function generateMetadata(): Promise<Metadata> {
       `A private digital wedding invitation and guest management platform for ${coupleName}'s celebration.`,
     robots: { index: false, follow: false },
     icons: {
-      icon: faviconUrl,
-      shortcut: faviconUrl,
-      apple: faviconUrl,
+      icon: { url: faviconUrl, type: faviconUrl.endsWith('.svg') ? 'image/svg+xml' : faviconUrl.endsWith('.ico') ? 'image/x-icon' : 'image/png' },
+      shortcut: { url: faviconUrl, type: faviconUrl.endsWith('.svg') ? 'image/svg+xml' : faviconUrl.endsWith('.ico') ? 'image/x-icon' : 'image/png' },
+      apple: { url: faviconUrl, type: faviconUrl.endsWith('.svg') ? 'image/svg+xml' : faviconUrl.endsWith('.ico') ? 'image/x-icon' : 'image/png' },
     },
   };
 }
