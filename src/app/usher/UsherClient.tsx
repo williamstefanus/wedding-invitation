@@ -6,6 +6,7 @@ import { getSeatingData } from "@/lib/actions/seating";
 import { PinLoginModal } from "@/components/usher/PinLoginModal";
 import { UsherGuestCard } from "@/components/usher/UsherGuestCard";
 import { FloorPlanView } from "@/components/admin/seating/FloorPlanView";
+import { ThemeToggle } from "@/components/admin/ThemeToggle";
 import { Search, LogOut, RefreshCw, Users, UserCheck, Map, List, X, FileText, MapPin, Check } from "lucide-react";
 import { Box, Flex, Text, Heading, Button, Card, Grid, SegmentedControl, TextField, Checkbox, Dialog, ScrollArea, Progress, Container, IconButton, Badge, TextArea, Spinner } from "@radix-ui/themes";
 
@@ -219,6 +220,7 @@ export function UsherClient({
 
                 {/* Action buttons */}
                 <Flex align="center" gap="2">
+                  <ThemeToggle />
                   <Button variant="soft" color="gray" onClick={handleRefresh} disabled={isPending}>
                     <RefreshCw width={14} height={14} className={isPending ? "animate-spin" : ""} />
                     <Text className="hidden md:inline">Refresh</Text>
