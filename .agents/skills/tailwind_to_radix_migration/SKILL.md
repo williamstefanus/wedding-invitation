@@ -42,3 +42,13 @@ When setting up dark mode with Radix UI, be vigilant about lingering Tailwind cl
 - **Clean up hardcoded backgrounds**: Ensure layout files and page wrappers do not contain `bg-white`, `bg-slate-50`, or hardcoded style props like `backgroundColor: "white"`. Rely entirely on Radix UI's `hasBackground={true}` on the `<Theme>` tag to set the root background, or use `var(--color-surface)` / `var(--color-panel-solid)`.
 - **Avoid Global CSS overriding `color-scheme`**: Never hardcode `color-scheme: light;` in global `.radix-themes` classes.
 - **Avoid Hardcoding Theme Palettes**: Do not override Radix native scale variables (like `--crimson-1: #ffffff;`) in global CSS unless you are providing matching variables for dark mode (`.dark` or `.dark-theme`). Using Radix's native palettes ensures automatic light/dark switching out of the box.
+
+## 7. Modal / Dialog Migration
+When migrating custom modals (e.g., ones built with Tailwind classes like `fixed inset-0 bg-slate-900/50 z-50`):
+- **Always rewrite them using Radix UI `Dialog` components** (`Dialog.Root`, `Dialog.Content`, `Dialog.Title`, etc.).
+- Hardcoded Tailwind backgrounds and text colors inside custom modals often break during dark mode toggling. The native Radix `Dialog` handles focus trapping, accessibility, animations, and dark mode colors seamlessly.
+
+## 8. Icon Dependencies
+Radix UI's documentation often uses `@radix-ui/react-icons` (e.g., `InfoCircledIcon`, `Cross2Icon`) in their examples.
+- **Do not blindly copy/paste imports from `@radix-ui/react-icons`** unless you are sure the package is installed.
+- If the project is already using a different icon set (like `lucide-react`), find the equivalent icon (e.g., `AlertCircle` instead of `InfoCircledIcon`) to avoid introducing missing module build errors (`Module not found: Can't resolve '@radix-ui/react-icons'`).
