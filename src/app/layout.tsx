@@ -53,6 +53,8 @@ const egizio = localFont({
 
 import { getSettings } from "@/lib/actions/settings";
 
+export const revalidate = 0; // Force layout to revalidate to ensure favicon updates
+
 export async function generateMetadata(): Promise<Metadata> {
   let faviconUrl = "/favicon-default.ico";
   let coupleName = "John & Jane";
