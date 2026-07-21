@@ -74,10 +74,12 @@ export function GuestClient({
   }, [allInvitations, currentTab]);
 
   // Form State
-  const [formData, setFormData] = useState({
+  const groomName = config?.groomFirstName || "William";
+
+  const [formData, setFormData] = useState<any>({
     name: "",
     phone: "",
-    owner: "William" as GuestOwner,
+    owner: "groom" as GuestOwner,
     category: "Friends" as GuestCategory,
     notes: ""
   });
