@@ -69,8 +69,8 @@ export const ADMIN_NAV_ITEMS = [
 
 export const WEDDING_INVITATION_ASSETS = {
   heroOpeningTitle: "/images/wedding/hero-opening-title.webp",
-  heroBackground: "/images/wedding/hero-background-mountains.webp",
-  heroCouplePhoto: "/images/wedding/hero-couple-photo.webp",
+  heroBackground: "/images/wedding/hero-bg-v2.png",
+  heroCouplePhoto: "/images/wedding/hero-couple-v2.png",
   heroGrassForeground: "/images/wedding/hero-grass-foreground.webp",
   meadowFlowerDivider: "/images/wedding/meadow-flower-divider.webp",
   countdownCardDecor: "/images/wedding/countdown-card-decor.png",
