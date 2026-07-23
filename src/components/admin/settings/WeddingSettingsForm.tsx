@@ -1,7 +1,7 @@
 "use client";
 
-import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, MessageSquare } from "lucide-react";
-import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code } from "@radix-ui/themes";
+import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, MessageSquare, User } from "lucide-react";
+import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code, Avatar, IconButton } from "@radix-ui/themes";
 interface WeddingSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
@@ -12,6 +12,10 @@ interface WeddingSettingsFormProps {
   uploading: boolean;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeImage: (index: number) => void;
+  uploadingGroomPhoto?: boolean;
+  handleGroomPhotoUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  uploadingBridePhoto?: boolean;
+  handleBridePhotoUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function WeddingSettingsForm({
@@ -23,7 +27,11 @@ export function WeddingSettingsForm({
   setSessions,
   uploading,
   handleImageUpload,
-  removeImage
+  removeImage,
+  uploadingGroomPhoto,
+  handleGroomPhotoUpload,
+  uploadingBridePhoto,
+  handleBridePhotoUpload
 }: WeddingSettingsFormProps) {
   const moveImage = (index: number, direction: 'left' | 'right') => {
     if (!config.galleryImages) return;
@@ -217,6 +225,84 @@ export function WeddingSettingsForm({
               onChange={e => setConfig({...config, bibleVerseReferenceId: e.target.value})}
               placeholder="e.g. Yakobus 1:17"
             />
+          </Box>
+        </Grid>
+      </Card>
+
+      {/* Groom & Bride Profile Photos */}
+      <Card size="3">
+        <Flex align="center" gap="2" mb="5">
+          <User className="w-5 h-5 text-indigo-600" />
+          <Heading size="4">Profile Photos (Opening Screen)</Heading>
+        </Flex>
+
+        <Grid columns={{ initial: "1", md: "2" }} gap="6">
+          <Box p="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)" }}>
+            <Text weight="bold" mb="4" style={{ display: "block", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--blue-9)" }}>Groom Photo</Text>
+            <Flex direction={{ initial: "column", sm: "row" }} align={{ initial: "start", sm: "center" }} gap="5">
+              <Box style={{ width: 64, height: 64, borderRadius: "var(--radius-3)", border: "2px dashed var(--gray-5)", display: "flex", alignItems: "center", justifyItems: "center", backgroundColor: "var(--gray-3)", overflow: "hidden", flexShrink: 0 }}>
+                {config.groomPhotoUrl ? (
+                  <img src={config.groomPhotoUrl} alt="Groom preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <User className="w-6 h-6 text-slate-400" style={{ margin: "auto" }} />
+                )}
+              </Box>
+              <Flex direction="column" gap="2">
+                <Flex align="center" wrap="wrap" gap="2">
+                  <Button asChild variant="soft" disabled={uploadingGroomPhoto} style={{ cursor: "pointer" }}>
+                    <label>
+                      {uploadingGroomPhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                      {config.groomPhotoUrl ? 'Replace' : 'Upload'} Photo
+                      {handleGroomPhotoUpload && <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleGroomPhotoUpload} style={{ display: "none" }} disabled={uploadingGroomPhoto} />}
+                    </label>
+                  </Button>
+                  {config.groomPhotoUrl && (
+                    <Button
+                      color="red"
+                      variant="soft"
+                      onClick={() => setConfig({ ...config, groomPhotoUrl: '' })}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Remove
+                    </Button>
+                  )}
+                </Flex>
+              </Flex>
+            </Flex>
+          </Box>
+
+          <Box p="4" style={{ backgroundColor: "var(--gray-2)", borderRadius: "var(--radius-3)" }}>
+            <Text weight="bold" mb="4" style={{ display: "block", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--pink-9)" }}>Bride Photo</Text>
+            <Flex direction={{ initial: "column", sm: "row" }} align={{ initial: "start", sm: "center" }} gap="5">
+              <Box style={{ width: 64, height: 64, borderRadius: "var(--radius-3)", border: "2px dashed var(--gray-5)", display: "flex", alignItems: "center", justifyItems: "center", backgroundColor: "var(--gray-3)", overflow: "hidden", flexShrink: 0 }}>
+                {config.bridePhotoUrl ? (
+                  <img src={config.bridePhotoUrl} alt="Bride preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <User className="w-6 h-6 text-slate-400" style={{ margin: "auto" }} />
+                )}
+              </Box>
+              <Flex direction="column" gap="2">
+                <Flex align="center" wrap="wrap" gap="2">
+                  <Button asChild variant="soft" disabled={uploadingBridePhoto} style={{ cursor: "pointer" }}>
+                    <label>
+                      {uploadingBridePhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                      {config.bridePhotoUrl ? 'Replace' : 'Upload'} Photo
+                      {handleBridePhotoUpload && <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleBridePhotoUpload} style={{ display: "none" }} disabled={uploadingBridePhoto} />}
+                    </label>
+                  </Button>
+                  {config.bridePhotoUrl && (
+                    <Button
+                      color="red"
+                      variant="soft"
+                      onClick={() => setConfig({ ...config, bridePhotoUrl: '' })}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Remove
+                    </Button>
+                  )}
+                </Flex>
+              </Flex>
+            </Flex>
           </Box>
         </Grid>
       </Card>

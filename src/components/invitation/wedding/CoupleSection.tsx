@@ -100,7 +100,7 @@ export function CoupleSection({ config = {} }: { config?: any }) {
               <div className="relative w-[45%] aspect-[152/172] rotate-[7deg] shrink-0 scale-[1.1]">
                 {/* We use standard inset so the photo fits nicely inside the stamp frame */}
                 <div className="absolute inset-[6.5%] overflow-hidden bg-slate-200 z-10 rounded-sm">
-                  <Image src={ASSET.groomPhotoWilliam} alt="Groom" fill sizes="200px" className="object-cover scale-[1.04]" />
+                  <Image src={config.groomPhotoUrl || ASSET.groomPhotoWilliam} alt="Groom" fill sizes="200px" className="object-cover scale-[1.04]" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
                   <Image src={ASSET.stampFrame} alt="Stamp" fill sizes="200px" className="object-fill" />
@@ -129,7 +129,7 @@ export function CoupleSection({ config = {} }: { config?: any }) {
               {/* Stamp Container */}
               <div className="relative w-[45%] aspect-[152/172] -rotate-[7deg] shrink-0 scale-[1.1]">
                 <div className="absolute inset-[6.5%] overflow-hidden bg-slate-200 z-10 rounded-sm">
-                  <Image src={ASSET.bridePhotoAziel} alt="Bride" fill sizes="200px" className="object-cover object-top scale-[1.04]" />
+                  <Image src={config.bridePhotoUrl || ASSET.bridePhotoAziel} alt="Bride" fill sizes="200px" className="object-cover object-top scale-[1.04]" />
                 </div>
                 <div className="absolute inset-0 z-20 pointer-events-none">
                   <Image src={ASSET.stampFrame} alt="Stamp" fill sizes="200px" className="object-fill" />

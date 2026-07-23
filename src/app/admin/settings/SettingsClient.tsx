@@ -53,13 +53,13 @@ async function loadImageElement(file: File) {
   }
 }
 
-async function optimizeImageForUpload(file: File) {
+async function optimizeImageForUpload(file: File, maxDimension: number = 1600) {
   if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
     return { file, optimized: false };
   }
 
   const image = await loadImageElement(file);
-  const scale = Math.min(1, GALLERY_IMAGE_MAX_DIMENSION / Math.max(image.naturalWidth, image.naturalHeight));
+  const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
   const width = Math.max(1, Math.round(image.naturalWidth * scale));
   const height = Math.max(1, Math.round(image.naturalHeight * scale));
 
@@ -132,6 +132,8 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
 
   const [uploading, setUploading] = useState(false);
   const [uploadingFavicon, setUploadingFavicon] = useState(false);
+  const [uploadingGroomPhoto, setUploadingGroomPhoto] = useState(false);
+  const [uploadingBridePhoto, setUploadingBridePhoto] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const showNotification = (type: 'success' | 'error', text: string) => {
@@ -283,16 +285,17 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
     setUploadingFavicon(true);
     try {
       const supabase = createClient();
+      const { file: uploadFile, optimized } = await optimizeImageForUpload(file, 256);
 
-      const fileExt = file.name.split('.').pop() || 'png';
+      const fileExt = uploadFile.name.split('.').pop() || 'png';
       const fileName = `favicon_${Date.now()}.${fileExt}`;
       const filePath = fileName;
 
       const { error: uploadError } = await supabase.storage
         .from('gallery')
-        .upload(filePath, file, {
+        .upload(filePath, uploadFile, {
           cacheControl: '31536000',
-          contentType: file.type || 'image/png',
+          contentType: uploadFile.type || 'image/png',
         });
 
       if (uploadError) throw uploadError;
@@ -310,6 +313,94 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
     } finally {
       e.target.value = "";
       setUploadingFavicon(false);
+    }
+  };
+
+  const handleGroomPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_SOURCE_IMAGE_BYTES) {
+      showNotification('error', `File size exceeds ${formatBytes(MAX_SOURCE_IMAGE_BYTES)} limit.`);
+      return;
+    }
+
+    setUploadingGroomPhoto(true);
+    try {
+      const supabase = createClient();
+      const { file: uploadFile, optimized } = await optimizeImageForUpload(file, 800);
+
+      if (uploadFile.size > MAX_OPTIMIZED_IMAGE_BYTES) {
+        showNotification('error', `Optimized image is still too large (${formatBytes(uploadFile.size)}). Please choose a smaller image.`);
+        return;
+      }
+
+      const fileExt = uploadFile.name.split('.').pop() || 'webp';
+      const fileName = `groom_${getFileStem(uploadFile.name)}_${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('gallery')
+        .upload(filePath, uploadFile, {
+          cacheControl: '31536000',
+          contentType: uploadFile.type || 'application/octet-stream',
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage.from('gallery').getPublicUrl(filePath);
+
+      setConfig((prev: any) => ({ ...prev, groomPhotoUrl: publicUrlData.publicUrl }));
+      showNotification('success', 'Groom photo uploaded successfully.');
+    } catch (err: any) {
+      showNotification('error', `Upload failed: ${err.message}`);
+    } finally {
+      e.target.value = "";
+      setUploadingGroomPhoto(false);
+    }
+  };
+
+  const handleBridePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_SOURCE_IMAGE_BYTES) {
+      showNotification('error', `File size exceeds ${formatBytes(MAX_SOURCE_IMAGE_BYTES)} limit.`);
+      return;
+    }
+
+    setUploadingBridePhoto(true);
+    try {
+      const supabase = createClient();
+      const { file: uploadFile, optimized } = await optimizeImageForUpload(file, 800);
+
+      if (uploadFile.size > MAX_OPTIMIZED_IMAGE_BYTES) {
+        showNotification('error', `Optimized image is still too large (${formatBytes(uploadFile.size)}). Please choose a smaller image.`);
+        return;
+      }
+
+      const fileExt = uploadFile.name.split('.').pop() || 'webp';
+      const fileName = `bride_${getFileStem(uploadFile.name)}_${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('gallery')
+        .upload(filePath, uploadFile, {
+          cacheControl: '31536000',
+          contentType: uploadFile.type || 'application/octet-stream',
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage.from('gallery').getPublicUrl(filePath);
+
+      setConfig((prev: any) => ({ ...prev, bridePhotoUrl: publicUrlData.publicUrl }));
+      showNotification('success', 'Bride photo uploaded successfully.');
+    } catch (err: any) {
+      showNotification('error', `Upload failed: ${err.message}`);
+    } finally {
+      e.target.value = "";
+      setUploadingBridePhoto(false);
     }
   };
 
@@ -373,6 +464,10 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
                 uploading={uploading}
                 handleImageUpload={handleImageUpload}
                 removeImage={removeImage}
+                uploadingGroomPhoto={uploadingGroomPhoto}
+                handleGroomPhotoUpload={handleGroomPhotoUpload}
+                uploadingBridePhoto={uploadingBridePhoto}
+                handleBridePhotoUpload={handleBridePhotoUpload}
               />
             </Tabs.Content>
 

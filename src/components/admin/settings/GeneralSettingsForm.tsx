@@ -8,6 +8,10 @@ interface GeneralSettingsFormProps {
   setConfig: (config: any) => void;
   uploadingFavicon: boolean;
   handleFaviconUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  uploadingGroomPhoto?: boolean;
+  handleGroomPhotoUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  uploadingBridePhoto?: boolean;
+  handleBridePhotoUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function GeneralSettingsForm({
@@ -15,6 +19,10 @@ export function GeneralSettingsForm({
   setConfig,
   uploadingFavicon,
   handleFaviconUpload,
+  uploadingGroomPhoto,
+  handleGroomPhotoUpload,
+  uploadingBridePhoto,
+  handleBridePhotoUpload,
 }: GeneralSettingsFormProps) {
   const [showWoPin, setShowWoPin] = useState(false);
   const [showAdminPassword, setShowAdminPassword] = useState(false);
