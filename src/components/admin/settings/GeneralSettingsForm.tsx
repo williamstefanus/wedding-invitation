@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { User, Phone, Gift, Lock, Globe, UploadCloud, Loader2, Trash2, Eye, EyeOff } from "lucide-react";
-import { Box, Flex, Grid, Card, Heading, Text, TextField, Select, Button, Avatar, IconButton } from "@radix-ui/themes";
+import { User, Phone, Gift, Lock, Globe, UploadCloud, Trash2, Eye, EyeOff } from "lucide-react";
+import { Box, Flex, Grid, Card, Heading, Text, TextField, Select, Button, Avatar, IconButton, Spinner } from "@radix-ui/themes";
 interface GeneralSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
@@ -51,7 +51,7 @@ export function GeneralSettingsForm({
             <Flex align="center" wrap="wrap" gap="2">
               <Button asChild color="green" disabled={uploadingFavicon} style={{ cursor: "pointer" }}>
                 <label>
-                  {uploadingFavicon ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                  {uploadingFavicon ? <Spinner /> : <UploadCloud width="16" height="16" />}
                   {config.faviconUrl ? 'Replace' : 'Upload'} Favicon
                   <input type="file" accept="image/png,image/svg+xml,image/x-icon,image/ico,image/vnd.microsoft.icon" onChange={handleFaviconUpload} style={{ display: "none" }} disabled={uploadingFavicon} />
                 </label>
@@ -62,7 +62,7 @@ export function GeneralSettingsForm({
                   variant="soft"
                   onClick={() => setConfig({ ...config, faviconUrl: '' })}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 width="16" height="16" />
                   Remove
                 </Button>
               )}

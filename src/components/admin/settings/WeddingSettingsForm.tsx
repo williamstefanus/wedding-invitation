@@ -1,7 +1,7 @@
 "use client";
 
-import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, MessageSquare, User } from "lucide-react";
-import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code, Avatar, IconButton } from "@radix-ui/themes";
+import { Settings, Clock, Music, Calendar, MapPin, Link as LinkIcon, Gift, Image as ImageIcon, UploadCloud, Trash2, MessageSquare, User } from "lucide-react";
+import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code, Avatar, IconButton, Spinner } from "@radix-ui/themes";
 interface WeddingSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
@@ -251,7 +251,7 @@ export function WeddingSettingsForm({
                 <Flex align="center" wrap="wrap" gap="2">
                   <Button asChild variant="soft" disabled={uploadingGroomPhoto} style={{ cursor: "pointer" }}>
                     <label>
-                      {uploadingGroomPhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                      {uploadingGroomPhoto ? <Spinner /> : <UploadCloud width="16" height="16" />}
                       {config.groomPhotoUrl ? 'Replace' : 'Upload'} Photo
                       {handleGroomPhotoUpload && <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleGroomPhotoUpload} style={{ display: "none" }} disabled={uploadingGroomPhoto} />}
                     </label>
@@ -262,7 +262,7 @@ export function WeddingSettingsForm({
                       variant="soft"
                       onClick={() => setConfig({ ...config, groomPhotoUrl: '' })}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 width="16" height="16" />
                       Remove
                     </Button>
                   )}
@@ -285,7 +285,7 @@ export function WeddingSettingsForm({
                 <Flex align="center" wrap="wrap" gap="2">
                   <Button asChild variant="soft" disabled={uploadingBridePhoto} style={{ cursor: "pointer" }}>
                     <label>
-                      {uploadingBridePhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                      {uploadingBridePhoto ? <Spinner /> : <UploadCloud width="16" height="16" />}
                       {config.bridePhotoUrl ? 'Replace' : 'Upload'} Photo
                       {handleBridePhotoUpload && <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleBridePhotoUpload} style={{ display: "none" }} disabled={uploadingBridePhoto} />}
                     </label>
@@ -296,7 +296,7 @@ export function WeddingSettingsForm({
                       variant="soft"
                       onClick={() => setConfig({ ...config, bridePhotoUrl: '' })}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 width="16" height="16" />
                       Remove
                     </Button>
                   )}
@@ -322,7 +322,7 @@ export function WeddingSettingsForm({
           <Box>
             <Button asChild color="amber" disabled={uploading} style={{ cursor: "pointer" }}>
               <label>
-                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                {uploading ? <Spinner /> : <UploadCloud width="16" height="16" />}
                 Upload Image
                 <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} disabled={uploading} />
               </label>
@@ -346,7 +346,7 @@ export function WeddingSettingsForm({
                     Move Next ▶
                   </Button>
                   <Button color="red" onClick={() => removeImage(0)}>
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 width="16" height="16" />
                   </Button>
                 </Box>
                 <Text size="1" weight="bold" style={{ position: "absolute", bottom: "8px", left: "8px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px" }}>
@@ -374,7 +374,7 @@ export function WeddingSettingsForm({
                           <Button size="1" variant="solid" color="gray" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1}>▶</Button>
                         </Flex>
                         <Button size="1" color="red" onClick={() => removeImage(actualIdx)}>
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 width="14" height="14" />
                         </Button>
                       </Box>
                       <Text size="1" weight="bold" style={{ position: "absolute", bottom: "4px", left: "4px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>
@@ -405,7 +405,7 @@ export function WeddingSettingsForm({
                           <Button size="1" variant="solid" color="gray" onClick={() => moveImage(actualIdx, 'right')} disabled={actualIdx === config.galleryImages.length - 1}>▶</Button>
                         </Flex>
                         <Button size="1" color="red" onClick={() => removeImage(actualIdx)}>
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 width="14" height="14" />
                         </Button>
                       </Box>
                       <Text size="1" weight="bold" style={{ position: "absolute", bottom: "4px", left: "4px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>

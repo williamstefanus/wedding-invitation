@@ -1,7 +1,7 @@
 "use client";
 
-import { Clock, Calendar, MapPin, Link as LinkIcon, Music, MessageSquare, Gift, Image as ImageIcon, UploadCloud, Trash2, Loader2, CheckCircle2 } from "lucide-react";
-import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code, Callout } from "@radix-ui/themes";
+import { Clock, Calendar, MapPin, Link as LinkIcon, Music, MessageSquare, Gift, Image as ImageIcon, UploadCloud, Trash2, CheckCircle2 } from "lucide-react";
+import { Box, Flex, Grid, Card, Heading, Text, TextField, TextArea, Button, Code, Spinner } from "@radix-ui/themes";
 interface SangjitSettingsFormProps {
   config: any;
   setConfig: (config: any) => void;
@@ -187,7 +187,7 @@ export function SangjitSettingsForm({
           <Box>
             <Button asChild color="ruby" disabled={uploading} style={{ cursor: "pointer" }}>
               <label>
-                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+                {uploading ? <Spinner /> : <UploadCloud width="16" height="16" />}
                 Upload Image
                 <input type="file" accept="image/*" onChange={handleSangjitImageUpload} style={{ display: "none" }} disabled={uploading} />
               </label>
@@ -211,7 +211,7 @@ export function SangjitSettingsForm({
                     Move Next ▶
                   </Button>
                   <Button color="red" onClick={() => removeSangjitImage(0)}>
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 width="16" height="16" />
                   </Button>
                 </Box>
                 <Text size="1" weight="bold" style={{ position: "absolute", bottom: "8px", left: "8px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px" }}>
@@ -239,7 +239,7 @@ export function SangjitSettingsForm({
                           <Button size="1" variant="solid" color="gray" onClick={() => moveSangjitImage(actualIdx, 'right')} disabled={actualIdx === config.sangjitGalleryImages.length - 1}>▶</Button>
                         </Flex>
                         <Button size="1" color="red" onClick={() => removeSangjitImage(actualIdx)}>
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 width="14" height="14" />
                         </Button>
                       </Box>
                       <Text size="1" weight="bold" style={{ position: "absolute", bottom: "4px", left: "4px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>
@@ -270,7 +270,7 @@ export function SangjitSettingsForm({
                           <Button size="1" variant="solid" color="gray" onClick={() => moveSangjitImage(actualIdx, 'right')} disabled={actualIdx === config.sangjitGalleryImages.length - 1}>▶</Button>
                         </Flex>
                         <Button size="1" color="red" onClick={() => removeSangjitImage(actualIdx)}>
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 width="14" height="14" />
                         </Button>
                       </Box>
                       <Text size="1" weight="bold" style={{ position: "absolute", bottom: "4px", left: "4px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", padding: "2px 6px", borderRadius: "4px", fontSize: "10px" }}>

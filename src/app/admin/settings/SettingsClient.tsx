@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Loader2 } from "lucide-react";
+import { Save } from "lucide-react";
 import { saveSettings } from "@/lib/actions/settings";
 import { createClient } from "@/lib/supabase/client";
 
@@ -10,7 +10,7 @@ import { WeddingSettingsForm } from "@/components/admin/settings/WeddingSettings
 import { SangjitSettingsForm } from "@/components/admin/settings/SangjitSettingsForm";
 import { GeneralSettingsForm } from "@/components/admin/settings/GeneralSettingsForm";
 
-import { Box, Flex, Heading, Text, Button, Tabs, Callout } from "@radix-ui/themes";
+import { Box, Flex, Heading, Text, Button, Tabs, Callout, Spinner } from "@radix-ui/themes";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 interface SettingsClientProps {
@@ -420,7 +420,7 @@ export function SettingsClient({ initialData }: SettingsClientProps) {
             disabled={isSaving}
             style={{ cursor: "pointer", fontWeight: "bold" }}
           >
-            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {isSaving ? <Spinner /> : <Save width="16" height="16" />}
             Save Changes
           </Button>
         </Flex>
