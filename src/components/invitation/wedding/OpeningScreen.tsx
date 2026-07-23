@@ -26,7 +26,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
       <div className="absolute inset-0 z-0 bg-white overflow-hidden">
         {/* Background Mountains (Bleeds to fill screen) */}
         <motion.div 
-          className="absolute inset-0"
+          className="absolute inset-0 flex justify-center items-end"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -34,9 +34,17 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
               src={WEDDING_INVITATION_ASSETS.heroBackground}
               alt="Hero Background" 
               fill
-              preload
-              sizes="(max-width: 420px) 100vw, 420px"
-              className="object-cover object-top"
+              priority
+              sizes="100vw"
+              className={`object-cover object-center transition-opacity duration-1000 ${isOpen ? 'opacity-0' : 'opacity-100'}`}
+            />
+            <Image 
+              src={WEDDING_INVITATION_ASSETS.heroBackgroundAfter}
+              alt="Hero Background After" 
+              fill
+              priority
+              sizes="100vw"
+              className={`object-cover object-center transition-opacity duration-1000 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
             />
         </motion.div>
         {/* Gradient Overlay for text readability */}
@@ -60,20 +68,29 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
         />
       </motion.div>
       
+      {/* Couple Photo - Full Screen Responsive */}
+      <div className="absolute inset-0 flex justify-center items-end z-[15] pointer-events-none">
+        <Image 
+          src={WEDDING_INVITATION_ASSETS.heroCouplePhoto}
+          alt="Hero Couple" 
+          fill
+          priority
+          sizes="100vw"
+          className={`object-contain object-bottom transition-opacity duration-1000 ${isOpen ? 'opacity-0' : 'opacity-100'}`}
+        />
+        <Image 
+          src={WEDDING_INVITATION_ASSETS.heroCouplePhotoAfter}
+          alt="Hero Couple After" 
+          fill
+          priority
+          sizes="100vw"
+          className={`object-cover object-center transition-opacity duration-1000 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        />
+      </div>
+      
       {/* Safe Area Wrapper for Foreground (Locks proportion of couple + grass to WIDTH) */}
       <div className="absolute inset-x-0 bottom-0 w-full aspect-[390/600] pointer-events-none flex flex-col justify-end z-20">
         
-        {/* Couple Photo */}
-        <div className="absolute inset-x-0 bottom-[12%] h-[65%] flex justify-center z-10 pointer-events-none">
-          <Image 
-            src={WEDDING_INVITATION_ASSETS.heroCouplePhoto}
-            alt="Hero Couple" 
-            fill
-            loading="eager"
-            sizes="(max-width: 420px) 100vw, 420px"
-            className="object-contain object-bottom"
-          />
-        </div>
 
         {/* Grass Foreground */}
         <div className="absolute inset-x-0 bottom-0 h-[45%] flex justify-center z-20 pointer-events-none">
