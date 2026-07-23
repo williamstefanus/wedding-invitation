@@ -99,7 +99,7 @@ export function OpeningScreen({ guestName, isOpen, onOpen, config = {} }: Openin
             alt="Hero Grass" 
             fill
             loading="eager"
-            sizes="(max-width: 420px) 100vw, 420px"
+            sizes="(max-width: 416px) 100vw, 416px"
             className="object-cover object-bottom"
           />
         </div>

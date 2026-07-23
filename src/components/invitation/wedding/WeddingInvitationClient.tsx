@@ -83,7 +83,7 @@ export function WeddingInvitationClient({ invitation, code, settings }: WeddingI
 
   return (
     <div className="min-h-[100dvh] w-full bg-neutral-100 flex justify-center">
-      <main className={`relative h-[100dvh] scroll-smooth w-full max-w-[420px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+      <main className={`relative h-[100dvh] scroll-smooth w-full max-w-[416px] overflow-x-hidden bg-white shadow-2xl ${isOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
         <audio ref={audioRef} src={musicUrl} loop preload="none" />
 
         <OpeningScreen

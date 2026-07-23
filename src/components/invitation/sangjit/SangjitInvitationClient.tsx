@@ -73,7 +73,7 @@ export function SangjitInvitationClient({ invitation, code, settings }: SangjitI
 
   return (
     <div className="min-h-[100dvh] w-full bg-[#FAFAFA] flex justify-center">
-      <main className={`relative scroll-smooth w-full max-w-[480px] mx-auto overflow-x-hidden bg-[#761B33] shadow-2xl ${isOpen ? 'min-h-[100dvh]' : 'h-[100dvh] overflow-hidden'}`}>
+      <main className={`relative scroll-smooth w-full max-w-[416px] mx-auto overflow-x-hidden bg-[#761B33] shadow-2xl ${isOpen ? 'min-h-[100dvh]' : 'h-[100dvh] overflow-hidden'}`}>
         <audio ref={audioRef} src={musicUrl} loop preload="none" />
 
         {isOpen && (
